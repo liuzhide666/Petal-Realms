@@ -2,6 +2,10 @@
 
 基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7（战术怪物、主动技能与动态世界）**。
 
+## Cloudflare Pages 第二发布平台（等待账号连接）
+
+仓库现已加入 `site/_headers`、适配 `pages.dev` 的邮箱注册与密码重置回跳，并加入 Cloudflare Pages 回归测试。**Cloudflare 账号还未连接，所以不能把这一准备工作称为 Cloudflare 已上线。** 正式 GitHub 部署方法、发布目录与 Supabase 邮件白名单见 [Cloudflare Pages 部署指南](docs/CLOUDFLARE_PAGES.md)。当前 Netlify 网站和存档保持不变。
+
 ## V5.7 · 战术怪物、主动花瓣与动态事件
 
 - **6 种怪物战术：** 有预警的冲锋、施毒减速、预测弹道、召唤增援、范围爆发、护甲强化。等级、地区和精英阶位影响强度，采用本游戏原创平衡系数。

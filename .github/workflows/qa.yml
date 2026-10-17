@@ -25,3 +25,5 @@ jobs:
         run: node tests/tactical_v57.cjs
       - name: V5.7 Realtime protocol regression
         run: node tests/realtime_v57.cjs
+      - name: Cloudflare Pages callback and headers regression
+        run: node tests/cloudflare_pages.cjs
