@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -eu
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 TARGET_SITE='2b2abcc1-06c1-4098-b0aa-373d2de3caf3'
 if ! command -v netlify >/dev/null 2>&1; then
   printf '%s\n' 'Netlify CLI is not installed. Install it in your own authenticated environment; no tokens are embedded in this package.' >&2

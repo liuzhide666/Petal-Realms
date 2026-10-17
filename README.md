@@ -1,42 +1,37 @@
-# Petal Realms V5.3 — cloud recovery preview
+# Petal Realms · 花瓣之境
 
-**目标：** 在同一个 Netlify 站点更新，不改变 `https://stellular-khapse-5c19f8.netlify.app`。
+基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.3（云存档测试版）**。
 
-- 固定 Netlify Site ID：`2b2abcc1-06c1-4098-b0aa-373d2de3caf3`
-- 上次经连接器核实的线上部署：`6ad2229bd10bcedfa6c6d6a4`（手动 Drop；`ready`）。**本包尚未发布到 Netlify。**
-- Supabase 项目：`bfipozjqhzsbdvmisoct`，游戏表 `public.petal_realms_saves` 已建且已启用 RLS（与其他应用分表）。
-- GitHub 身份：`liuzhide666`。当前可访问仓库仅 `Windesk`（**无关项目，不要提交**）；本包尚未提交 GitHub。
+- 正式网址：https://stellular-khapse-5c19f8.netlify.app
+- GitHub 仓库：https://github.com/liuzhide666/Petal-Realms
+- Netlify 项目：`stellular-khapse-5c19f8`（固定项目 ID：`2b2abcc1-06c1-4098-b0aa-373d2de3caf3`）
+- Supabase 项目：`bfipozjqhzsbdvmisoct`；游戏存档表：`public.petal_realms_saves`
 
-## 本轮代码修正
+## 仓库目录
 
-1. 云端异常时，把未同步完整快照连同基线 `revision` 保存到浏览器本地；不是只保存一个标志位。
-2. 再次登录时：只有云端 `revision` 与本地原基线相同时才自动续传；有差异时停止覆盖，并保留本地与云端两份状态。
-3. 云端写入期间又产生新存档时，写入失败不会让旧快照覆盖内存/本地中更新的快照。
-4. Postgres BIGINT `revision` 转安全整数，拒绝异常值。
-5. 增加「导出本机云存档备份」按钮；仅导出当前识别的云端账号的存档，不导出密码、令牌。
-6. 页面进入后台或关闭时先保存本地；恢复网络后尝试续传。保留 V5.2 离线账号系统作为回退。
+| 目录 | 用途 |
+| --- | --- |
+| `site/index.html` | **唯一的线上游戏入口**，Netlify 发布此目录 |
+| `tests/` | JavaScript 语法、云存档单元测试、Chromium 烟测 |
+| `database/migrations/` | 已执行的 Supabase 迁移留档，勿重复运行 |
+| `scripts/` | 指定现有 Netlify Site ID 的手动预览部署脚本 |
+| `docs/qa/` | V5.3 QA 记录、历史测试数据和截图 |
+| `docs/history/` | 历史版本说明原文 |
+| `releases/` | 历史 HTML 和源代码压缩包，仅供存档 |
+| `.github/workflows/` | GitHub Actions 自动静态测试 |
+| `netlify.toml` | Netlify 发布目录与响应头配置 |
 
-**目前仍是客户端权威的单机游戏**，不能用于具有经济利益的物品交易、公共排行榜。正式推广前应把关键奖励和物品变更置于服务端权威交易中。
+不要将 `releases/`、`tests/` 或 SQL 文件设置为公开网站发布目录。正式发布目录固定为 **`site`**。
 
-## 发布到原 Netlify 站点（不是创建新站点）
+## 当前集成状态
 
-1. 打开 `https://app.netlify.com/projects/stellular-khapse-5c19f8` → **Deploys**。
-2. 将 `Petal_Realms_V5_3_Netlify.zip` 解压；把得到的**只含 index.html 的文件夹**拖到**当前站点 Deploys 页的部署区域**。不要到 Netlify Drop 创建新项目。
-3. 核对新部署 `ready` 且部署 ID 已发生变化，再用原网址测试页面。
-4. 对于长期维护，建议先建立独立私有 GitHub `Petal-Realms` 仓库，再把本工程包内容提交到 `main`；在原 Netlify 站点关联仓库，Publish directory 为 `site`，无需 build command。`.netlify/` 已加入 `.gitignore`。
-5. 切换 Git 自动部署前请先检查已有手动生产版本；后续推送默认生产分支会代替手动发布版本。
+- Supabase 游戏表已经创建并启用 RLS，但**不能据此宣称真实邮箱登录、跨设备云存档已验收**。
+- Netlify 站点存在且线上部署为 `ready`；最近核实的生产部署仍来自手动上传（Drop）。**代码上传到 GitHub 不等于已经启用 Netlify 自动部署。**
+- 本仓库目前是 **Public**。发布代码中只允许 Supabase Publishable Key，禁止提交密码、`service_role`、`sb_secret_*`、`.env` 和玩家私密存档。
 
-如在你自己的已登录终端使用 Netlify CLI，运行 `./deploy-existing-site.sh` 会生成**草稿部署**（不替换正式版本）。运行 `./deploy-existing-site.sh --prod` 才可能替换正式版本，请先测试草稿并确认站点 ID。
+## 快速测试
 
-## Supabase Authentication 配置与数据迁移
-
-- 在 Supabase Dashboard → **Authentication → URL Configuration** 检查 **Site URL** 和 Redirect URLs，允许精确的正式 HTTPS 网址 `https://stellular-khapse-5c19f8.netlify.app`。当前没有通过插件修改此设置。
-- 首次使用新邮箱创建一个受控测试账号并完成邮件验证，然后验证首次读写、重新登录、另一设备读取、冲突恢复；这些真实端到端环节**尚未测试**。
-- 旧本地账号的进度不会自动导入云端。务必在旧站点同一 origin 上备份 localStorage，设计显式导入和授权确认流程后再迁移。
-- `sql/` 目录记录**已执行**的 Supabase 数据库迁移，勿在现有项目重跑。
-- 只允许 Publishable Key 出现在静态 HTML，绝不在前端放入 Secret / Service Role Key。
-
-## 复核
+需要 Node.js；浏览器测试需要 Python、Playwright 和 Chromium：
 
 ```bash
 node tests/js_syntax.cjs
@@ -45,4 +40,8 @@ python tests/browser_smoke.py
 python tests/browser_cloud_auth.py
 ```
 
-浏览器测试使用 Chromium 的模拟环境和模拟 Supabase API，不能替代真实域名、HTTPS、真实邮箱与跨设备端到端验收。
+浏览器测试会把生成的新结果写入 `artifacts/qa/`（已 Git 忽略），而 `docs/qa/` 保留历史验收证据。模拟 API 的测试**不是**真实 Supabase 生产读写测试。
+
+发布步骤和上线前的注意事项见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。目录调整历史见 [docs/STRUCTURE.md](docs/STRUCTURE.md)。
+
+> 本次目录整理保留 `site/index.html` 原始 Git Blob 不变，未触碰真实玩家数据或 Supabase 现有表。
