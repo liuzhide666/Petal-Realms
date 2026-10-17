@@ -22,14 +22,18 @@ for(const [loc,want] of cases){assert.equal(configured(loc),want);n++;}
 for(const [needle,message] of [
  ['<link rel="canonical" href="'+primary+'/"','Canonical link'],
  ['<meta property="og:url" content="'+primary+'/"','Social primary URL'],
- ["'/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Signup callback'],
- ["'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Recovery callback'],
+ ["cloudRequest('/auth/v1/signup',{method:'POST'",'No-email signup endpoint'],
+ ['cloudNoMailSignupReady();','No-email preflight before registration'],
+ ['id="changePasswordForm"','In-game password rotation'],
+ ['version:\'5.8-password-only\'','Version code'],
+ ['id="forgotPasswordBtn"','Disabled legacy recovery control'],
+ 
  ['id="migrationNotice"','Explicit old-origin migration warning'],
- ['注册请求已受理，但不代表验证邮件已送达','Signup response must not claim mail was delivered'],
+ ['服务器尚未启用免邮件注册','Fail-closed no-email config message'],
  ['id="hostBadge"','Hosting badge'],
  ["const CLOUD_PRIMARY_URL='"+primary+"'","Explicit Cloudflare canonical constant"],
  ["cloudAuthMessage(err,'login')","Localized auto-login error"],
- ['version:\'5.7.2-email-delivery-guidance\'','Current version marker']
+ 
 ]){assert.ok(html.includes(needle),message);n++;}
 for(const str of ['X-Content-Type-Options: nosniff','Referrer-Policy: strict-origin-when-cross-origin','X-Frame-Options: DENY','Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()','/index.html','Cache-Control: no-cache, must-revalidate']){
  assert.ok(headers.includes(str),str);n++;
@@ -50,4 +54,5 @@ const a=hosted({protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app'
 assert.ok(a.badge.includes('旧版网站')&&a.notice==='block');n++;
 const b=hosted({protocol:'https:',hostname:'petal-realms.pages.dev'},false);
 assert.ok(b.badge.includes('Cloudflare Pages')&&b.badge.includes('离线')&&b.notice==='none');n++;
-console.log(JSON.stringify({checks:n,passed:n,scope:'unit-only; no live Supabase email delivery'}));
+assert.ok(!html.includes("'/auth/v1/recover"),'No email-recovery sending endpoint allowed');n++;
+console.log(JSON.stringify({checks:n,passed:n,scope:'static Cloudflare + no-email flow; live Auth confirmation setting separate'}));
