@@ -27,3 +27,5 @@ jobs:
         run: node tests/realtime_v57.cjs
       - name: Cloudflare Pages callback and headers regression
         run: node tests/cloudflare_pages.cjs
+      - name: V5.8 password-only registration safety and password change
+        run: node tests/password_only_v58.cjs
