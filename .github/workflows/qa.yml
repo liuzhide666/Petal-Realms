@@ -29,6 +29,8 @@ jobs:
         run: node tests/cloudflare_pages.cjs
       - name: V5.9 creature geometry, inventory and verified signup
         run: node tests/v59_gameplay_auth.cjs
+      - name: V5.9.1 bounded bulk crafting regression
+        run: node tests/v591_batch_craft.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
