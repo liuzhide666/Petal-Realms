@@ -34,6 +34,7 @@ with sync_playwright() as pw:
         page.evaluate("document.getElementById('craftBtn').click()")
         page.wait_for_timeout(120)
         results.append((label,'craft_filters',page.locator('#craftReadyOnly').count()==1 and page.locator('#itemRarity').count()==1))
+        results.append((label,'batch_craft_action',page.locator('#batchCraft').count()==1 and page.locator('#batchCraft').get_attribute('type')=='button'))
         page.screenshot(path=f'artifacts/qa/v59_{label}_craft.png')
         page.locator('#craftReadyOnly').check()
         results.append((label,'craft_filters_render_without_exception',page.locator('#inventoryFilterCount').count()==1))
