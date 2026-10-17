@@ -1,0 +1,60 @@
+{
+  "checks": 10,
+  "passed": 10,
+  "results": [
+    {
+      "test": "desktop_login_visible",
+      "ok": true
+    },
+    {
+      "test": "desktop_cloud_config",
+      "ok": true
+    },
+    {
+      "test": "desktop_cloud_form",
+      "ok": true
+    },
+    {
+      "test": "desktop_guest",
+      "ok": true,
+      "detail": {
+        "zone": "garden",
+        "mobs": 125,
+        "petals": 27,
+        "slots": 6
+      }
+    },
+    {
+      "test": "desktop_errors",
+      "ok": true,
+      "errors": []
+    },
+    {
+      "test": "mobile_login_visible",
+      "ok": true
+    },
+    {
+      "test": "mobile_cloud_config",
+      "ok": true
+    },
+    {
+      "test": "mobile_cloud_form",
+      "ok": true
+    },
+    {
+      "test": "mobile_guest",
+      "ok": true,
+      "detail": {
+        "zone": "garden",
+        "mobs": 125,
+        "petals": 27,
+        "slots": 6
+      }
+    },
+    {
+      "test": "mobile_errors",
+      "ok": true,
+      "errors": []
+    }
+  ]
+}
