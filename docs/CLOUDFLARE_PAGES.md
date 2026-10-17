@@ -1,4 +1,4 @@
-# Cloudflare Pages — Petal Realms V5.7
+# Cloudflare Pages — Petal Realms V5.7.1 正式主站
 
 **状态：Cloudflare Pages 已创建，GitHub 关联成功，V5.7 首次生产构建与部署已通过。** 项目 `petal-realms`，访问域名 https://petal-realms.pages.dev ，部署源为 `liuzhide666/Petal-Realms` 的 `main` 分支。首次成功部署 ID `5510e895-f477-4b2a-8bc4-013f1193d6d3`，对应提交 `2f7331f1c8a3362c3595522a0b4d3cc71fc48069`。该状态由 Cloudflare API 返回；真实手机浏览器及邮箱验证尚待独立验收。
 
@@ -30,11 +30,11 @@
 
 游戏仍使用既有 Supabase 项目 `bfipozjqhzsbdvmisoct`、邮箱密码认证及 `public.petal_realms_saves`，**不要新建空数据库或移走玩家数据**。
 
-V5.7 的 Cloudflare 兼容修正使 `*.pages.dev` HTTPS 正式页/预览页在请求注册验证邮件、密码重置邮件时使用当前网页 origin；Netlify 正式页的原有回跳不变。但 Supabase Auth 有重定向白名单，必须在 https://supabase.com/dashboard/project/bfipozjqhzsbdvmisoct/auth/url-configuration 手工添加：
+V5.7.1 将 **Cloudflare 主站 `https://petal-realms.pages.dev` 固定为新网站（包括预览页）的注册验证／密码重置回跳地址**，防止把一次性邮件链接送到临时预览域名；只有旧 Netlify 的确切正式域名继续使用 Netlify 回跳。但 Supabase Auth 有重定向白名单，必须在 https://supabase.com/dashboard/project/bfipozjqhzsbdvmisoct/auth/url-configuration 手工添加：
 
-- **Redirect URLs**：`https://<实际的项目名>.pages.dev/**`（将占位符换为部署成功后 Cloudflare 给出的项目名）。
-- 只在需要测试 PR 邮箱回跳时，添加**具体预览域名**；不要不受控地允许 `https://**.pages.dev/**`。
-- 可以暂时保留 Supabase **Site URL** 为旧的 Netlify 正式 URL；Cloudflare 前端显式传递 `redirect_to`，不要求马上迁移全站主域名。迁移主站后再统一调整 Site URL。
+- **Redirect URLs**：`https://petal-realms.pages.dev/**`（准确复制此值，不要使用 `https://**.pages.dev/**`）。
+- PR 预览的邮件认证也固定回到正式主站，因此不必为每一个随机预览域名添加白名单。
+- **正式运营的建议 Site URL**：`https://petal-realms.pages.dev`。修改之前核对其他使用该 Supabase 项目的应用及其默认邮件链接，避免影响兼容系统；现有 Netlify Redirect URL 要继续保留。Supabase 连接器目前没有 Auth URL Configuration 写入能力，该项需要在控制台完成。
 - 旧的 `https://stellular-khapse-5c19f8.netlify.app/**` 白名单应保留，直到有明确迁移计划。
 - 检查 Email Provider、Confirm Email 和实际 SMTP 发信限制，不要将模拟测试视为真实邮件验收。
 
@@ -61,4 +61,4 @@ V5.7 的 Cloudflare 兼容修正使 `*.pages.dev` HTTPS 正式页/预览页在�
 
 ## 5. 后续发布
 
-Cloudflare Git 集成设置完成后，不需要维护 Cloudflare Token 的 GitHub Actions；直接在 GitHub 合并测试通过的 PR 即可触发 Cloudflare Pages 部署，Netlify 原链接仍独立存在。若未来要改为只保留 Cloudflare，再单独迁移主域名和邮件回跳，避免玩家数据丢失。
+Cloudflare 是正式主站：每次将通过测试的 PR 合并到 GitHub `main` 即可触发 Cloudflare Pages Production 自动部署；需核对部署 SHA、状态及真实浏览器加载。旧 Netlify 当前仅用作历史用户兼容及本地存档迁移，**不得贸然强制转址或删除**。跨域数据迁移和新域名真实邮箱恢复验证完成后再讨论退役旧站。

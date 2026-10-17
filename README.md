@@ -1,10 +1,10 @@
 # Petal Realms · 花瓣之境
 
-基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7（战术怪物、主动技能与动态世界）**。
+基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7.1（Cloudflare Pages 主站整合与认证体验优化）**。
 
-## Cloudflare Pages 第二发布平台（已部署）
+## Cloudflare Pages 正式主站
 
-**Cloudflare Pages 正式地址： https://petal-realms.pages.dev**。项目 `petal-realms` 已连接本仓库 `main` 分支，静态发布目录为 `site`，首次 V5.7 生产构建与部署已由 Cloudflare API 确认为成功。GitHub Actions 包含 Cloudflare 回跳测试，`site/_headers` 提供安全响应头。
+**正式游戏地址： https://petal-realms.pages.dev**。Cloudflare Pages 是唯一推荐对外公开的游戏入口；GitHub `main` 负责版本管理和自动发布，输出目录 `site`。V5.7.1 固定主站邮箱回跳地址、标记旧 Netlify 迁移入口、改善自动登录提示，且配置了 Pages 安全响应头和 HTML 缓存复核。
 
 **仍需完成：** 在 Supabase Auth Redirect URLs 中加入真实 Pages 域名，随后用测试邮箱实测注册验证、找回密码和跨域云存档。不要清除 Netlify 域名上的 localStorage；两个域名的本地存储彼此独立。详见 [Cloudflare Pages 部署和验收指南](docs/CLOUDFLARE_PAGES.md)。原 Netlify 网站与数据均保留。
 
@@ -43,7 +43,8 @@
 
 回归记录：[V5.4 QA](docs/qa/V5.4_QA.md)。
 
-- 正式网址：https://stellular-khapse-5c19f8.netlify.app
+- **正式主站：** https://petal-realms.pages.dev
+- 旧版迁移入口：https://stellular-khapse-5c19f8.netlify.app（暂不删除）
 - GitHub 仓库：https://github.com/liuzhide666/Petal-Realms
 - Netlify 项目：`stellular-khapse-5c19f8`（固定项目 ID：`2b2abcc1-06c1-4098-b0aa-373d2de3caf3`）
 - Supabase 项目：`bfipozjqhzsbdvmisoct`；游戏存档表：`public.petal_realms_saves`
@@ -52,7 +53,7 @@
 
 | 目录 | 用途 |
 | --- | --- |
-| `site/index.html` | **唯一的线上游戏入口**，Netlify 发布此目录 |
+| `site/index.html` | **游戏唯一源码入口**，Cloudflare Pages 主站和旧 Netlify 兼容站均发布该目录 |
 | `tests/` | JavaScript 语法、云存档单元测试、Chromium 烟测 |
 | `database/migrations/` | 已执行的 Supabase 迁移留档，勿重复运行 |
 | `scripts/` | 指定现有 Netlify Site ID 的手动预览部署脚本 |
@@ -67,7 +68,7 @@
 ## 当前集成状态
 
 - Supabase 游戏表已经创建并启用 RLS，但**不能据此宣称真实邮箱登录、跨设备云存档已验收**。
-- Netlify 站点存在且线上部署为 `ready`；最近核实的生产部署仍来自手动上传（Drop）。**代码上传到 GitHub 不等于已经启用 Netlify 自动部署。**
+- Cloudflare Pages 已连 GitHub 并经过真实生产自动部署验证；**Netlify 已降为旧账号／旧本地存档迁移入口**。旧站仍可能有人使用，暂不删除。
 - 本仓库目前是 **Public**。发布代码中只允许 Supabase Publishable Key，禁止提交密码、`service_role`、`sb_secret_*`、`.env` 和玩家私密存档。
 
 ## 快速测试
@@ -83,6 +84,6 @@ python tests/browser_cloud_auth.py
 
 浏览器测试会把生成的新结果写入 `artifacts/qa/`（已 Git 忽略），而 `docs/qa/` 保留历史验收证据。模拟 API 的测试**不是**真实 Supabase 生产读写测试。
 
-发布步骤和上线前的注意事项见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。目录调整历史见 [docs/STRUCTURE.md](docs/STRUCTURE.md)。
+正式发布和邮箱回跳验收见 [Cloudflare Pages 主站指南](docs/CLOUDFLARE_PAGES.md)。旧 Netlify 的回滚及迁移管理见 [旧部署说明](docs/DEPLOYMENT.md)。目录调整历史见 [docs/STRUCTURE.md](docs/STRUCTURE.md)。
 
-> 本次目录整理保留 `site/index.html` 原始 Git Blob 不变，未触碰真实玩家数据或 Supabase 现有表。
+> Cloudflare 主站切换未删除旧站本地存档、未修改 Supabase 表或账号数据。此版不是服务器权威多人战斗，真实邮件送达和跨设备存档仍需现场验收。

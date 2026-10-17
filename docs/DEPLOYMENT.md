@@ -1,4 +1,6 @@
-# Netlify / GitHub / Supabase 部署指南
+# 旧版 Netlify 迁移与回滚指南（Cloudflare Pages 为正式主站）
+
+**当前正式网站是 https://petal-realms.pages.dev 。本文件仅保留 Netlify 的旧站运维和迁移信息，新版本发布以 [Cloudflare 主站指南](CLOUDFLARE_PAGES.md) 为准。未经旧站存档迁移验收，请勿删除或强制重定向 Netlify。**
 
 ## 固定目标
 
