@@ -25,10 +25,11 @@ for(const [needle,message] of [
  ["'/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Signup callback'],
  ["'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Recovery callback'],
  ['id="migrationNotice"','Explicit old-origin migration warning'],
+ ['注册请求已受理，但不代表验证邮件已送达','Signup response must not claim mail was delivered'],
  ['id="hostBadge"','Hosting badge'],
  ["const CLOUD_PRIMARY_URL='"+primary+"'","Explicit Cloudflare canonical constant"],
  ["cloudAuthMessage(err,'login')","Localized auto-login error"],
- ['version:\'5.7.1-cloudflare-primary\'','Current version marker']
+ ['version:\'5.7.2-email-delivery-guidance\'','Current version marker']
 ]){assert.ok(html.includes(needle),message);n++;}
 for(const str of ['X-Content-Type-Options: nosniff','Referrer-Policy: strict-origin-when-cross-origin','X-Frame-Options: DENY','Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()','/index.html','Cache-Control: no-cache, must-revalidate']){
  assert.ok(headers.includes(str),str);n++;
