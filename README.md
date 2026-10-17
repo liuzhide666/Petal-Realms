@@ -1,6 +1,15 @@
 # Petal Realms · 花瓣之境
 
-基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7.2（邮箱注册投递提示与 SMTP 故障说明）**。
+基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.8（账号地址＋密码，免邮件注册）**。
+
+## V5.8 · 不需要邮件的账号体系
+
+- 默认入口为 **Address（邮箱格式）＋ Password（密码）**。已注册玩家正常登录，新注册玩家不需要点击确认邮件。
+- **注册安全门禁：** 先读取 Supabase Auth 公开设置。未确定 `Confirm Email` 已关闭时，前端不会提交注册请求，避免继续给玩家发送注册验证邮件。
+- **无需 SMTP 的注册流程需在 Supabase 控制台关闭 Email → Confirm Email。** 这是一次性服务器配置，不会因为 GitHub 代码发布而自动更改。
+- 移除邮件找回入口；登录后可在游戏设置中通过原密码修改密码。请保管好密码，丢失后当前没有无邮件的自助恢复途径。
+- 旧账号、云存档、存档冲突保护与双装备构筑不迁移、不清空。
+- 部署与设置说明：[免邮件账号操作手册](docs/AUTH_PASSWORD_ONLY.md)。旧 [SMTP 问题排查](docs/EMAIL_DELIVERY_SETUP.md) 作为历史记录保留。
 
 ## V5.7.2 · 注册邮件诊断
 
@@ -13,7 +22,7 @@
 
 **正式游戏地址： https://petal-realms.pages.dev**。Cloudflare Pages 是唯一推荐对外公开的游戏入口；GitHub `main` 负责版本管理和自动发布，输出目录 `site`。V5.7.1 固定主站邮箱回跳地址、标记旧 Netlify 迁移入口、改善自动登录提示，且配置了 Pages 安全响应头和 HTML 缓存复核。
 
-**仍需完成：** 在 Supabase Auth Redirect URLs 中加入真实 Pages 域名，随后用测试邮箱实测注册验证、找回密码和跨域云存档。不要清除 Netlify 域名上的 localStorage；两个域名的本地存储彼此独立。详见 [Cloudflare Pages 部署和验收指南](docs/CLOUDFLARE_PAGES.md)。原 Netlify 网站与数据均保留。
+**仍需完成：** 在 Supabase Auth → Email 关闭 Confirm Email，之后用新的测试账号核验免邮件注册、密码登录和跨设备云存档。不要清除 Netlify 域名上的 localStorage；两个域名的本地存储彼此独立。详见 [Cloudflare Pages 部署和验收指南](docs/CLOUDFLARE_PAGES.md)。原 Netlify 网站与数据均保留。
 
 ## V5.7 · 战术怪物、主动花瓣与动态事件
 
