@@ -20,6 +20,7 @@ ok(get("(()=>{const m={facing:6.25};updateMobFacing(m,0,-1,.016);return Math.abs
 ok(html.includes("!mobCircleOverlap(m,e.x,e.y,petalContactRadius(def))"),'petal hitboxes use shared geometry');
 ok(html.includes('const d=pets[e.t],size=d.size*PETAL_WORLD_SCALE'),'petal rendering uses same scale');
 ok(html.includes('ctx.rotate((m.facing??0)'),'creature facing drives sprite orientation');
+ok(html.includes('function drawMobHitbox(m)')&&html.includes("$('hitboxToggle').onclick"),'optional visual collision debugger');
 ok(html.includes('mobSupportRadius(a,dx,dy)+mobSupportRadius(b,-dx,-dy)'),'mob separation respects silhouettes');
 
 const uiStart=html.indexOf('// Shared controls for inventory and forging'),uiEnd=html.indexOf('function renderModal(){',uiStart);
