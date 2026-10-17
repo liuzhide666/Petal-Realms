@@ -22,14 +22,15 @@ for(const [loc,want] of cases){assert.equal(configured(loc),want);n++;}
 for(const [needle,message] of [
  ['<link rel="canonical" href="'+primary+'/"','Canonical link'],
  ['<meta property="og:url" content="'+primary+'/"','Social primary URL'],
- ["cloudRequest('/auth/v1/signup',{method:'POST'",'No-email signup endpoint'],
- ['cloudNoMailSignupReady();','No-email preflight before registration'],
+ ["'/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Verified signup callback'],
+ ["cloudVerifiedSignupReady();",'Verified email preflight'],
+
  ['id="changePasswordForm"','In-game password rotation'],
- ['version:\'5.8-password-only\'','Version code'],
- ['id="forgotPasswordBtn"','Disabled legacy recovery control'],
+ ['version:\'5.9-collision-inventory-verified-auth\'','Version code'],
+ ['id="forgotPasswordBtn"','Email recovery control'],
  
  ['id="migrationNotice"','Explicit old-origin migration warning'],
- ['服务器尚未启用免邮件注册','Fail-closed no-email config message'],
+ ['Supabase 尚未开启注册邮箱验证','Verified signup configuration gate'],
  ['id="hostBadge"','Hosting badge'],
  ["const CLOUD_PRIMARY_URL='"+primary+"'","Explicit Cloudflare canonical constant"],
  ["cloudAuthMessage(err,'login')","Localized auto-login error"],
@@ -54,5 +55,5 @@ const a=hosted({protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app'
 assert.ok(a.badge.includes('旧版网站')&&a.notice==='block');n++;
 const b=hosted({protocol:'https:',hostname:'petal-realms.pages.dev'},false);
 assert.ok(b.badge.includes('Cloudflare Pages')&&b.badge.includes('离线')&&b.notice==='none');n++;
-assert.ok(!html.includes("'/auth/v1/recover"),'No email-recovery sending endpoint allowed');n++;
+assert.ok(html.includes("'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)"),'Verified email recovery callback');n++;
 console.log(JSON.stringify({checks:n,passed:n,scope:'static Cloudflare + no-email flow; live Auth confirmation setting separate'}));

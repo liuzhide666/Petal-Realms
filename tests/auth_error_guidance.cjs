@@ -9,9 +9,9 @@ assert.ok(start>0&&stop>start,'Expected error presenter in site HTML');
 const ctx={};vm.createContext(ctx);vm.runInContext(html.slice(start,stop),ctx);
 const translate=(code,message,action)=>vm.runInContext('cloudAuthMessage({code:'+JSON.stringify(code)+',message:'+JSON.stringify(message)+'},'+JSON.stringify(action||'login')+')',ctx);
 const cases=[
- ['invalid_credentials','Invalid login credentials','账号地址或密码不正确'],
- ['','Invalid login credentials','注册新角色'],
- ['email_not_confirmed','Email not confirmed','旧版邮箱确认状态'],
+ ['invalid_credentials','Invalid login credentials','邮箱地址或密码不正确'],
+ ['','Invalid login credentials','先注册并完成邮箱验证'],
+ ['email_not_confirmed','Email not confirmed','邮箱尚未确认'],
  ['email_address_not_authorized','Email address not authorized','必须配置自定义 SMTP'],
  ['','Email address not authorized','发送授权'],
  ['email_send_failed','Error sending confirmation email','邮件服务未能正常发送'],
