@@ -1,6 +1,13 @@
 # Petal Realms · 花瓣之境
 
-基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7.1（Cloudflare Pages 主站整合与认证体验优化）**。
+基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7.2（邮箱注册投递提示与 SMTP 故障说明）**。
+
+## V5.7.2 · 注册邮件诊断
+
+- 注册请求已被 Supabase 接收，不等于确认邮件成功投递；前端现在会明确说明这一点。
+- 对邮箱发信未授权、SMTP 发信失败提供中文原因和处理建议；登录及旧存档格式不变。
+- **面向普通玩家的邮件投递尚未验收。** 必须为 Supabase 配置生产级自定义 SMTP，再实际测试注册、邮件链接、密码重置。
+- 操作指南：[邮箱投递诊断与 SMTP 配置](docs/EMAIL_DELIVERY_SETUP.md)。
 
 ## Cloudflare Pages 正式主站
 
