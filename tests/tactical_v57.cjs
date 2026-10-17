@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const h=fs.readFileSync(path.join(__dirname,'../site/index.html'),'utf8');
 const start=h.indexOf('// V5.7 independent original tuning:'),end=h.indexOf('function resetEquip(',start);assert.ok(start>=0&&end>start);
 const creature={t:'wasp',x:100,y:100,hp:200,max:200,rank:3,tier:1,r:20,level:18};
-const c={console,Math,Date,TAU:Math.PI*2,W:6800,H:5000,mobs:{ant:{drop:['basic'],hp:50,dmg:10},soldier:{hp:90,dmg:12,size:18,speed:90},mantis:{hp:95,dmg:14,size:18,speed:90}},zones:{garden:{drop:0,mob:['ant']}},
+const c={console,Math,Date,TAU:Math.PI*2,W:6800,H:5000,mobs:{wasp:{guardian:false},ant:{drop:['basic'],hp:50,dmg:10},soldier:{hp:90,dmg:12,size:18,speed:90},mantis:{hp:95,dmg:14,size:18,speed:90}},zones:{garden:{drop:0,mob:['ant']}},
 game:{active:true,paused:false,dead:false,time:12,zone:'garden',skills:{},skillBuffs:{},synergies:{},p:{x:100,y:100,hp:50,level:11,angle:0,r:20},mapData:{garden:{living:[creature],rocks:[],portals:[]}},friendlyShots:[],bullets:[],drops:[],particles:[]},
 maxHP:()=>100,petalDamageMultiplier:()=>1,damageMob:(m,d)=>{m.hp-=d},pulse:()=>{},floating:()=>{},toast:()=>{},screenFx:()=>{},
 clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),dist:(a,b,c,d)=>Math.hypot(a-c,b-d),nearbyRocks:()=>[],spawnMob:()=>{},mobUid:1};
