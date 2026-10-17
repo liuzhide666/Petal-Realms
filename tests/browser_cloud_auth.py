@@ -13,7 +13,9 @@ with sync_playwright() as pw:
   headers={'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,PATCH,OPTIONS','access-control-allow-headers':'apikey,authorization,content-type,prefer','content-type':'application/json'}
   if req.method=='OPTIONS':return route.fulfill(status=200,headers=headers,body='{}')
   url=req.url
-  if '/auth/v1/token?grant_type=password' in url:
+  if '/auth/v1/user' in url and req.method=='GET':
+   content={'id':uid,'email':'qa@example.invalid'}
+  elif '/auth/v1/token?grant_type=password' in url:
    content={'access_token':'testing-access','refresh_token':'testing-refresh','user':{'id':uid},'expires_in':3600}
   elif '/rest/v1/petal_realms_saves' in url and req.method=='GET':
    content=[database]
@@ -27,7 +29,6 @@ with sync_playwright() as pw:
  page.route('https://bfipozjqhzsbdvmisoct.supabase.co/**',handle)
  page.evaluate('''() => {const m=new Map();Object.defineProperty(window, 'localStorage', {value:{getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),key:i=>Array.from(m.keys())[i]||null,get length(){return m.size}},configurable:true});}''')
  page.set_content(html.read_text(),wait_until='domcontentloaded')
- page.locator('#cloudModeBtn').click()
  page.locator('#authName').fill('qa@example.invalid')
  page.locator('#authPass').fill('temporary-mock-password')
  page.locator('#authSubmit').click()
