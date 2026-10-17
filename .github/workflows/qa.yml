@@ -19,3 +19,5 @@ jobs:
         run: node tests/cloud_unit.cjs
       - name: Auth error guidance regression
         run: node tests/auth_error_guidance.cjs
+      - name: Talent progression and shrine regression
+        run: node tests/talents_v56.cjs
