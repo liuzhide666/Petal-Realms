@@ -2,9 +2,11 @@
 
 基于 HTML、CSS 和 JavaScript 的独立浏览器游戏。当前代码版本：**V5.7（战术怪物、主动技能与动态世界）**。
 
-## Cloudflare Pages 第二发布平台（等待账号连接）
+## Cloudflare Pages 第二发布平台（已部署）
 
-仓库现已加入 `site/_headers`、适配 `pages.dev` 的邮箱注册与密码重置回跳，并加入 Cloudflare Pages 回归测试。**Cloudflare 账号还未连接，所以不能把这一准备工作称为 Cloudflare 已上线。** 正式 GitHub 部署方法、发布目录与 Supabase 邮件白名单见 [Cloudflare Pages 部署指南](docs/CLOUDFLARE_PAGES.md)。当前 Netlify 网站和存档保持不变。
+**Cloudflare Pages 正式地址： https://petal-realms.pages.dev**。项目 `petal-realms` 已连接本仓库 `main` 分支，静态发布目录为 `site`，首次 V5.7 生产构建与部署已由 Cloudflare API 确认为成功。GitHub Actions 包含 Cloudflare 回跳测试，`site/_headers` 提供安全响应头。
+
+**仍需完成：** 在 Supabase Auth Redirect URLs 中加入真实 Pages 域名，随后用测试邮箱实测注册验证、找回密码和跨域云存档。不要清除 Netlify 域名上的 localStorage；两个域名的本地存储彼此独立。详见 [Cloudflare Pages 部署和验收指南](docs/CLOUDFLARE_PAGES.md)。原 Netlify 网站与数据均保留。
 
 ## V5.7 · 战术怪物、主动花瓣与动态事件
 
