@@ -735,7 +735,8 @@ function inventoryControls(mode){
 // V5.9.1 bounded crafting: each attempt preserves original per-rank probability and failure cost.
 // Bulk crafting never recurses into crafted items and stops as soon as fewer than five inputs remain.
 function craftBatch(key,requested=1){
- const item=itemOf(key),limit=Math.min(5,Math.max(0,Math.trunc(Number(requested)||0)));
+ const item=itemOf(key),numeric=Number(requested);
+ const limit=Number.isFinite(numeric)&&numeric>0?Math.min(5,Math.trunc(numeric)):0;
  const result={attempts:0,success:0,failed:0,spent:0,requested:limit};
  if(!item||!limit)return result;
  const [type,rank]=item;
