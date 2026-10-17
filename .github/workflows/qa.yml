@@ -21,3 +21,7 @@ jobs:
         run: node tests/auth_error_guidance.cjs
       - name: Talent progression and shrine regression
         run: node tests/talents_v56.cjs
+      - name: V5.7 tactical gameplay regression
+        run: node tests/tactical_v57.cjs
+      - name: V5.7 Realtime protocol regression
+        run: node tests/realtime_v57.cjs
