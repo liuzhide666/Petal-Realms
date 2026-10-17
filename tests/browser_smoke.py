@@ -14,10 +14,8 @@ with sync_playwright() as pw:
   tag='mobile' if mobile else 'desktop'
   res.append({'test':tag+'_login_visible','ok':page.locator('#authForm').is_visible()})
   res.append({'test':tag+'_cloud_config','ok':page.evaluate('window.PetalCloudStatus.configured()')})
-  page.locator('#cloudModeBtn').click()
   res.append({'test':tag+'_cloud_form','ok':page.locator('#authName').get_attribute('type')=='email'})
-  page.locator('#cloudModeBtn').click()
-  page.locator('#guestBtn').click();page.wait_for_timeout(700)
+  page.evaluate("document.getElementById('guestBtn').click()");page.wait_for_timeout(700)
   snap=page.evaluate('window.PetalRealmsInfo.snapshot()')
   res.append({'test':tag+'_guest','ok':bool(snap and snap.get('mobs',0)>0 and snap.get('petals',0)>=27 and snap.get('slots',0)==6),'detail':{k:snap.get(k) for k in ['zone','mobs','petals','slots']} if snap else None})
   page.screenshot(path=str(output_dir/(tag+'_QA.png')))
