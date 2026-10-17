@@ -1,8 +1,12 @@
 # Cloudflare Pages — Petal Realms V5.7
 
-**状态：GitHub 已准备；Cloudflare 项目尚未授权创建。** 本文描述通过 Cloudflare Pages 的 GitHub 集成部署，不是 Cloudflare Workers 或静态 ZIP 直传。
+**状态：Cloudflare Pages 已创建，GitHub 关联成功，V5.7 首次生产构建与部署已通过。** 项目 `petal-realms`，访问域名 https://petal-realms.pages.dev ，部署源为 `liuzhide666/Petal-Realms` 的 `main` 分支。首次成功部署 ID `5510e895-f477-4b2a-8bc4-013f1193d6d3`，对应提交 `2f7331f1c8a3362c3595522a0b4d3cc71fc48069`。该状态由 Cloudflare API 返回；真实手机浏览器及邮箱验证尚待独立验收。
 
-## 1. 连接 GitHub
+**管理位置：** https://dash.cloudflare.com/2ebb112a603a5703f40ca2a1f6edd263/pages/view/petal-realms
+
+
+
+## 1. 已应用的 GitHub 部署配置（供复核或重建使用）
 
 1. 使用自己的 Cloudflare 账户打开 https://dash.cloudflare.com/ ，进入 **Workers & Pages → Create application → Pages → Connect to Git**。
 2. 授权 Cloudflare GitHub 应用访问仓库 `liuzhide666/Petal-Realms`，选择该仓库。请选择仅授权所需仓库（可行时）。
