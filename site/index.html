@@ -195,7 +195,7 @@ let modal=null,authMode='login',toastTimer=null;
 const CLOUD_CONFIG={url:'https://bfipozjqhzsbdvmisoct.supabase.co',publishableKey:'sb_publishable_wfyMqIqPAZPjH-Q7sHl5ug_8m92bpX0'};
 let cloudMode=true,cloudSession=null,cloudRevision=null,cloudPending=null,cloudBusy=false,cloudSaveTimer=null;
 const CLOUD_SESSION_KEY='petal_realms_auth_session_v1';
-const CLOUD_SITE_URL='https://stellular-khapse-5c19f8.netlify.app';
+const CLOUD_SITE_URL=(typeof location!=='undefined'&&location.protocol==='https:'&&/(^|\.)pages\.dev$/i.test(location.hostname))?location.origin:'https://stellular-khapse-5c19f8.netlify.app';
 let cloudRemember=true,cloudRecovering=false,cloudRestoring=false;
 function cloudForgetStoredSession(){try{localStorage.removeItem(CLOUD_SESSION_KEY)}catch{}}
 function cloudStoreSession(){if(!cloudRemember||!cloudSession)return;try{localStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify({format:1,refresh_token:cloudSession.refresh}))}catch{}}
