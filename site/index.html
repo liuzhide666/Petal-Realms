@@ -99,6 +99,17 @@
 #synergyLabel{position:absolute;z-index:6;bottom:calc(225px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#16382eba;padding:4px 9px;border:1px solid #79b9a46a;border-radius:9px;font-size:10px;color:#d5edce;white-space:nowrap;pointer-events:none}
 #partyTag{position:absolute;z-index:6;bottom:calc(248px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#163344d9;color:#bdeefa;border-radius:9px;padding:5px 10px;font-size:10px;pointer-events:none}
 @media(max-width:700px){#skillDock{bottom:calc(199px + env(safe-area-inset-bottom));left:50%;gap:3px;max-width:95vw} .skill-btn{width:51px;min-height:42px;font-size:9px;padding:3px}.skill-btn small{font-size:9px}#synergyLabel{bottom:calc(245px + env(safe-area-inset-bottom));max-width:80vw;overflow:hidden;text-overflow:ellipsis}#partyTag{display:none}#eventRibbon{top:calc(72px + env(safe-area-inset-top));max-width:140px;font-size:10px;left:52%}}
+
+/* V5.9 touch-friendly inventory, rarity browsing and crafting panel. */
+.inventory-toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin:10px 0 14px}
+.inventory-toolbar>label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:#c4ddcc;flex:1 1 126px;min-width:0}
+.inventory-toolbar input[type="search"],.inventory-toolbar select{width:100%;min-height:40px;box-sizing:border-box;background:#17332e;color:#f3f6e9;border:1px solid #9bcbb36c;border-radius:9px;padding:8px;font:inherit}
+.inventory-toolbar .inventory-toggle{display:flex;align-items:center;flex-direction:row;min-height:40px;gap:9px;flex:0 1 158px}
+.inventory-filter-count{font-size:12px;color:#b3d6c6;align-self:center}
+.inventory-items .item-card[hidden]{display:none!important}
+.inventory-slot-list button.active,.route-list button.active{border-color:#f5e1a1!important;color:#fff2ba!important;background:#3e5540!important}
+.craft-summary{gap:14px;flex-wrap:wrap}.craft-summary .craft-risk{color:#f2c0aa}.inventory-items .item-card{min-height:104px;touch-action:manipulation}
+@media(max-width:560px){.inventory-toolbar{gap:8px}.inventory-toolbar>label{flex-basis:43%}.inventory-slot-list{gap:6px}.inventory-slot-list button{font-size:11px;padding:7px}}
 </style>
 </head>
 <body>
@@ -342,7 +353,7 @@ async function cloudAutoResume(){
 async function cloudSendRecovery(){
  if(!cloudMode)return;
  const email=$('authName').value.trim();
- if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){ $('authError').textContent='请先输入注册邮箱地址，再点击找回密码。';return}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('authError').textContent='请先输入注册邮箱地址，再点击找回密码。';return}
  const btn=$('forgotPasswordBtn');btn.disabled=true;$('authError').textContent='正在申请密码重置邮件…';
  try{
   await cloudRequest('/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL),{method:'POST',body:{email}});
@@ -674,8 +685,83 @@ let suppressItemClick=0;
 function bindBagDrag(root){const slots=[...root.querySelectorAll('[data-slot]')];const items=[...root.querySelectorAll('[data-equip]')];function resetHighlights(){slots.forEach(s=>s.classList.remove('drop-target'))}for(const slot of slots){slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('drop-target')});slot.addEventListener('dragleave',()=>slot.classList.remove('drop-target'));slot.addEventListener('drop',e=>{e.preventDefault();resetHighlights();let key=e.dataTransfer.getData('text/plain');if(key)equipInto(key,+slot.dataset.slot)})}for(const item of items){item.draggable=true;item.addEventListener('dragstart',e=>{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',item.dataset.equip)});item.addEventListener('dragend',resetHighlights);item.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;const key=item.dataset.equip,origin={x:e.clientX,y:e.clientY};let ghost=null,dragged=false;const move=event=>{if(event.pointerId!==e.pointerId)return;const gap=Math.hypot(event.clientX-origin.x,event.clientY-origin.y);if(gap>12&&!dragged){dragged=true;ghost=document.createElement('div');ghost.className='drag-ghost';ghost.textContent=pets[itemOf(key)[0]].name;document.body.appendChild(ghost)}if(!dragged)return;event.preventDefault();ghost.style.left=event.clientX+'px';ghost.style.top=event.clientY+'px';resetHighlights();document.elementFromPoint(event.clientX,event.clientY)?.closest('[data-slot]')?.classList.add('drop-target')};const finish=event=>{if(event.pointerId!==e.pointerId)return;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',finish);window.removeEventListener('pointercancel',finish);const target=dragged?document.elementFromPoint(event.clientX,event.clientY)?.closest('[data-slot]'):null;ghost?.remove();resetHighlights();if(dragged){suppressItemClick=performance.now()+500;if(target)equipInto(key,+target.dataset.slot)}};window.addEventListener('pointermove',move,{passive:false});window.addEventListener('pointerup',finish);window.addEventListener('pointercancel',finish)})}}
 
 function renderModal(){const b=$('panelBody');if(modal==='party'){renderPartyPanel();return}if(modal==='talents'){$('panelTitle').textContent='花朵天赋 · 成长构筑';let html='<p class="notice">每提升 2 级可获得 1 点天赋，单项最多 5 级。每点只可投入一次，可通过下方按钮重新规划；数据随本地与云端存档同步。当前 LV '+game.p.level+' · 已获得 '+talentEarned(game.p.level)+' 点 · <span class="talent-count">未分配 '+talentPoints()+' 点</span></p><div class="talent-grid">';for(const [k,t] of Object.entries(TALENTS)){const rank=talentRank(k);html+='<div class="talent-card"><strong>'+t.name+' · '+rank+'/5</strong><small>'+t.desc+'</small><small>当前加成 '+Math.round(rank*t.gain*100)+'%</small><button type="button" data-talent="'+k+'" '+(rank>=5||!talentPoints()?'disabled':'')+'>提升天赋 (+1)</button></div>'}html+='</div><div class="route-list"><button id="respecTalents" type="button">重置已分配天赋</button></div>';b.innerHTML=html;b.querySelectorAll('[data-talent]').forEach(btn=>btn.onclick=()=>spendTalent(btn.dataset.talent));$('respecTalents').onclick=resetTalents}
-else if(modal==='bag'){$('panelTitle').textContent='花瓣背包 · 分组堆叠';let html='<p class="notice">每种花瓣只展示背包中<strong>最高持有等级</strong>；其他等级仍然保存，可在合成页查看和使用。点击物品可装备到选定槽位，也可<strong>拖拽物品到槽位</strong>（电脑、触屏均支持）。</p><div class="section-title">构筑配置</div><div class="route-list"><button data-deck="0">当前 '+(game.deck===0?'A':'B')+'</button><button data-deck="1">备用 '+(game.deck===0?'B':'A')+'</button></div><div class="section-title">选择目标槽位（可拖入）</div><div class="route-list">';const editing=selectedDeck===0?game.slots:game.backupSlots;for(let i=0;i<editing.length;i++)html+='<button data-slot="'+i+'" style="'+(i===selectedSlot?'border-color:#ffe3a2;color:#ffe3a2':'')+'">'+(i+1)+' · '+rarity[editing[i].r].en+' '+pets[editing[i].t].name+'</button>';html+='</div><div class="section-title">背包 · 每种最高等级</div><div class="item-grid">';for(const {k,n,r,hidden} of stackedBag()){const[t]=itemOf(k),d=pets[t];html+='<button class="item-card" data-equip="'+k+'" draggable="true"><span class="count">× '+n+'</span><span class="itemicon" style="color:'+d.color+'">'+d.glyph+'</span><strong>'+d.name+'</strong><small style="color:'+(r===8?'#e8e8e8':rarity[r].hex)+'">'+rarity[r].en+' · 伤害 '+Math.round(d.dmg*rarity[r].scale)+' · 耐久 '+Math.round(d.hp*rarity[r].scale)+'</small>'+(hidden?'<small>其他等级收纳 '+hidden+' 张</small>':'')+'</button>'}html+='</div>';b.innerHTML=html;b.querySelectorAll('[data-deck]').forEach(x=>x.onclick=()=>{selectedDeck=+x.dataset.deck;renderModal()});b.querySelectorAll('[data-slot]').forEach(x=>x.onclick=()=>{selectedSlot=+x.dataset.slot;renderModal()});b.querySelectorAll('[data-equip]').forEach(x=>x.onclick=()=>{if(performance.now()<suppressItemClick)return;equipInto(x.dataset.equip,selectedSlot)});bindBagDrag(b)}
-else if(modal==='craft'){$('panelTitle').textContent='花瓣合成 / 锻造';let selected=craftSelect&&itemOf(craftSelect)?itemOf(craftSelect):null;let available=selected?(game.bags[craftSelect]||0):0;let rate=selected&&selected[1]<rarity.length-1?rarity[selected[1]].chance:0;let forge=selected&&selected[1]===7;let html='<p class="notice">10 阶稀有度，从 common 至 eternal。普通合成消耗 5 张同类同阶花瓣，基础成功率 64%，逐级减半，失败损失 1–4 张。<strong>super → unique 必须锻造，固定 5 合 1（100%）</strong>；unique → eternal 恢复正常概率合成（0.25%）。此为本作自定数值。</p><div class="tier-legend">';for(const rr of rarity)html+='<span><b style="color:'+rr.hex+'">●</b> '+rr.en+'</span>';html+='</div><div class="craftbar"><div><strong>'+(selected?rarity[selected[1]].en+' '+pets[selected[0]].name:'请选择花瓣')+'</strong><span>'+(selected?(selected[1]===rarity.length-1?'已达到 eternal 最高等级':'仓库 '+available+' 张 · '+(forge?'固定锻造':'合成')+'成功率 '+(rate*100).toFixed(rate<.01?3:2)+'% · 需要 5 张'):'选择下面任一等级花瓣')+'</span></div><button id="doCraft" class="small-primary" '+(!selected||available<5||!rate?'disabled':'')+'>'+(forge?'锻造':'合成')+' 5 → 1</button></div><div class="section-title">所有稀有度库存（低阶未删除）</div><div class="item-grid">';let had=false;for(const [k,n]of sortedBag()){const[t,r]=itemOf(k),d=pets[t];had=true;html+='<button class="item-card '+(craftSelect===k?'active':'')+'" data-craft="'+k+'"><span class="count">× '+n+'</span><span class="itemicon" style="color:'+d.color+'">'+d.glyph+'</span><strong>'+d.name+'</strong><small style="color:'+(r===8?'#e8e8e8':rarity[r].hex)+'">'+rarity[r].en+(n>=5?' · 可合成':'')+'</small></button>'}if(!had)html+='<p class="notice">仓库没有物品。击败怪物获得花瓣。</p>';html+='</div>';b.innerHTML=html;b.querySelectorAll('[data-craft]').forEach(x=>x.onclick=()=>{craftSelect=x.dataset.craft;renderModal()});const doBtn=$('doCraft');if(doBtn)doBtn.onclick=()=>{if(!craftSelect)return;const [t,r]=itemOf(craftSelect),k=craftSelect;if(r>=rarity.length-1||(game.bags[k]||0)<5)return;const guaranteed=r===7;const win=guaranteed||Math.random()<rarity[r].chance;const consumed=win?5:Math.floor(Math.random()*4)+1;if(!takeBag(t,r,consumed))return;if(win){addBag(t,r+1);toast((guaranteed?'锻造':'合成')+'成功：'+rarity[r+1].en+' '+pets[t].name)}else toast('合成失败，损失 '+consumed+' 张 '+pets[t].name);saveGame();renderModal()}}
+// Shared controls for inventory and forging, including touch-friendly filters.
+let bagSearch='',bagRarity='all',bagSort='rarity',craftSearch='',craftRarity='all',craftReadyOnly=false;
+function inventoryFilterCards(mode,root){
+ const isCraft=mode==='craft',search=(isCraft?craftSearch:bagSearch).trim().toLocaleLowerCase();
+ const rarityFilter=isCraft?craftRarity:bagRarity,sorting=isCraft?'rarity':bagSort;
+ const cards=[...root.querySelectorAll(isCraft?'[data-craft]':'[data-equip]')],total=cards.length;
+ const ordered=cards.slice().sort((a,b)=>{
+  const ar=Number(a.dataset.rank),br=Number(b.dataset.rank),an=Number(a.dataset.count),bn=Number(b.dataset.count);
+  if(sorting==='count')return bn-an||br-ar;
+  if(sorting==='name')return a.dataset.name.localeCompare(b.dataset.name,'zh')||br-ar;
+  return br-ar||a.dataset.name.localeCompare(b.dataset.name,'zh');
+ });
+ ordered.forEach((card,i)=>card.style.order=String(i));
+ let shown=0;
+ for(const card of cards){
+  const rank=Number(card.dataset.rank),count=Number(card.dataset.count);
+  const hide=!!(search&&!card.dataset.name.toLocaleLowerCase().includes(search))||
+   (rarityFilter!=='all'&&rank!==Number(rarityFilter))||
+   (isCraft&&craftReadyOnly&&(count<5||rank>=rarity.length-1));
+  card.hidden=hide;if(!hide)shown++;
+ }
+ const counter=root.querySelector('#inventoryFilterCount');
+ if(counter)counter.textContent='显示 '+shown+' / '+total+' 组'+(isCraft&&craftReadyOnly?' · 可合成':'');
+}
+function bindInventoryFilters(mode,root){
+ const isCraft=mode==='craft',query=root.querySelector('#itemSearch'),tier=root.querySelector('#itemRarity');
+ query.value=isCraft?craftSearch:bagSearch;tier.value=isCraft?craftRarity:bagRarity;
+ const update=()=>inventoryFilterCards(mode,root);
+ query.oninput=()=>{if(isCraft)craftSearch=query.value;else bagSearch=query.value;update()};
+ tier.onchange=()=>{if(isCraft)craftRarity=tier.value;else bagRarity=tier.value;update()};
+ if(isCraft){const only=root.querySelector('#craftReadyOnly');only.checked=craftReadyOnly;
+   only.onchange=()=>{craftReadyOnly=only.checked;update()}}
+ else {const order=root.querySelector('#bagSort');order.value=bagSort;order.onchange=()=>{bagSort=order.value;update()}}
+ update();
+}
+function inventoryControls(mode){
+ const craft=mode==='craft';
+ return '<div class="inventory-toolbar"><label>查找花瓣<input id="itemSearch" type="search" placeholder="输入花瓣名称" aria-label="搜索背包花瓣"></label>'+
+ '<label>稀有度<select id="itemRarity"><option value="all">全部品质</option>'+rarity.map((r,i)=>'<option value="'+i+'">'+r.en+' · '+r.name+'</option>').join('')+'</select></label>'+
+ (craft?'<label class="inventory-toggle"><input id="craftReadyOnly" type="checkbox"> 仅显示可合成</label>':
+ '<label>排序<select id="bagSort"><option value="rarity">品质优先</option><option value="count">数量优先</option><option value="name">名称优先</option></select></label>')+
+ '<span id="inventoryFilterCount" class="inventory-filter-count" aria-live="polite"></span></div>';
+}
+else if(modal==='bag'){
+ $('panelTitle').textContent='花瓣背包 · 全品质库存';let html='<p class="notice">全部稀有度完整显示，支持名称搜索、稀有度筛选与排序。先选 A/B 构筑及槽位，再点选花瓣装备；桌面可拖动，手机可点击。旧装备自动返还背包。</p>';
+ html+='<div class="section-title">双构筑 · 槽位</div><div class="route-list"><button data-deck="0" class="'+(selectedDeck===0?'active':'')+'">A · '+(game.deck===0?'当前':'备用')+'</button><button data-deck="1" class="'+(selectedDeck===1?'active':'')+'">B · '+(game.deck===1?'当前':'备用')+'</button></div>';
+ const editing=selectedDeck===0?game.slots:game.backupSlots;
+ html+='<div class="route-list inventory-slot-list">';
+ for(let i=0;i<editing.length;i++){const x=editing[i];html+='<button data-slot="'+i+'" class="'+(i===selectedSlot?'active':'')+'" aria-pressed="'+(i===selectedSlot)+'"><span style="color:'+rarity[x.r].hex+'">●</span> '+(i+1)+' · '+pets[x.t].name+'</button>'}html+='</div>';
+ html+='<div class="section-title">花瓣库存 · 全品质</div>'+inventoryControls('bag')+'<div class="item-grid inventory-items">';
+ for(const [k,n] of sortedBag()){const[t,r]=itemOf(k),d=pets[t];html+='<button type="button" class="item-card" data-equip="'+k+'" data-name="'+d.name+' '+t+'" data-rank="'+r+'" data-count="'+n+'" draggable="true"><span class="count">× '+n+'</span><span class="itemicon" style="color:'+d.color+'">'+d.glyph+'</span><strong>'+d.name+'</strong><small style="color:'+rarity[r].hex+'">'+rarity[r].en+' · 伤害 '+Math.round(d.dmg*rarity[r].scale)+'</small><small>耐久 '+Math.round(d.hp*rarity[r].scale)+'</small></button>'}
+ html+='</div>';if(!sortedBag().length)html+='<p class="notice">背包尚无花瓣。战斗掉落会自动进入这里。</p>';
+ b.innerHTML=html;bindInventoryFilters('bag',b);
+ b.querySelectorAll('[data-deck]').forEach(x=>x.onclick=()=>{selectedDeck=+x.dataset.deck;renderModal()});
+ b.querySelectorAll('[data-slot]').forEach(x=>x.onclick=()=>{selectedSlot=+x.dataset.slot;renderModal()});
+ b.querySelectorAll('[data-equip]').forEach(x=>x.onclick=()=>{if(performance.now()<suppressItemClick)return;equipInto(x.dataset.equip,selectedSlot)});
+ bindBagDrag(b);
+}
+else if(modal==='craft'){
+ $('panelTitle').textContent='花瓣合成 · 风险锻造';
+ let selected=craftSelect&&itemOf(craftSelect)?itemOf(craftSelect):null;
+ let available=selected?(game.bags[craftSelect]||0):0;
+ let rate=selected&&selected[1]<rarity.length-1?rarity[selected[1]].chance:0;
+ let forge=!!selected&&selected[1]===7;
+ let html='<p class="notice">从背包选择同类同品质的 5 张花瓣进行合成；普通合成可能失败并损失 1–4 张，超凡→独一固定 5 合 1，永恒不可继续升级。所有概率为本游戏的独立设计。</p><div class="tier-legend">';
+ for(const rr of rarity)html+='<span><b style="color:'+rr.hex+'">●</b> '+rr.en+'</span>';
+ html+='</div><div class="craftbar craft-summary"><div><strong>'+(selected?rarity[selected[1]].en+' '+pets[selected[0]].name:'请选择一组花瓣')+'</strong><span>'+(selected?'库存 '+available+' / 需要 5 · '+(selected[1]===rarity.length-1?'已达最高品质':(forge?'必成锻造':'成功概率 '+(rate*100).toFixed(rate<.01?3:2)+'%')):'先搜索或筛选，再点击下方花瓣')+'</span>'+(selected&&!forge&&rate>0?'<span class="craft-risk">失败可能损失 1–4 张，合成结果不可撤销</span>':'')+'</div><button id="doCraft" type="button" class="small-primary" '+(!selected||available<5||!rate?'disabled':'')+'>'+(forge?'确定锻造':'尝试合成')+' 5 → 1</button></div>';
+ html+='<div class="section-title">全部品质库存</div>'+inventoryControls('craft')+'<div class="item-grid inventory-items">';
+ let had=false;
+ for(const [k,n] of sortedBag()){const[t,r]=itemOf(k),d=pets[t];had=true;
+  html+='<button type="button" class="item-card '+(craftSelect===k?'active':'')+'" data-craft="'+k+'" data-name="'+d.name+' '+t+'" data-rank="'+r+'" data-count="'+n+'" aria-pressed="'+(craftSelect===k)+'"><span class="count">× '+n+'</span><span class="itemicon" style="color:'+d.color+'">'+d.glyph+'</span><strong>'+d.name+'</strong><small style="color:'+rarity[r].hex+'">'+rarity[r].en+(n>=5&&r<rarity.length-1?' · 可合成':'')+'</small></button>'}
+ if(!had)html+='<p class="notice">暂无库存。击败怪物获得花瓣。</p>';
+ html+='</div>';b.innerHTML=html;bindInventoryFilters('craft',b);
+ b.querySelectorAll('[data-craft]').forEach(x=>x.onclick=()=>{craftSelect=x.dataset.craft;renderModal()});
+ const doBtn=$('doCraft');if(doBtn)doBtn.onclick=()=>{if(!craftSelect)return;const [t,r]=itemOf(craftSelect),k=craftSelect;if(r>=rarity.length-1||(game.bags[k]||0)<5)return;const guaranteed=r===7;const win=guaranteed||Math.random()<rarity[r].chance;const consumed=win?5:Math.floor(Math.random()*4)+1;if(!takeBag(t,r,consumed))return;if(win){addBag(t,r+1);toast((guaranteed?'锻造':'合成')+'成功：'+rarity[r+1].en+' '+pets[t].name)}else toast('合成失败，损失 '+consumed+' 张 '+pets[t].name);saveGame();renderModal()}}
+
+}
 else if(modal==='map'){$('panelTitle').textContent='世界地图 · 8 个区域';let svg='<svg class="world-map" viewBox="0 0 700 360" role="img" aria-label="世界区域网络图"><defs><pattern id="dots" width="23" height="23" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#ffffff1a"/></pattern></defs><rect width="700" height="360" fill="url(#dots)"/>';const shown=new Set();for(const[id,z]of Object.entries(zones))for(const [to]of z.ports){const key=[id,to].sort().join('-');if(shown.has(key))continue;shown.add(key);let[a,b]=[worldLayout[id],worldLayout[to]];svg+='<line x1="'+a[0]*700+'" y1="'+a[1]*360+'" x2="'+b[0]*700+'" y2="'+b[1]*360+'" stroke="#bdd6bc77" stroke-width="2" stroke-dasharray="5 6"/>'}for(const [id,z]of Object.entries(zones)){const a=worldLayout[id],x=a[0]*700,y=a[1]*360,active=id===game.zone;svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(active?26:21)+'" fill="'+z.bg+'" stroke="'+(active?'#fff4b8':'#c7e0bf')+'" stroke-width="'+(active?4:2)+'"/><text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#fffbee">'+z.name+'</text>'}svg+='</svg><p class="notice" style="margin-top:12px">实线不代表可以任意瞬移；地图连线表示可通过游戏内传送门抵达。点击区域设置追踪目标，随后在场景中寻找闪亮的传送门。地狱入口为此单机版本的玩法改编。</p><div class="section-title">导航目标（当前：'+zones[game.zone].name+'）</div><div class="route-list">';for(const[id,z]of Object.entries(zones))svg+='<button data-nav="'+id+'" style="'+(game.navTarget===id?'border-color:#ffe2aa':'')+'">'+z.name+(id===game.zone?' · 当前':'')+'</button>';svg+='</div><div class="section-title">区域危险等级（中心 → 边缘）</div><div class="inspection-grid">';for(const[id,z]of Object.entries(zones))svg+='<div class="inspect-box"><strong>'+z.name+'</strong>中心：'+bandLabel(id,0)+'<br>最外层：'+bandLabel(id,6)+'</div>';svg+='</div>';b.innerHTML=svg;b.querySelectorAll('[data-nav]').forEach(x=>x.onclick=()=>{game.navTarget=x.dataset.nav;closeModal();toast(game.navTarget===game.zone?'你已经位于目标地图':'导航已设为 '+zones[game.navTarget].name)})}
 else if(modal==='codex'){$('panelTitle').textContent='怪物图鉴 · MOB CODEX';
 const seen=Object.values(game.codex).filter(s=>s.seen).length,kills=Object.values(game.codex).reduce((s,d)=>s+d.kills,0),select=codexChoice&&mobs[codexChoice]?codexChoice:Object.keys(mobs)[0];codexChoice=select;
