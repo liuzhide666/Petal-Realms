@@ -1,20 +1,52 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync(path.join(__dirname,'../site/index.html'),'utf8');
-const match=html.match(/^const CLOUD_SITE_URL=.*;$/m);
-assert.ok(match,'CLOUD_SITE_URL declaration must exist on one line');
-const configured=(loc)=>vm.runInNewContext(match[0]+'\nCLOUD_SITE_URL',loc?{location:loc}:{});
-const defaultURL='https://stellular-khapse-5c19f8.netlify.app';
+const headers=fs.readFileSync(path.join(__dirname,'../site/_headers'),'utf8');
+const lines=['CLOUD_PRIMARY_URL','CLOUD_LEGACY_URL','CLOUD_SITE_URL'].map(name=>{
+ const declaration=html.match(new RegExp('^const '+name+'=.*;$','m'));
+ assert.ok(declaration,'Missing '+name);
+ return declaration[0];
+});
+const configured=(loc)=>vm.runInNewContext(lines.join('\n')+'\nCLOUD_SITE_URL',loc?{location:loc}:{});
+const primary='https://petal-realms.pages.dev',legacy='https://stellular-khapse-5c19f8.netlify.app';
 const cases=[
- [{protocol:'https:',hostname:'petal-realms.pages.dev',origin:'https://petal-realms.pages.dev'},'https://petal-realms.pages.dev'],
- [{protocol:'https:',hostname:'staging.petal-realms.pages.dev',origin:'https://staging.petal-realms.pages.dev'},'https://staging.petal-realms.pages.dev'],
- [{protocol:'https:',hostname:'some-project-7.pages.dev',origin:'https://some-project-7.pages.dev'},'https://some-project-7.pages.dev'],
- [{protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:defaultURL},defaultURL],
- [{protocol:'http:',hostname:'petal-realms.pages.dev',origin:'http://petal-realms.pages.dev'},defaultURL],
- [{protocol:'https:',hostname:'petal-realms.pages.dev.attacker.example',origin:'https://petal-realms.pages.dev.attacker.example'},defaultURL],
- [null,defaultURL]
+ [{protocol:'https:',hostname:'petal-realms.pages.dev',origin:primary},primary],
+ [{protocol:'https:',hostname:'staging.petal-realms.pages.dev',origin:'https://staging.petal-realms.pages.dev'},primary],
+ [{protocol:'https:',hostname:'other.pages.dev',origin:'https://other.pages.dev'},primary],
+ [{protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:legacy},legacy],
+ [{protocol:'http:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:'http://stellular-khapse-5c19f8.netlify.app'},primary],
+ [{protocol:'https:',hostname:'petal-realms.pages.dev.attacker.example',origin:'https://petal-realms.pages.dev.attacker.example'},primary],
+ [null,primary]
 ];
-for(const [loc,want] of cases)assert.equal(configured(loc),want);
-assert.ok(fs.readFileSync(path.join(__dirname,'../site/_headers'),'utf8').includes('X-Content-Type-Options'));
-assert.ok(html.includes("'/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)"));
-assert.ok(html.includes("'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)"));
-console.log(JSON.stringify({checks:10,passed:10,scope:'local URL and static-file configuration only; requires Supabase redirect allowlist'}));
+let n=0;
+for(const [loc,want] of cases){assert.equal(configured(loc),want);n++;}
+for(const [needle,message] of [
+ ['<link rel="canonical" href="'+primary+'/"','Canonical link'],
+ ['<meta property="og:url" content="'+primary+'/"','Social primary URL'],
+ ["'/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Signup callback'],
+ ["'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)",'Recovery callback'],
+ ['id="migrationNotice"','Explicit old-origin migration warning'],
+ ['id="hostBadge"','Hosting badge'],
+ ["const CLOUD_PRIMARY_URL='"+primary+"'","Explicit Cloudflare canonical constant"],
+ ["cloudAuthMessage(err,'login')","Localized auto-login error"],
+ ['version:\'5.7.1-cloudflare-primary\'','Current version marker']
+]){assert.ok(html.includes(needle),message);n++;}
+for(const str of ['X-Content-Type-Options: nosniff','Referrer-Policy: strict-origin-when-cross-origin','X-Frame-Options: DENY','Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()','/index.html','Cache-Control: no-cache, must-revalidate']){
+ assert.ok(headers.includes(str),str);n++;
+}
+const start=html.indexOf('function updateHostingStatus()');
+const stop=html.indexOf('window.PetalRealmsInfo=Object.freeze(',start);
+assert.ok(start>=0&&stop>start);
+const code=html.slice(start,stop);
+function hosted(loc,online){
+ const badge={textContent:''},notice={style:{display:''}},listeners={};
+ const c={location:loc,navigator:{onLine:online},window:{addEventListener:(evt,fn)=>listeners[evt]=fn},$:id=>id==='hostBadge'?badge:id==='migrationNotice'?notice:null};
+ vm.runInNewContext(code,c);
+ assert.equal(typeof listeners.online,'function');
+ assert.equal(typeof listeners.offline,'function');
+ return {badge:badge.textContent,notice:notice.style.display};
+}
+const a=hosted({protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app'},true);
+assert.ok(a.badge.includes('旧版网站')&&a.notice==='block');n++;
+const b=hosted({protocol:'https:',hostname:'petal-realms.pages.dev'},false);
+assert.ok(b.badge.includes('Cloudflare Pages')&&b.badge.includes('离线')&&b.notice==='none');n++;
+console.log(JSON.stringify({checks:n,passed:n,scope:'unit-only; no live Supabase email delivery'}));
