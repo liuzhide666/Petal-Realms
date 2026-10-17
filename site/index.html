@@ -224,17 +224,17 @@ function cloudAuthMessage(err,action='login'){
  const raw=String(err?.message||'');
  const message=raw.toLowerCase();
  if(code==='invalid_credentials'||/invalid.login.credentials|invalid.grant|invalid.password|email.not.found|user.not.found/.test(message))
-  return '邮箱或密码不正确。首次使用请点击「注册新角色」；已注册可检查密码或使用「忘记密码」。旧版本地角色请切换旧账号入口。';
+  return '账号地址或密码不正确。首次使用请点击「注册新角色」；旧本地角色请切换旧账号入口。';
  if(['email_address_not_authorized','email_not_authorized'].includes(code)||/email.address.not.authorized|email.recipient.not.authorized/.test(message))
   return '此邮箱尚未获得 Supabase 默认邮件服务的发送授权。管理员必须配置自定义 SMTP 才能面向普通玩家发送验证邮件；请不要反复注册。';
  if((/email|smtp|mail/.test(message)&&/sending|send|failed|error|provider|smtp/.test(message))||['email_provider_error','email_send_failed'].includes(code))
   return '邮件服务未能正常发送验证邮件。请稍后重试并联系游戏管理员检查 Supabase SMTP 设置；重复注册无法修复发信配置。';
  if(code==='email_not_confirmed'||/email.not.confirmed|email.not.verified|confirm.your.email/.test(message))
-  return '邮箱尚未完成验证。请打开注册邮箱中的确认邮件，完成验证后再登录；也请检查垃圾邮件。';
+  return '该账号仍处于旧版邮箱确认状态。请联系管理员检查 Supabase Confirm Email 设置；不要反复请求验证邮件。';
  if(['over_email_send_rate_limit','over_request_rate_limit','over_sms_send_rate_limit','rate_limit_exceeded'].includes(code)||/too.many.requests|rate.limit|email.rate.limit|email.send.rate/.test(message))
   return '操作过于频繁，请稍后再试，避免连续点击注册或重发邮件。';
  if(code==='email_exists'||code==='user_already_exists'||/already.registered|already.exists/.test(message))
-  return '该邮箱可能已经注册。请切换到登录，或使用「忘记密码」恢复账号。';
+  return '该账号地址可能已经注册。请切换「登录角色」并输入原密码；当前不提供邮件重置。';
  if(['signup_disabled','email_provider_disabled'].includes(code)||/signups?.(are.)?disabled/.test(message))
   return '邮箱注册服务暂未开放，请稍后再试。';
  if(['weak_password','password_too_short'].includes(code)||/password.should.be.at.least|weak.password/.test(message))
@@ -247,7 +247,7 @@ function cloudAuthMessage(err,action='login'){
   return '安全验证没有通过，请刷新页面后重试。';
  // Locally generated Chinese messages include cloud-save conflict instructions.
  if(/[\u3400-\u9fff]/.test(raw))return raw.slice(0,240);
- return action==='register'?'注册暂时未完成，请核对邮箱和密码或稍后重试。':'登录暂时未完成，请稍后重试；也可使用找回密码功能。';
+ return action==='register'?'注册未完成，请检查账号地址、密码和服务器免邮件注册设置。':'登录未完成，请检查账号地址、密码或稍后重试。';
 }
 async function cloudRequest(path,{method='GET',body,token,prefer}={}){
  if(!cloudReady())throw Error('尚未配置可用的 Supabase 项目及 Publishable Key。');
@@ -300,6 +300,16 @@ async function cloudEnter(a){
   if(resume){cloudPending=pending.snapshot;cloudGeneration++;cloudSchedule(300);toast('已安全恢复本地未同步存档，正在尝试上传')}
  }catch(err){cloudSession=null;cloudRevision=null;cloudPending=null;throw err}
 }
+// Enforce password-only registration. Public GoTrue settings disclose whether email confirmation is enabled.
+async function cloudNoMailSignupReady(){
+ let settings;
+ try{settings=await cloudRequest('/auth/v1/settings')}
+ catch{throw Error('无法核对服务器免邮件注册设置，已安全取消注册请求。请检查网络或联系管理员。')}
+ if(settings?.disable_signup)throw Error('云端暂停了新账号注册，请联系管理员。');
+ if(settings?.autoconfirm!==true&&settings?.mailer_autoconfirm!==true)
+  throw Error('服务器尚未启用免邮件注册。已安全取消注册请求，不发送验证邮件。管理员需在 Supabase Authentication → Providers → Email 中关闭 Confirm Email。');
+ return true;
+}
 async function cloudAuth(name,pass){
  if(!cloudReady())throw Error('当前云端服务不可用，请稍后重试');
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(name)||name.length>254||pass.length<6)throw Error('请输入有效邮箱地址与正确密码');
@@ -307,8 +317,9 @@ async function cloudAuth(name,pass){
  if(authMode==='register'){
   if(pass.length<8)throw Error('新账号密码至少需要 8 位');
   if(pass!==$('authConfirm').value)throw Error('两次输入的密码不一致');
-  const a=await cloudRequest('/auth/v1/signup?redirect_to='+encodeURIComponent(CLOUD_SITE_URL),{method:'POST',body:{email:name,password:pass}});
-  if(!a?.access_token){$('authError').textContent='注册请求已受理，但不代表验证邮件已送达。请检查收件箱和垃圾邮件；若账号已经注册，请切换「登录角色」而非重复注册。长时间未收到邮件请联系游戏管理员检查 Supabase SMTP。';$('authPass').value='';$('authConfirm').value='';return}
+  await cloudNoMailSignupReady();
+  const a=await cloudRequest('/auth/v1/signup',{method:'POST',body:{email:name,password:pass}});
+  if(!a?.access_token||!a?.refresh_token)throw Error('服务器未返回可直接登录的会话。请管理员核对 Confirm Email 是否已经关闭。');
   await cloudEnter(a);
  }else{
   await cloudEnter(await cloudRequest('/auth/v1/token?grant_type=password',{method:'POST',body:{email:name,password:pass}}));
@@ -327,16 +338,6 @@ async function cloudAutoResume(){
   if(/(?:invalid|expired|revoked|401|403|refresh.token|token.not.found)/i.test(String(err.message)))cloudForgetStoredSession();
   $('authError').textContent='自动登录未完成：'+cloudAuthMessage(err,'login')+'。可手动输入邮箱与密码。';
  }finally{cloudRestoring=false;$('authSubmit').disabled=false}
-}
-async function cloudSendRecovery(){
- if(!cloudMode)return;
- const email=$('authName').value.trim();
- if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('authError').textContent='请先在邮箱地址栏输入注册邮箱，再点击找回密码。';return}
- const btn=$('forgotPasswordBtn');btn.disabled=true;$('authError').textContent='正在发送密码重置邮件…';
- try{await cloudRequest('/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL),{method:'POST',body:{email}});
-  $('authError').textContent='如果此邮箱已注册，重置邮件会发送到该邮箱。请检查收件箱和垃圾邮件。'}
- catch(err){ $('authError').textContent='发送失败：'+cloudAuthMessage(err,'recovery') }
- finally{btn.disabled=false}
 }
 async function cloudRecoveryFromURL(){
  if(!location.hash||!cloudReady())return false;
