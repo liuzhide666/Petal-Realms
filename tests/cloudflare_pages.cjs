@@ -34,7 +34,7 @@ for(const str of ['X-Content-Type-Options: nosniff','Referrer-Policy: strict-ori
  assert.ok(headers.includes(str),str);n++;
 }
 const start=html.indexOf('function updateHostingStatus()');
-const stop=html.indexOf('window.PetalRealmsInfo=Object.freeze(',start);
+const stop=html.indexOf('// Opt-in multiplayer preview.',start);
 assert.ok(start>=0&&stop>start);
 const code=html.slice(start,stop);
 function hosted(loc,online){
