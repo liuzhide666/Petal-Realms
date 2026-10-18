@@ -1,4 +1,6 @@
-# Cloudflare Pages — Petal Realms V5.7.1 正式主站
+# Cloudflare Pages — Petal Realms 正式主站
+
+V5.10 起 Cloudflare 是唯一正式入口与邮箱认证回跳地址；默认本机账号不发邮件。`netlify.toml` 的 `ignore = "exit 0"` 用于跳过旧 Netlify 自动构建；没有删除旧站及其浏览器存档。以下首次上线记录属于历史证据，当前生产 SHA 每次发版都需重新读取 Cloudflare 验证。
 
 **状态：Cloudflare Pages 已创建，GitHub 关联成功，V5.7 首次生产构建与部署已通过。** 项目 `petal-realms`，访问域名 https://petal-realms.pages.dev ，部署源为 `liuzhide666/Petal-Realms` 的 `main` 分支。首次成功部署 ID `5510e895-f477-4b2a-8bc4-013f1193d6d3`，对应提交 `2f7331f1c8a3362c3595522a0b4d3cc71fc48069`。该状态由 Cloudflare API 返回；真实手机浏览器及邮箱验证尚待独立验收。
 

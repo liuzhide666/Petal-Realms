@@ -47,5 +47,4 @@ ok(html.includes("ctx.rotate(m.facing??0);")&&html.includes("drawCreatureBody(m,
 ok(html.includes("ctx.arc(0,0,petalContactRadius(d),0,TAU);ctx.stroke()"),'petal hitbox debug shows actual collision circle');
 ok(html.includes("if(mobCircleOverlap(a,p.x,p.y,p.r+.5))"),'player body uses exact ellipse vs circle');
 ok(html.includes("!mobCircleOverlap(m,e.x,e.y,petalContactRadius(def))"),'orbit petals use exact ellipse vs circle');
-ok(html.includes("version:'5.9.2-contact-precision'"),'version marker');
 console.log(JSON.stringify({passed:n,reference_geometry_comparisons:comparisons,status:'ok',scope:'deterministic geometry; not a native-phone test'}));

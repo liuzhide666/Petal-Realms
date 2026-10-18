@@ -8,7 +8,7 @@ function make(initial,rank,rolls=[]){
  const key='basic@'+rank,bags={[key]:initial};
  const rarities=Array.from({length:10},(_,i)=>({chance:i===7?1:i===9?0:.64/Math.pow(2,i)}));
  const math=Object.create(Math);let cursor=0;math.random=()=>rolls[cursor++]??.9;
- const ctx={Math:math,game:{bags},rarity:rarities,itemOf:k=>k===key?['basic',rank]:null,
+ const ctx={Math:math,game:{bags,protectedPetals:{}},rarity:rarities,itemOf:k=>k===key?['basic',rank]:null,isPetalProtected:()=>false,
  takeBag:(t,r,n=1)=>{const k=t+'@'+r;if((bags[k]||0)<n)return false;bags[k]-=n;return true},
  addBag:(t,r,n=1)=>{const k=t+'@'+r;bags[k]=(bags[k]||0)+n}};
  vm.createContext(ctx);vm.runInContext(html.slice(start,end),ctx);
