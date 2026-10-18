@@ -12,7 +12,7 @@ checks = []
 
 with sync_playwright() as pw:
     browser = pw.chromium.launch(headless=True, executable_path=os.environ.get('PETAL_CHROMIUM'), args=['--no-sandbox', '--disable-dev-shm-usage'])
-    for label, width, height, mobile in [('desktop',1280,800,False), ('portrait',390,844,True), ('landscape',844,390,True)]:
+    for label, width, height, mobile in [('desktop',1280,800,False), ('portrait',390,844,True), ('landscape',844,390,True), ('small',320,568,True)]:
         ctx = browser.new_context(viewport={'width':width,'height':height},has_touch=mobile,is_mobile=mobile,device_scale_factor=1)
         page = ctx.new_page()
         errors = []
@@ -56,6 +56,7 @@ with sync_playwright() as pw:
             page.locator('#skillMenuBtn').tap()
             check('skill_tray_expands',page.locator('#skillDock').is_visible())
             check('skills_clear_inventory',disjoint('#skillDock','#bottom'))
+            check('skill_tray_clear_of_controls',disjoint('#skillDock','.action-buttons') and disjoint('#skillDock','#joystick') and disjoint('#skillDock','#sideBtns'))
             page.screenshot(path=str(OUT/f'v512_{label}_skills.png'))
             page.locator('#skillMenuBtn').tap()
             page.locator('#touchAtk').dispatch_event('pointerdown',{'pointerId':21,'pointerType':'touch','button':0})
