@@ -33,6 +33,8 @@ jobs:
         run: node tests/v591_batch_craft.cjs
       - name: V5.9.2 exact collision geometry regression
         run: node tests/v592_collision_precision.cjs
+      - name: V5.9.3 petal protection and collision broadphase
+        run: node tests/v593_protection_broadphase.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
