@@ -43,7 +43,7 @@ try:
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         check('default_is_cloudflare_account','Cloudflare' in page.locator('#authHeading').inner_text())
         stamp=str(time.time_ns())[-12:]
-        user='cf'+stamp; password='runtime-password-2026'
+        user='cf'+stamp+'@example.com'; password='runtime-password-2026'
         page.locator('#tabRegister').click()
         page.locator('#authName').fill(user);page.locator('#authPass').fill(password);page.locator('#authConfirm').fill(password)
         page.locator('#authSubmit').click()
@@ -60,6 +60,21 @@ try:
         check('signup_really_saves_to_d1',True)
         check('secure_httponly_session',all(c['httpOnly'] and c['secure'] and c['sameSite']=='Strict' for c in desktop.cookies() if c['name']=='__Host-petal_session'))
         check('no_auth_token_in_localstorage',not page.evaluate('Object.values(localStorage).some(v=>v.includes("__Host-petal_session"))'))
+        page.locator('#orbitBtn').click()
+        check('orbit_button_reverses_live_petals',page.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')==-1)
+        page.keyboard.press('h')
+        check('orbit_keyboard_reverses_live_petals',page.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')==1)
+        page.keyboard.down('Shift')
+        page.wait_for_function('document.getElementById("modeTag").textContent.includes("修复")')
+        check('guard_repair_stance_visible',True)
+        page.keyboard.up('Shift')
+        page.keyboard.press('r')
+        page.wait_for_function('document.querySelector(".slot-state").textContent.includes("s")')
+        check('swapping_loadout_shows_reload_countdowns',page.evaluate('window.PetalRealmsInfo.snapshot().petalState.every(p=>p.cd>0)'))
+        page.screenshot(path=str(OUT/'v511_combat_reload.png'))
+        page.wait_for_function('window.PetalRealmsInfo.snapshot().petalState.every(p=>p.cd<=0)')
+        page.wait_for_function('!document.querySelector(".slot.reloading")')
+        check('petals_return_after_reload',not page.locator('.slot.reloading').count())
         page.evaluate('document.getElementById("pauseBtn").click()')
         check('cloud_controls_reachable',page.locator('#cfSaveNow').count()==1 and page.locator('#cfPasswordForm').count()==1)
         with page.expect_download() as download:
@@ -83,6 +98,15 @@ try:
         second.wait_for_function('document.getElementById("saveText").textContent.includes("已同步")')
         check('independent_device_reads_same_cloud_character',True)
         second.screenshot(path=str(OUT/'v511_mobile_cloud_account.png'))
+        second.locator('#panelClose').click()
+        second.locator('#orbitBtn').click()
+        check('mobile_orbit_control_is_reachable',second.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')==-1)
+        check('mobile_slots_do_not_overlap_combat_buttons',second.evaluate('''()=>{
+          const a=document.querySelector('#slots').getBoundingClientRect();
+          return Array.from(document.querySelectorAll('.action-button')).every(e=>{const b=e.getBoundingClientRect();return a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top});
+        }'''))
+        second.screenshot(path=str(OUT/'v511_mobile_combat.png'))
+        second.locator('#pauseBtn').click()
         remote=api(second,'save')['data'];remote['payload']['p']['level']=14
         response=api(second,'save','PUT',{'expectedRevision':remote['revision'],'payload':remote['payload']})
         check('second_device_update',response['status']==200)
@@ -125,7 +149,7 @@ try:
         page.locator('#authName').fill('local'+stamp[-8:]);page.locator('#authPass').fill(password);page.locator('#authConfirm').fill(password);page.locator('#authSubmit').click()
         page.wait_for_function('window.PetalRealmsInfo.snapshot() !== null')
         page.evaluate('document.getElementById("pauseBtn").click()')
-        page.locator('#cfMigrateName').fill('migrate'+stamp[-8:]);page.locator('#cfMigratePassword').fill(password);page.locator('#cfMigrateConfirm').fill(password)
+        page.locator('#cfMigrateName').fill('migrate'+stamp[-8:]+'@example.com');page.locator('#cfMigratePassword').fill(password);page.locator('#cfMigrateConfirm').fill(password)
         page.once('dialog',lambda d:d.accept());page.locator('#cfMigrateForm button').click()
         page.locator('#cfRecoveryCard').wait_for()
         page.wait_for_function('document.getElementById("saveText").textContent.includes("已同步")')

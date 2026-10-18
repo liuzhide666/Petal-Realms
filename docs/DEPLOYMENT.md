@@ -20,3 +20,8 @@ Cloudflare 是唯一正式发布目标：https://petal-realms.pages.dev/ 。不�
 当前 Netlify 连接器没有删除站点或解除仓库关联的操作。远程退役尚未执行；不能用删除本地文件冒充平台操作成功。当前界面入口是 https://app.netlify.com/projects/stellular-khapse-5c19f8 。
 
 历史 Netlify ZIP 与 QA 仅作为发布来源保留，不作为有效部署配置。
+
+
+### 2026-10-18 实际退役状态
+
+Netlify 所有部署现已启用受邀团队登录限制，旧生产地址公开访问显示 `This site is private`，不再向访客提供旧游戏。Cloudflare 为公开运行基准。历史部署保留，永久删除和仓库解绑尚未完成，构建停止保护仍需保留。Google 登录回调报 `Invalid state key`，没有据此声称后台退役已全部完成。

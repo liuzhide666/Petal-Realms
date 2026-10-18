@@ -43,6 +43,7 @@ jobs:
       - name: Cloudflare account API and frontend wiring
         run: |
           node tests/v511_wiring.cjs
+          node --test tests/v511_combat.cjs
           node --test tests/v511_review.cjs
           node --test tests/cloudflare_api.test.mjs
   browser-v59:

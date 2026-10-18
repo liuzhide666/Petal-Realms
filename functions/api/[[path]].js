@@ -18,9 +18,16 @@ const statement = (db,sql,...args) => db.prepare(sql).bind(...args);
 function reply(data,status=200,headers={}) {
   return Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',...headers}});
 }
-function username(value) {
-  if(typeof value!=='string') fail(400,'请输入游戏账号。');
+function username(value,emailOnly=false) {
+  if(typeof value!=='string') fail(400,'请输入注册邮箱。');
   const name=value.normalize('NFKC').trim().toLowerCase();
+  if(emailOnly||name.includes('@')) {
+    const parts=name.split('@'),local=parts[0],domain=parts[1]||'';
+    const labels=domain.split('.');
+    if(name.length>254||parts.length!==2||!local||local.length>64||! /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i.test(local)||local.startsWith('.')||local.endsWith('.')||local.includes('..')||labels.length<2||!labels.every(x=>/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(x))||!/^[a-z]{2,63}$/i.test(labels.at(-1))) fail(400,'请输入有效的邮箱地址，例如 name@example.com。');
+    return name;
+  }
+  // Existing V5.11 preview game names keep working for login and recovery.
   if(!/^[\p{L}\p{N}_-]{2,18}$/u.test(name)||['__proto__','constructor','prototype'].includes(name)||/^(cloud-|cf-)/i.test(name)) fail(400,'账号需为 2—18 位汉字、字母、数字、下划线或连字符，且不能使用保留前缀。');
   return name;
 }
@@ -163,13 +170,13 @@ export async function onRequest({request,env}) {
       if(!changed)fail(409,'账号安全设置已改变，请重新登录。');
       return reply({ok:true},200,{'Set-Cookie':await sessionCookie(db,{...account,...changed},body.remember===true)});
     }
-    const name=username(body.username);
+    const name=username(body.username,path==='auth/register');
     await limit(db,'auth-name:'+hash(name),15,300);
     if(path==='auth/register') {
       await limit(db,'register:'+hash(ip),5,3600);
       const record=await makePassword(password(body.password)),id=randomUUID(),recoveryCode=randomBytes(32).toString('hex');
       const row=await statement(db,'INSERT INTO players(id,username,display_name,password_record,recovery_hash,created_at) VALUES(?,?,?,?,?,?) ON CONFLICT(username) DO NOTHING RETURNING id,username,display_name,credential_version',id,name,body.username.normalize('NFKC').trim(),record,hash(recoveryCode),now()).first();
-      if(!row)fail(409,'游戏账号已被使用，请登录或更换名称。');
+      if(!row)fail(409,'该邮箱已经注册，请登录或使用恢复码找回。');
       return reply({account:publicAccount(row),recoveryCode},201,{'Set-Cookie':await sessionCookie(db,row,body.remember===true)});
     }
     const row=await statement(db,'SELECT * FROM players WHERE username=?',name).first();

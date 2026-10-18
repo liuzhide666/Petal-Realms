@@ -31,7 +31,7 @@ function fixture() {
 }
 const password='sensible-password-2026';
 const save = () => ({version:5,zone:'garden',p:{level:3,xp:12,kills:5,hp:100},bag:{'basic@0':8},slots:[{t:'basic',r:0}],protectedPetals:{'basic@0':true}});
-async function register(f, username='flower', ip='127.0.0.1') {
+async function register(f, username='flower@example.com', ip='127.0.0.1') {
   const r=await f.call('auth/register',{method:'POST',body:{username,password,remember:true},ip});
   assert.equal(r.status,201); const data=await r.json();
   return {...data,cookie:r.headers.get('Set-Cookie').split(';')[0]};
@@ -39,27 +39,27 @@ async function register(f, username='flower', ip='127.0.0.1') {
 
 test('registration uses a server account, secure cookie and no email',async()=>{
   const f=fixture(), a=await register(f);
-  assert.equal(a.account.username,'flower'); assert.match(a.recoveryCode,/^[a-f0-9]{64}$/);
+  assert.equal(a.account.username,'flower@example.com'); assert.match(a.recoveryCode,/^[a-f0-9]{64}$/);
   const row=f.db.prepare('SELECT * FROM players').get();
   assert.ok(!JSON.stringify(row).includes(password)); assert.ok(!JSON.stringify(row).includes(a.recoveryCode));
-  const r=await f.call('auth/login',{method:'POST',body:{username:'FLOWER',password,remember:true}});
+  const r=await f.call('auth/login',{method:'POST',body:{username:'FLOWER@EXAMPLE.COM',password,remember:true}});
   assert.equal(r.status,200); assert.match(r.headers.get('Set-Cookie'),/HttpOnly; Secure; SameSite=Strict/);
   assert.match(r.headers.get('Set-Cookie'),/Max-Age=/);
   const session=await f.call('session',{cookie:a.cookie}); assert.equal((await session.json()).account.id,a.account.id);
   assert.equal((await f.call('session')).status,200);
-  assert.equal((await f.call('auth/login',{method:'POST',body:{username:'flower',password:'wrong'}})).status,401);
-  assert.equal((await f.call('auth/register',{method:'POST',body:{username:'flower',password}})).status,409);
+  assert.equal((await f.call('auth/login',{method:'POST',body:{username:'flower@example.com',password:'wrong'}})).status,401);
+  assert.equal((await f.call('auth/register',{method:'POST',body:{username:'flower@example.com',password}})).status,409);
 });
 test('same-origin JSON required, body bounded and identity never comes from caller',async()=>{
   const f=fixture();
-  assert.equal((await f.call('auth/register',{method:'POST',origin:'https://evil.test',body:{username:'flower',password}})).status,403);
+  assert.equal((await f.call('auth/register',{method:'POST',origin:'https://evil.test',body:{username:'flower@example.com',password}})).status,403);
   assert.equal((await f.call('auth/register',{method:'POST',body:{username:'__proto__',password}})).status,400);
   assert.equal((await f.call('auth/register',{method:'POST',body:{username:'cloud-test',password}})).status,400);
-  assert.equal((await f.call('auth/register',{method:'POST',body:{username:'flower',password:'a'.repeat(1100000)}})).status,413);
+  assert.equal((await f.call('auth/register',{method:'POST',body:{username:'flower@example.com',password:'a'.repeat(1100000)}})).status,413);
   assert.equal((await f.call('save')).status,401);
 });
 test('save revisions are atomic; users cannot overwrite each other',async()=>{
-  const f=fixture(), a=await register(f), b=await register(f,'second','127.0.0.2');
+  const f=fixture(), a=await register(f), b=await register(f,'second@example.com','127.0.0.2');
   const write=await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:null,payload:save()}});
   assert.equal(write.status,200); assert.equal((await write.json()).revision,1);
   assert.equal((await f.call('save',{cookie:b.cookie})).status,200);
@@ -73,17 +73,17 @@ test('save revisions are atomic; users cannot overwrite each other',async()=>{
 });
 test('password rotation and one-use recovery revoke every older session',async()=>{
   const f=fixture(), a=await register(f);
-  const other=await f.call('auth/login',{method:'POST',body:{username:'flower',password}});
+  const other=await f.call('auth/login',{method:'POST',body:{username:'flower@example.com',password}});
   const otherCookie=other.headers.get('Set-Cookie').split(';')[0];
   const change=await f.call('auth/password',{method:'POST',cookie:a.cookie,body:{currentPassword:password,newPassword:password+'new'}});
   assert.equal(change.status,200); const fresh=change.headers.get('Set-Cookie').split(';')[0];
   assert.equal((await (await f.call('session',{cookie:a.cookie})).json()).account,null);
   assert.equal((await (await f.call('session',{cookie:otherCookie})).json()).account,null);
   assert.ok((await (await f.call('session',{cookie:fresh})).json()).account);
-  const recovered=await f.call('auth/recover',{method:'POST',body:{username:'flower',recoveryCode:a.recoveryCode,newPassword:password+'restored'}});
+  const recovered=await f.call('auth/recover',{method:'POST',body:{username:'flower@example.com',recoveryCode:a.recoveryCode,newPassword:password+'restored'}});
   assert.equal(recovered.status,200); assert.notEqual((await recovered.json()).recoveryCode,a.recoveryCode);
   assert.equal((await (await f.call('session',{cookie:fresh})).json()).account,null);
-  assert.equal((await f.call('auth/recover',{method:'POST',body:{username:'flower',recoveryCode:a.recoveryCode,newPassword:password+'again'}})).status,401);
+  assert.equal((await f.call('auth/recover',{method:'POST',body:{username:'flower@example.com',recoveryCode:a.recoveryCode,newPassword:password+'again'}})).status,401);
 });
 test('rate limits persist in database; failures do not grant a session',async()=>{
   const f=fixture(); let r;
@@ -97,7 +97,7 @@ test('logout invalidates cookie on server and missing binding fails closed',asyn
   const r=await onRequest({env:{},request:new Request('https://petal.test/api/session')}); assert.equal(r.status,503);
 });
 test('legacy migration proves identity, refuses overwrite and is idempotent',async()=>{
-  const f=fixture(), a=await register(f), b=await register(f,'other','127.0.0.2');
+  const f=fixture(), a=await register(f), b=await register(f,'other@example.com','127.0.0.2');
   const original=globalThis.fetch, uid='11223344-aaaa-4aaa-bbbb-112233445566';
   let authOK=false;
   globalThis.fetch=async url=>url.includes('/auth/v1/user')
@@ -129,7 +129,7 @@ test('all 27 petals survive validation and concurrent writes have one winner',as
 });
 
 test('another tab changing the shared cookie cannot redirect reads, saves or logout',async()=>{
-  const f=fixture(), a=await register(f), b=await register(f,'second','127.0.0.2');
+  const f=fixture(), a=await register(f), b=await register(f,'second@example.com','127.0.0.2');
   const newer=save();newer.p.level=20;
   await f.call('save',{method:'PUT',cookie:b.cookie,body:{expectedRevision:null,payload:newer}});
   const stale={cookie:b.cookie,expectedAccountId:a.account.id};
@@ -138,4 +138,22 @@ test('another tab changing the shared cookie cannot redirect reads, saves or log
   assert.equal((await f.call('auth/logout',{...stale,method:'POST',body:{}})).status,409);
   assert.equal((await (await f.call('save',{cookie:b.cookie})).json()).payload.p.level,20);
   assert.equal((await (await f.call('save',{cookie:b.cookie})).json()).accountId,b.account.id);
+});
+
+
+test('email registration is canonical, sends no mail, and preserves legacy logins',async()=>{
+  const f=fixture();let calls=0;const original=globalThis.fetch;
+  globalThis.fetch=async()=>{calls++;throw Error('new accounts must not contact mail or Supabase')};
+  try{
+    for(const username of ['flower','a..b@example.com','a@-domain.com','a@domain','a@domain..com','<script>@example.com','a'.repeat(65)+'@example.com']){
+      assert.equal((await f.call('auth/register',{method:'POST',body:{username,password}})).status,400,username);
+    }
+    const a=await register(f,'  Flower+garden@Example.COM  ');
+    assert.equal(a.account.username,'flower+garden@example.com');
+    assert.equal((await f.call('auth/register',{method:'POST',body:{username:'FLOWER+GARDEN@example.com',password}})).status,409);
+    f.db.prepare("UPDATE players SET username='oldflower', display_name='oldflower' WHERE id=?").run(a.account.id);
+    assert.equal((await f.call('auth/login',{method:'POST',body:{username:'OLDFLOWER',password}})).status,200);
+    assert.equal((await f.call('auth/recover',{method:'POST',body:{username:'oldflower',recoveryCode:a.recoveryCode,newPassword:password+'legacy'}})).status,200);
+    assert.equal(calls,0);
+  }finally{globalThis.fetch=original}
 });
