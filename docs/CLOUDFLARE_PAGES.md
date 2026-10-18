@@ -10,8 +10,10 @@
 
 | 环境 | D1 名称 | ID |
 | --- | --- | --- |
-| 生产 | petal-realms-accounts | 9ec11aae-8c72-4e78-a32e-79b9525e7d1d |
-| 预览 | petal-realms-accounts-preview | 92c62437-5604-46c2-821c-8999cf739d90 |
+| 生产 | petal-realms-accounts-preview（历史名称） | 92c62437-5604-46c2-821c-8999cf739d90 |
+| 后续预览 | petal-realms-accounts | 9ec11aae-8c72-4e78-a32e-79b9525e7d1d |
+
+V5.12 将用户已注册并保存进度的原预览库指定为生产库，保留相同账号 ID、密码摘要和存档版本；没有复制、重建或删除数据。原生产库经只读聚合确认无玩家／存档后，改作后续预览库。旧 V5.11 不可变预览仍绑定原库，旧标签页与生产使用同一版本条件写入保护；后续测试禁止写入该真实玩家库。数据库名称沿用历史命名，判断环境应以 ID 和绑定为准。
 
 两库均已通过 Cloudflare API 创建，并应用 `database/cloudflare/0001_accounts.sql`。初始结构为 additive/IF NOT EXISTS；不要对后续变更盲目重放或重建数据库。
 
@@ -43,7 +45,7 @@ Pages 构建环境使用 Node.js 24，发布目录 site，构建命令建议 `np
 
 - 真正多人战斗尚未迁移到 Durable Objects；原房间只是过渡位置预览。
 - Supabase 实际邮箱设置不由本轮改变，其项目还承载其他应用。
-- Netlify 远程退役在数据迁移后执行，参见 DEPLOYMENT.md。
+- Netlify 所有旧部署已限制为受邀团队访问，公开旧游戏已退役；永久删除／解除 Git 关联仍待完成，参见 DEPLOYMENT.md。
 - 手机原生 Safari/HarmonyOS 长时间运行、真实旧邮箱用户迁移仍需单独验收。
 
 官方依据：

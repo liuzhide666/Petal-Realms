@@ -106,6 +106,7 @@ function validateSave(payload) {
   const bag=payload.bag;
   if(!bag||typeof bag!=='object'||Array.isArray(bag)||Object.keys(bag).length>270) fail(400,'背包数据无效。');
   for(const [k,n]of Object.entries(bag)){const m=/^([a-zA-Z]+)@(0|[1-9])$/.exec(k);if(!m||!PETALS.has(m[1])||!Number.isInteger(n)||n<0||n>99999)fail(400,'背包物品无效。')}
+  if(payload.goal!=null&&(!PETALS.has(payload.goal.t)||!Number.isInteger(payload.goal.r)||payload.goal.r<0||payload.goal.r>9))fail(400,'收集目标无效。');
   const text=JSON.stringify(payload);
   if(new TextEncoder().encode(text).length>MAX_BODY) fail(413,'存档超过大小限制。');
   return text;
@@ -149,7 +150,7 @@ export async function onRequest({request,env}) {
     if(!['GET','POST','PUT'].includes(method)) return reply({error:'请求方法不支持。'},405,{Allow:'GET, POST, PUT'});
     if(method!=='GET'&&request.headers.get('Origin')!==url.origin) fail(403,'请求来源不匹配。请从游戏主站重新操作。');
     if(method==='GET'&&path==='session') {const a=await accountFor(db,request);return reply({account:a?publicAccount(a):null});}
-    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.11',provider:'cloudflare',passwordHash:'scrypt'});}
+    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.12',provider:'cloudflare',passwordHash:'scrypt'});}
     const account=await accountFor(db,request);
     if(account&&['save','auth/password','auth/logout','migrate'].includes(path)&&request.headers.get('X-Petal-Account')!==account.id)
       fail(409,'此浏览器已切换到其他账号。已停止操作，请在当前标签页重新登录。');

@@ -46,6 +46,8 @@ jobs:
           node --test tests/v511_combat.cjs
           node --test tests/v511_review.cjs
           node --test tests/cloudflare_api.test.mjs
+      - name: Input, collection and neutral creature behavior
+        run: node tests/v512_controls_collection.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -70,6 +72,7 @@ jobs:
           python tests/browser_v59.py
           python tests/browser_v510.py
           python tests/browser_v511.py
+          python tests/browser_v512.py
       - name: Upload desktop/mobile inventory screenshots
         if: always()
         uses: actions/upload-artifact@v4

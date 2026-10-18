@@ -84,7 +84,7 @@ with sync_playwright() as pw:
         page.locator('#restoreLocalSave').click()
         check('import_can_be_rolled_back', page.evaluate('window.PetalRealmsInfo.snapshot().level') == 1)
         page.evaluate("document.getElementById('logoutBtn').click()")
-        page.locator('#cloudModeBtn').click()
+        page.locator('#legacyAccounts').evaluate('(e)=>e.open=true');page.locator('#cloudModeBtn').click()
         page.locator('#tabRegister').click()
         page.locator('#authName').fill('qa@example.invalid')
         page.locator('#authPass').fill('petal-pass-2026')

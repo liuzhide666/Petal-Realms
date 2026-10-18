@@ -72,6 +72,13 @@ test('save revisions are atomic; users cannot overwrite each other',async()=>{
   const bad=save(); bad.bag['constructor@0']=3;
   assert.equal((await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:2,payload:bad}})).status,400);
   assert.equal((await (await f.call('save',{cookie:a.cookie})).json()).revision,2);
+  const target=save();target.goal={t:'rose',r:2};
+  assert.equal((await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:2,payload:target}})).status,200);
+  assert.deepEqual((await (await f.call('save',{cookie:a.cookie})).json()).payload.goal,target.goal);
+  target.goal.r=10;
+  assert.equal((await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:3,payload:target}})).status,400);
+  target.goal={t:'constructor',r:0};
+  assert.equal((await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:3,payload:target}})).status,400);
 });
 test('password rotation and one-use recovery revoke every older session',async()=>{
   const f=fixture(), a=await register(f);

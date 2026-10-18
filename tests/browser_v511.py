@@ -44,7 +44,7 @@ try:
         page.on('request',lambda r:mail.append(r.url) if 'supabase.co' in r.url else None)
         page.goto(BASE)
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
-        check('default_is_cloudflare_account','Cloudflare' in page.locator('#authHeading').inner_text())
+        check('default_is_cloudflare_account','继续你的冒险' in page.locator('#authHeading').inner_text())
         stamp=str(time.time_ns())[-12:]
         user='cf'+stamp+'@example.com'; password='runtime-password-2026'
         page.locator('#tabRegister').click()

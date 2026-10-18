@@ -1,6 +1,6 @@
 # Petal Realms · 花瓣之境
 
-当前源码版本：**V5.11 · Cloudflare 云账号与跨设备存档**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.11_QA.md)。
+当前源码版本：**V5.12 · 操作适配与收集路线**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.12_QA.md)。
 
 ## 游戏账号
 
@@ -16,7 +16,13 @@
 
 Cloudflare 原生账号的正常注册、登录和存档不调用 Supabase。旧邮箱认证、旧云角色迁移和原位置房间仍是明确隔离的过渡功能；真实旧云角色迁移需由其所有者登录验收。
 
-## 本批战斗改进
+## 本批操作与玩法改进
+
+- 手机固定动态视口、避免输入框聚焦缩放；游戏按钮不允许长按选字，密码与恢复码字段仍可正常复制。
+- 手机竖屏的 9–10 槽分两行，横屏保留单行；攻击、防御、闪避、摇杆与背包分区，技能托盘可收起。
+- 电脑支持鼠标跟随（WASD 优先）或纯键盘移动；物理键位不受输入法布局影响。暂停、切后台、失焦和触摸取消会释放操作状态。
+- 背包可追踪下一品质花瓣，显示已拥有数量和产出地图，并一键设置路线；目标随角色保存。中立生物受击后短暂反击，随后恢复退避。
+- 默认入口聚焦邮箱与密码，旧账号迁移折叠收纳；简化帮助、合成、图鉴和设置文案。
 
 - H 或触屏“环绕”按钮反转花瓣旋转方向，保持当前角度，方便控制接触时机。
 - 防御时，本体和每片完整花瓣连续 1.2 秒未受击后，该花瓣每秒修复 6% 耐久；破损花瓣仍须装填。
@@ -48,6 +54,7 @@ python -m playwright install --with-deps chromium
 python tests/browser_v59.py
 python tests/browser_v510.py
 python tests/browser_v511.py
+python tests/browser_v512.py
 ```
 
 V5.11 浏览器测试自行启动**本地** workerd/D1，创建隔离测试账号；不要改成生产地址运行。单元测试中的 SQLite 适配器、真实本地 workerd 测试和 Cloudflare 生产验证是三种不同证据。

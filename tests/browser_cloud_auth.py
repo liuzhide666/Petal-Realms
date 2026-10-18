@@ -30,7 +30,7 @@ with sync_playwright() as pw:
  page.route('https://bfipozjqhzsbdvmisoct.supabase.co/**',handle)
  page.evaluate('''() => {const m=new Map();Object.defineProperty(window, 'localStorage', {value:{getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),key:i=>Array.from(m.keys())[i]||null,get length(){return m.size}},configurable:true});}''')
  page.set_content(html.read_text(),wait_until='domcontentloaded')
- page.locator('#cloudModeBtn').click()
+ page.locator('#legacyAccounts').evaluate('(e)=>e.open=true');page.locator('#cloudModeBtn').click()
  page.locator('#authName').fill('qa@example.invalid')
  page.locator('#authPass').fill('temporary-mock-password')
  page.locator('#authSubmit').click()
