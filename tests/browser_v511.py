@@ -32,6 +32,9 @@ try:
             if server.poll() is not None: raise RuntimeError('workerd failed; see artifacts/qa/v511_workerd.log')
             time.sleep(.2)
     else: raise RuntimeError('workerd did not become ready')
+    with urllib.request.urlopen(BASE+'/api/health',timeout=10) as response:
+        health=json.load(response)
+    check('health_checks_native_password_runtime',health.get('ok') is True and health.get('passwordHash')=='scrypt')
     with sync_playwright() as pw:
         browser=pw.chromium.launch(headless=True,executable_path=os.environ.get('PETAL_CHROMIUM'),args=['--no-sandbox','--disable-dev-shm-usage'])
         desktop=browser.new_context(viewport={'width':1280,'height':800},accept_downloads=True)

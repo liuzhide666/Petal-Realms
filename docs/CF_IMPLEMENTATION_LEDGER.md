@@ -4,7 +4,7 @@ Baseline: main 7a083b406ee7988a4eb63742a68617bcc7f4c6dc (V5.10).
 User direction: Cloudflare only; retire Netlify after preserving progress; account/password without email; improve the existing flower game.
 
 ## Decisions
-- Deliver Cloudflare-native accounts and versioned saves first, keeping the existing Canvas gameplay and explicit legacy access. Server authentication uses native Node crypto PBKDF2-SHA256 600000 iterations, random salt, HttpOnly Secure SameSite=Strict cookies, hashed session/recovery tokens, credential-version revocation and database-backed rate limits.
+- Deliver Cloudflare-native accounts and versioned saves first, keeping the existing Canvas gameplay and explicit legacy access. Original implementation used native PBKDF2-SHA256 600000 iterations (superseded by the production-runtime hotfix below), random salt, HttpOnly Secure SameSite=Strict cookies, hashed session/recovery tokens, credential-version revocation and database-backed rate limits.
 - Keep existing local accounts and Supabase records untouched. Import requires an explicit action; cloud migration verifies the old access token and fetches its RLS-protected save server-side. Existing target saves are never overwritten by migration.
 - Production and preview use separate new D1 databases. No other Supabase application or project-level setting is changed.
 - Retain the Netlify build-stop tombstone until the remote site is actually unlinked/retired. Removing the ignore configuration before unlinking could restart unwanted builds. Remove the old manual deployment script now.
@@ -53,3 +53,13 @@ User direction: Cloudflare only; retire Netlify after preserving progress; accou
 - GitHub/main production remains V5.10 until this revised preview is accepted; do not promote based on the old preview URL or the prior 98-check count.
 
 - Final revised browser regression: Cloudflare 28, local accounts 32, gameplay 28, smoke 10, mocked legacy cloud 7; all 105 passed. Worker compilation passed. Preview publication follows; production signup, owner migration and permanent Netlify removal remain separately gated.
+
+
+## Production-runtime registration failure and root-cause fix
+- User's revised preview registration returned the generic 503 message. Preview D1 had 0 players/sessions/saves with rate buckets present; production D1 also had 0 native players/saves. No account or save was deleted or rewritten.
+- A temporary same-account Worker, with the same compatibility date and nodejs_compat, reproduced native pbkdf2(600000) throwing NotSupportedError: "Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000)." Native 100000 succeeded. Official workerd PR #7550 explains that the open-source runtime overrides this enforcement, while deployed Workers inherit it. This corrects the inference from earlier local workerd acceptance.
+- Selected native scrypt at N=16384,r=8,p=5,maxmem=32MiB, a documented OWASP 16MiB profile, rather than silently reducing PBKDF2 protection. The exact fixed public vector returned 964969a05a3b287285cf7576af1ffcdc6bc82f271132dcc5915c14dd7bea6767 on both deployed Worker and Node.
+- A regression mocks the real PBKDF2 ceiling at the native module boundary. It reproduced registration failing 503 before the fix, then exercises registration, existing/missing-account login, password change and recovery. Another case ensures old PBKDF2 records retain recovery access.
+- Health now checks both D1 and a cached fixed scrypt vector; the crypto result must be verified on the exact new Pages deployment before asking the user to retry. No test signup or user credentials are involved in this health probe.
+- Current static/API suite and Worker compile passed: 17 static scripts and 12 API cases. Fresh browser runtime acceptance and revised preview deployment are subsequent gates. The previously reported 105 browser checks belong to the pre-hotfix tree.
+- References: https://github.com/cloudflare/workerd/pull/7550 ; https://developers.cloudflare.com/workers/runtime-apis/nodejs/crypto/ ; https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#scrypt .

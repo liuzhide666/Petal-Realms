@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
+import crypto from 'node:crypto';
+import { syncBuiltinESMExports } from 'node:module';
 import { onRequest } from '../functions/api/[[path]].js';
 
 function fixture() {
@@ -156,4 +158,36 @@ test('email registration is canonical, sends no mail, and preserves legacy login
     assert.equal((await f.call('auth/recover',{method:'POST',body:{username:'oldflower',recoveryCode:a.recoveryCode,newPassword:password+'legacy'}})).status,200);
     assert.equal(calls,0);
   }finally{globalThis.fetch=original}
+});
+
+test('register/login/password/recovery work with the deployed Workers PBKDF2 cap',async()=>{
+  const original=crypto.pbkdf2;let overLimit=0;
+  crypto.pbkdf2=function(pass,salt,iterations,keylen,digest,callback){
+    if(iterations>100000){overLimit++;const e=new Error('Pbkdf2 failed: iteration counts above 100000 are not supported');e.name='NotSupportedError';callback(e);return}
+    return original(pass,salt,iterations,keylen,digest,callback);
+  };syncBuiltinESMExports();
+  try{
+    const f=fixture(),a=await register(f);
+    const health=await f.call('health');assert.equal(health.status,200);assert.equal((await health.json()).passwordHash,'scrypt');
+    const record=JSON.parse(f.db.prepare('SELECT password_record FROM players').get().password_record);
+    assert.deepEqual({algorithm:record.algorithm,N:record.N,r:record.r,p:record.p},{algorithm:'scrypt',N:16384,r:8,p:5});
+    assert.equal((await f.call('auth/login',{method:'POST',body:{username:a.account.username,password}})).status,200);
+    assert.equal((await f.call('auth/login',{method:'POST',body:{username:'missing@example.com',password}})).status,401);
+    assert.equal((await f.call('auth/password',{method:'POST',cookie:a.cookie,body:{currentPassword:password,newPassword:password+'changed'}})).status,200);
+    assert.equal((await f.call('auth/recover',{method:'POST',body:{username:a.account.username,recoveryCode:a.recoveryCode,newPassword:password+'recovered'}})).status,200);
+    assert.equal(overLimit,0);
+  }finally{crypto.pbkdf2=original;syncBuiltinESMExports()}
+});
+
+test('capped legacy password records retain recovery-code access',async()=>{
+  const f=fixture(),a=await register(f);
+  f.db.prepare('UPDATE players SET password_record=? WHERE id=?').run(JSON.stringify({algorithm:'pbkdf2-sha256',iterations:600000,salt:'legacy',key:'0'.repeat(64)}),a.account.id);
+  const original=crypto.pbkdf2;
+  crypto.pbkdf2=(...args)=>{const e=new Error('iteration counts above 100000 are not supported');e.name='NotSupportedError';args.at(-1)(e)};syncBuiltinESMExports();
+  try{
+    const login=await f.call('auth/login',{method:'POST',body:{username:a.account.username,password}});
+    assert.equal(login.status,503);assert.match((await login.json()).error,/恢复码/);
+    assert.equal((await f.call('auth/recover',{method:'POST',body:{username:a.account.username,recoveryCode:a.recoveryCode,newPassword:password+'new'}})).status,200);
+    assert.equal(JSON.parse(f.db.prepare('SELECT password_record FROM players').get().password_record).algorithm,'scrypt');
+  }finally{crypto.pbkdf2=original;syncBuiltinESMExports()}
 });

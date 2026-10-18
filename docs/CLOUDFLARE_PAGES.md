@@ -29,7 +29,7 @@ Pages 构建环境使用 Node.js 24，发布目录 site，构建命令建议 `np
 
 ## 账号、冲突与迁移
 
-账号密码：PBKDF2-SHA256，600000 iterations，随机盐。恢复码为 32 随机字节，仅存其摘要；登录令牌也仅在数据库存摘要。Cookie 使用 HttpOnly/Secure/SameSite=Strict。改密与恢复会增加 credential_version，使旧会话立即失效；所有写入要求相同 Origin 和 JSON，另有持久限流。账号相关请求携带 X-Petal-Account 并与 Cookie 身份比对，防止其他标签页换号后写错角色。同一浏览器同一账号只允许一个持有 Web Lock 的活动标签页；不支持 Web Locks 的旧浏览器可选择本机角色。错误和限流不会授予身份。
+账号密码：原生 scrypt（N=16384、r=8、p=5、32 字节输出、随机盐），使用 OWASP 的 16 MiB 参数档。线上 Workers 会拒绝超过 100000 次的 PBKDF2，不能使用本地模拟器通过来证明线上支持。恢复码为 32 随机字节，仅存其摘要；登录令牌也仅在数据库存摘要。Cookie 使用 HttpOnly/Secure/SameSite=Strict。改密与恢复会增加 credential_version，使旧会话立即失效；所有写入要求相同 Origin 和 JSON，另有持久限流。账号相关请求携带 X-Petal-Account 并与 Cookie 身份比对，防止其他标签页换号后写错角色。同一浏览器同一账号只允许一个持有 Web Lock 的活动标签页；不支持 Web Locks 的旧浏览器可选择本机角色。错误和限流不会授予身份。
 
 保存通过 `expectedRevision` 条件写入；新存档使用 null。冲突返回 409，客户端保留本机待同步记录，不自动强行合并库存。选择云端版本前下载本机备份并另存回退副本；选择本机版本前备份云端，再按读取到的当前版本条件写入。
 

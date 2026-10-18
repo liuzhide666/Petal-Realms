@@ -1,8 +1,9 @@
-import { pbkdf2, randomBytes, randomUUID, createHash, timingSafeEqual } from 'node:crypto';
+import { pbkdf2, scrypt, randomBytes, randomUUID, createHash, timingSafeEqual } from 'node:crypto';
 
 // Secrets are never accepted as player IDs or put into a save/export.
 const COOKIE = '__Host-petal_session';
-const ITERATIONS = 600000;
+// OWASP's 16 MiB scrypt profile; native Workers PBKDF2 rejects >100000 iterations.
+const SCRYPT = Object.freeze({N:16384,r:8,p:5,maxmem:33554432});
 const MAX_BODY = 1048576;
 const LEGACY_URL = 'https://bfipozjqhzsbdvmisoct.supabase.co';
 const LEGACY_PUBLIC_KEY = 'sb_publishable_wfyMqIqPAZPjH-Q7sHl5ug_8m92bpX0';
@@ -35,16 +36,29 @@ function password(value) {
   if(typeof value!=='string'||value.length<8||value.length>128) fail(400,'密码需为 8—128 个字符。');
   return value;
 }
-const derive = (pass,salt,iterations) => new Promise((resolve,reject)=>pbkdf2(pass,salt,iterations,32,'sha256',(err,key)=>err?reject(err):resolve(key)));
+const derive = (pass,salt) => new Promise((resolve,reject)=>scrypt(pass,salt,32,SCRYPT,(err,key)=>err?reject(err):resolve(key)));
+let passwordRuntimeReady;
+function verifyPasswordRuntime(){
+  return passwordRuntimeReady??=(async()=>{
+    const key=await derive('fixed-public-runtime-probe','fixed-public-salt');
+    if(key.toString('hex')!=='964969a05a3b287285cf7576af1ffcdc6bc82f271132dcc5915c14dd7bea6767')throw Error('Password runtime self-test failed');
+  })();
+}
 async function makePassword(pass) {
   const salt=randomBytes(16).toString('hex');
-  return JSON.stringify({algorithm:'pbkdf2-sha256',iterations:ITERATIONS,salt,key:(await derive(pass,salt,ITERATIONS)).toString('hex')});
+  return JSON.stringify({algorithm:'scrypt',version:1,N:SCRYPT.N,r:SCRYPT.r,p:SCRYPT.p,salt,key:(await derive(pass,salt)).toString('hex')});
 }
 async function checkPassword(pass,record) {
   if(typeof pass!=='string'||pass.length>128) return false;
-  const p=record?JSON.parse(record):{algorithm:'pbkdf2-sha256',salt:'00000000000000000000000000000000',iterations:ITERATIONS,key:'0'.repeat(64)};
-  if(p.algorithm!=='pbkdf2-sha256'||p.iterations!==ITERATIONS) fail(503,'密码校验暂不可用。');
-  const actual=await derive(pass,p.salt,p.iterations), expected=Buffer.from(p.key,'hex');
+  const p=record?JSON.parse(record):{algorithm:'scrypt',version:1,...SCRYPT,salt:'00000000000000000000000000000000',key:'0'.repeat(64)};
+  let actual;
+  if(p.algorithm==='scrypt'&&p.version===1&&p.N===SCRYPT.N&&p.r===SCRYPT.r&&p.p===SCRYPT.p)actual=await derive(pass,p.salt);
+  else if(p.algorithm==='pbkdf2-sha256'&&p.iterations===600000){
+    // Earlier preview records are recoverable by recovery code even on capped runtimes.
+    try{actual=await new Promise((resolve,reject)=>pbkdf2(pass,p.salt,p.iterations,32,'sha256',(err,key)=>err?reject(err):resolve(key)));}
+    catch(e){if(e.name==='NotSupportedError')fail(503,'此旧密码记录需要更新，请使用注册时保存的恢复码设置新密码。');throw e}
+  }else fail(503,'密码校验暂不可用。');
+  const expected=Buffer.from(p.key,'hex');
   return actual.length===expected.length&&timingSafeEqual(actual,expected)&&!!record;
 }
 async function bodyOf(request) {
@@ -135,7 +149,7 @@ export async function onRequest({request,env}) {
     if(!['GET','POST','PUT'].includes(method)) return reply({error:'请求方法不支持。'},405,{Allow:'GET, POST, PUT'});
     if(method!=='GET'&&request.headers.get('Origin')!==url.origin) fail(403,'请求来源不匹配。请从游戏主站重新操作。');
     if(method==='GET'&&path==='session') {const a=await accountFor(db,request);return reply({account:a?publicAccount(a):null});}
-    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();return reply({ok:true,version:'5.11',provider:'cloudflare'});}
+    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.11',provider:'cloudflare',passwordHash:'scrypt'});}
     const account=await accountFor(db,request);
     if(account&&['save','auth/password','auth/logout','migrate'].includes(path)&&request.headers.get('X-Petal-Account')!==account.id)
       fail(409,'此浏览器已切换到其他账号。已停止操作，请在当前标签页重新登录。');
