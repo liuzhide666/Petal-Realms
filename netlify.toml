@@ -1,12 +1,5 @@
-# Keep the source, SQL migrations and tests out of the published site.
+# Retirement tombstone only. This is not a release configuration.
+# Remove this file AFTER unlinking/deleting the remote Netlify site; otherwise
+# a Git push could restart builds on the still-connected legacy project.
 [build]
-  publish = "site"
-  # Cloudflare is the sole release target. Skip future legacy Netlify builds.
   ignore = "exit 0"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Frame-Options = "DENY"

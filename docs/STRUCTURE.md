@@ -1,20 +1,14 @@
-# 仓库目录规范与本次归档
+# 当前目录职责
 
-## 整理原则
+- `site/index.html`：现有 Canvas 2D 游戏与客户端账号／存档界面；唯一游戏页面。公开静态目录仅为 `site/`。
+- `site/_headers`：Cloudflare 静态安全与缓存响应头。
+- `functions/api/[[path]].js`：Cloudflare 服务器账号、会话、恢复码、限流、存档与受验证的旧云角色迁移。
+- `database/cloudflare/`：本游戏专用 D1 结构迁移。
+- `database/migrations/`：已应用的历史 Supabase SQL，仅供来源留档，勿盲目重放。
+- `wrangler.jsonc`：生产／预览绑定、运行时兼容配置。
+- `package.json`、`package-lock.json`：锁定开发与测试工具；没有新增客户端框架。
+- `tests/`：静态、API、浏览器回归。运行输出位于被 Git 忽略的 `artifacts/qa/`。
+- `docs/qa/`：有版本边界的验证记录；`docs/history/`、`releases/`：历史资料。
+- `netlify.toml`：远程旧站退役前的构建停止保护，不是发布入口。
 
-1. `site/` 为唯一公开发布根目录，目前只有 `index.html`；配置由根目录 `netlify.toml` 读取。
-2. 测试源码进 `tests/`，运行生成的临时截图和 JSON 进 `artifacts/qa/`（不纳入 Git）。
-3. 旧版报告、截图、SQL、压缩包分离保存，不把历史资料误当现行线上版本。
-4. 过去的根目录 `index.html` 与 `site/index.html` Blob SHA 完全相同，因此仅保留后者作为有效入口；原始重复文件仍可从 Git 历史恢复。
-5. `docs/history/` 存放历史 README 原文，**其中关于当时仓库和部署的描述已过时**。
-
-## 重要文件
-
-- `releases/v5.2/Petal_Realms_V5_2.html`：V5.2 参考版
-- `releases/v5.3/Petal_Realms_V5_3_Source.zip`：V5.3 历史源代码包
-- `docs/qa/V5.3_QA.md`：原有 QA 声明（模拟与真实验收需区分）
-- `docs/qa/browser_qa_v5.3.json`：当时的浏览器烟测结果
-- `docs/qa/screenshots/`：V5.3 历史截图
-- `database/migrations/20261017053742_create_petal_realms_saves_v1.sql`：已应用的数据库迁移
-
-**安全提示**：当前仓库是公开的。今后源文件仅允许公开配置，不得提交密钥、用户存档或浏览器 Token。
+后续随实际修改逐步拆出客户端账号、存档和游戏配置，不整体重写框架。当前单文件体积与客户端权威进度仍是明确的维护／反作弊边界。

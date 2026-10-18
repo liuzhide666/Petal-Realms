@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "petal-realms",
+  "pages_build_output_dir": "site",
+  "compatibility_date": "2026-10-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [{
+    "binding": "PETAL_DB",
+    "database_name": "petal-realms-accounts",
+    "database_id": "9ec11aae-8c72-4e78-a32e-79b9525e7d1d",
+    "migrations_dir": "database/cloudflare"
+  }],
+  "env": {
+    "preview": {
+      "d1_databases": [{
+        "binding": "PETAL_DB",
+        "database_name": "petal-realms-accounts-preview",
+        "database_id": "92c62437-5604-46c2-821c-8999cf739d90",
+        "migrations_dir": "database/cloudflare"
+      }]
+    }
+  }
+}

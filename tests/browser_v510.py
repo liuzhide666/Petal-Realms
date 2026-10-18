@@ -28,6 +28,8 @@ with sync_playwright() as pw:
 
         page.route('https://*.supabase.co/**', auth_route)
         page.goto('https://petal-qa.invalid/')
+        page.wait_for_function('!document.getElementById("authSubmit").disabled')
+        page.locator('#localModeBtn').click()
         def check(name, value):
             checks.append({'viewport': label, 'test': name, 'passed': bool(value)})
             assert value, f'{label}: {name}'
@@ -45,6 +47,8 @@ with sync_playwright() as pw:
         page.locator('#manualSave').click()
         check('backup_controls_for_local_character', page.locator('#exportLocalSave').count() == 1)
         page.reload()
+        page.wait_for_function('!document.getElementById("authSubmit").disabled')
+        page.locator('#localModeBtn').click()
         page.locator('#authName').fill('petaltest')
         page.locator('#authPass').fill('petal-pass-2026')
         page.locator('#authSubmit').click()

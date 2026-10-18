@@ -13,6 +13,8 @@ with sync_playwright() as pw:
         errors=[]
         page.on('pageerror',lambda error:errors.append(str(error)))
         page.set_content(html.read_text(),wait_until='domcontentloaded')
+        page.wait_for_function('!document.getElementById("authSubmit").disabled')
+        page.locator('#localModeBtn').click()
         results.append((label,'local_account_hint','当前浏览器' in page.locator('#authModeHint').inner_text()))
         page.locator('#tabRegister').click()
         results.append((label,'signup_action_present','创建游戏账号' in page.locator('#authHeading').inner_text()))
