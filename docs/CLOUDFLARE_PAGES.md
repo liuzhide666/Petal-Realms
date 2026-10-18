@@ -2,7 +2,7 @@
 
 正式站：https://petal-realms.pages.dev/
 
-仓库：liuzhide666/Petal-Realms，生产分支 main，静态目录 site。V5.11 新增 Pages Functions 与 D1。生产是否已到 V5.11，必须读取 Cloudflare 的真实部署 SHA 和状态，不能仅凭仓库文档认定。
+仓库：liuzhide666/Petal-Realms，生产分支 main，静态目录 site。V5.11 新增 Pages Functions 与 D1。生产版本必须读取 Cloudflare 的真实部署 SHA、状态和 `/api/health`，不能仅凭仓库文档认定。
 
 ## 配置与数据库
 

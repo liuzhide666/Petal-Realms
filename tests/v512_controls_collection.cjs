@@ -20,7 +20,16 @@ test('collection targets accept known items only and count both equipment decks'
  vm.runInNewContext(extract('function sanitizeCollectionGoal(','function petalBaseStats('),ctx);
  assert.equal(ctx.sanitizeCollectionGoal({t:'constructor',r:2}),null);
  assert.equal(ctx.sanitizeCollectionGoal({t:'rose',r:99}),null);
+ assert.equal(ctx.sanitizeCollectionGoal({t:'rose',r:'2'}),null,'goal must match the numeric server schema');
+ assert.equal(ctx.sanitizeCollectionGoal({t:{toString:'rose'},r:2}),null,'malformed backup must not throw');
  assert.equal(ctx.collectionOwned(),4);assert.deepEqual(Array.from(ctx.collectionSources('rose')),['garden']);
+});
+test('creature regions include guardian habitats without revealing unknown IDs',()=>{
+ const ctx={zones:{garden:{mob:['bee']},desert:{mob:['scarab']}},GUARDIANS:{garden:'guardianGarden',desert:'guardianDesert'}};
+ vm.runInNewContext(extract('function creatureRegions(','function collectionSources('),ctx);
+ assert.deepEqual(Array.from(ctx.creatureRegions('guardianGarden')),['garden']);
+ assert.deepEqual(Array.from(ctx.creatureRegions('bee')),['garden']);
+ assert.deepEqual(Array.from(ctx.creatureRegions('unknown')),[]);
 });
 test('neutral creatures retaliate for a limited interval, then retreat again',()=>{
  const ctx={game:{time:10}};vm.runInNewContext(extract('function neutralMotion(','function actMode('),ctx);
