@@ -26,7 +26,7 @@ for(const [needle,message] of [
  ["cloudVerifiedSignupReady();",'Verified email preflight'],
 
  ['id="changePasswordForm"','In-game password rotation'],
- ['version:\'5.9.1-batch-crafting\'','Version code'],
+ ['version:\'5.9.2-contact-precision\'','Version code'],
  ['id="forgotPasswordBtn"','Email recovery control'],
  
  ['id="migrationNotice"','Explicit old-origin migration warning'],
