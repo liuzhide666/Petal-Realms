@@ -12,12 +12,18 @@ checks = []
 
 with sync_playwright() as pw:
     browser = pw.chromium.launch(headless=True, executable_path=os.environ.get('PETAL_CHROMIUM'), args=['--no-sandbox', '--disable-dev-shm-usage'])
-    for label, width, height, mobile in [('desktop',1280,800,False), ('portrait',390,844,True), ('landscape',844,390,True), ('small',320,568,True)]:
+    for label, width, height, mobile in [('desktop',1280,800,False), ('portrait',390,844,True), ('landscape',844,390,True), ('small',320,568,True), ('small_landscape',568,320,True), ('inset_portrait',390,844,True), ('inset_landscape',844,390,True)]:
         ctx = browser.new_context(viewport={'width':width,'height':height},has_touch=mobile,is_mobile=mobile,device_scale_factor=1)
         page = ctx.new_page()
         errors = []
         page.on('pageerror',lambda e:errors.append(str(e)))
-        page.route('https://petal-qa.invalid/**',lambda r:r.fulfill(status=200,content_type='text/html',body=HTML))
+        variant=HTML
+        if label.startswith('inset_'):
+            # Synthetic inset model checks CSS arithmetic; it is not hardware Safari evidence.
+            insets={'top':47,'bottom':34,'left':0,'right':0} if label.endswith('portrait') else {'top':0,'bottom':21,'left':47,'right':47}
+            for side, pixels in insets.items():
+                variant=variant.replace(f'env(safe-area-inset-{side})',f'{pixels}px')
+        page.route('https://petal-qa.invalid/**',lambda r:r.fulfill(status=200,content_type='text/html',body=variant))
         page.goto('https://petal-qa.invalid/')
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         def check(name, condition):
@@ -27,7 +33,7 @@ with sync_playwright() as pw:
         check('input_stays_selectable_at_16px',page.locator('#authName').evaluate('(e)=>getComputedStyle(e).userSelect==="text" && parseFloat(getComputedStyle(e).fontSize)>=16'))
         check('controls_unselectable',page.locator('#authSubmit').evaluate('(e)=>getComputedStyle(e).userSelect==="none"'))
         page.locator('#localModeBtn').click()
-        page.evaluate("""localStorage.setItem('petal_realms_save_controlqa',JSON.stringify({version:5,zone:'garden',p:{level:60,xp:0,kills:0,hp:1000},bag:{'rose@0':5},slots:Array.from({length:10},()=>({t:'basic',r:0}))}))""")
+        page.evaluate("""localStorage.setItem('petal_realms_save_controlqa',JSON.stringify({version:5,zone:'garden',p:{level:60,xp:0,kills:0,hp:1000},bag:{'rose@0':5},codex:{guardianGarden:{seen:true,kills:1,maxLevel:12}},slots:Array.from({length:10},()=>({t:'basic',r:0}))}))""")
         page.locator('#tabRegister').click()
         page.locator('#authName').fill('controlqa')
         page.locator('#authPass').fill('control-password-2026')
@@ -36,6 +42,21 @@ with sync_playwright() as pw:
         page.wait_for_function('window.PetalRealmsInfo.snapshot()?.slots===10')
         page.locator('#bagBtn').click()
         page.locator('[data-equip="rose@0"]').click()
+        if mobile:
+            slot=page.locator('[data-slot="0"]')
+            slot.scroll_into_view_if_needed()
+            target=slot.bounding_box()
+            point={'pointerId':31,'pointerType':'touch','clientX':target['x']+target['width']/2,'clientY':target['y']+target['height']/2}
+            original=page.locator('#slots .slot').first.get_attribute('title')
+            page.locator('[data-equip="rose@0"]').dispatch_event('pointerdown',{'pointerId':31,'pointerType':'touch','clientX':0,'clientY':0})
+            page.dispatch_event('body','pointermove',point)
+            page.dispatch_event('body','pointercancel',point)
+            check('cancelled_inventory_drag_does_not_equip',page.locator('#slots .slot').first.get_attribute('title')==original)
+            check('cancelled_drag_cleans_ghost',page.locator('.drag-ghost').count()==0)
+            page.locator('[data-equip="rose@0"]').dispatch_event('pointerdown',{'pointerId':31,'pointerType':'touch','clientX':0,'clientY':0})
+            page.dispatch_event('body','pointermove',point)
+            page.dispatch_event('body','pointerup',point)
+            check('completed_inventory_drag_equips', '玫瑰' in page.locator('#slots .slot').first.get_attribute('title'))
         page.locator('#trackPetal').click()
         check('goal_has_real_sources',page.locator('[data-goal-zone]').count()>0)
         page.locator('[data-goal-zone]').first.click()
@@ -44,6 +65,14 @@ with sync_playwright() as pw:
         page.locator('#mapBtn').click()
         check('map_shows_goal_routes',page.locator('.collection-guide').count()==1 and page.locator('[data-goal-zone]').count()>0)
         page.locator('#panelClose').click()
+        page.locator('#codexBtn').click()
+        page.locator('[data-creature="guardianGarden"]').click()
+        check('guardian_habitat_visible','出没地区：花园' in page.locator('.codex-detail').inner_text())
+        page.locator('#codexGoalRank').select_option('1')
+        page.locator('[data-track-drop="cactus"]').click()
+        check('codex_drop_sets_goal',page.evaluate('window.PetalRealmsInfo.snapshot().goal.t')=='cactus')
+        page.screenshot(path=str(OUT/f'v512_{label}_codex.png'))
+        page.locator('#panelClose').click()
         page.wait_for_timeout(100)
         check('no_page_overflow',page.evaluate('document.documentElement.scrollWidth<=innerWidth && document.documentElement.scrollHeight<=innerHeight'))
         check('canvas_fills_viewport',page.locator('#game').evaluate('(e)=>Math.abs(e.clientWidth-innerWidth)<2 && Math.abs(e.clientHeight-innerHeight)<2'))
@@ -51,6 +80,7 @@ with sync_playwright() as pw:
             return page.evaluate('''([a,b])=>{const x=document.querySelector(a).getBoundingClientRect(),y=document.querySelector(b).getBoundingClientRect();return x.right<=y.left||y.right<=x.left||x.bottom<=y.top||y.bottom<=x.top}''',[a,b])
         if mobile:
             page.screenshot(path=str(OUT/f'v512_{label}_layout.png'))
+            check('inventory_touch_targets',page.locator('#slots .slot').first.evaluate('(e)=>e.getBoundingClientRect().width>=40'))
             check('touch_controls_above_inventory',disjoint('#joystick','#bottom') and disjoint('.action-buttons','#bottom'))
             check('actions_clear_side_menu',disjoint('.action-buttons','#sideBtns'))
             page.locator('#skillMenuBtn').tap()
