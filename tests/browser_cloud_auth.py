@@ -1,3 +1,4 @@
+import os
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import json
@@ -5,7 +6,7 @@ html=Path(__file__).resolve().parent.parent/'site/index.html'
 results=[];database={'revision':1,'payload':{'version':5,'zone':'garden','p':{'level':9,'xp':10,'kills':4,'hp':100},'bag':{'basic@0':5},'slots':[{'t':'basic','r':0}]*7}}
 uid='cc901c93-aaaa-4aa4-bbbb-2389d1e34a7a'
 with sync_playwright() as pw:
- browser=pw.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox','--disable-dev-shm-usage'])
+ browser=pw.chromium.launch(headless=True,executable_path=os.environ.get('PETAL_CHROMIUM'),args=['--no-sandbox','--disable-dev-shm-usage'])
  context=browser.new_context(viewport={'width':1200,'height':760});page=context.new_page();errs=[]
  page.on('pageerror',lambda e:errs.append(str(e)))
  def handle(route):
@@ -29,6 +30,7 @@ with sync_playwright() as pw:
  page.route('https://bfipozjqhzsbdvmisoct.supabase.co/**',handle)
  page.evaluate('''() => {const m=new Map();Object.defineProperty(window, 'localStorage', {value:{getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),key:i=>Array.from(m.keys())[i]||null,get length(){return m.size}},configurable:true});}''')
  page.set_content(html.read_text(),wait_until='domcontentloaded')
+ page.locator('#cloudModeBtn').click()
  page.locator('#authName').fill('qa@example.invalid')
  page.locator('#authPass').fill('temporary-mock-password')
  page.locator('#authSubmit').click()

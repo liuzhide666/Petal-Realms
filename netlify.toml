@@ -1,6 +1,8 @@
 # Keep the source, SQL migrations and tests out of the published site.
 [build]
   publish = "site"
+  # Cloudflare is the sole release target. Skip future legacy Netlify builds.
+  ignore = "exit 0"
 
 [[headers]]
   for = "/*"

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import json
 from playwright.sync_api import sync_playwright
@@ -5,16 +6,16 @@ from playwright.sync_api import sync_playwright
 html=Path(__file__).resolve().parent.parent/'site/index.html'
 results=[]
 with sync_playwright() as pw:
-    browser=pw.chromium.launch(headless=True)
+    browser=pw.chromium.launch(headless=True, executable_path=os.environ.get('PETAL_CHROMIUM'), args=['--no-sandbox', '--disable-dev-shm-usage'])
     for label,viewport in [('desktop',{'width':1280,'height':800}),('mobile',{'width':390,'height':844})]:
         ctx=browser.new_context(viewport=viewport,device_scale_factor=1)
         page=ctx.new_page()
         errors=[]
         page.on('pageerror',lambda error:errors.append(str(error)))
         page.set_content(html.read_text(),wait_until='domcontentloaded')
-        results.append((label,'verified_email_signup_hint','验证' in page.locator('#authModeHint').inner_text()))
+        results.append((label,'local_account_hint','当前浏览器' in page.locator('#authModeHint').inner_text()))
         page.locator('#tabRegister').click()
-        results.append((label,'signup_action_present','邮箱验证' in page.locator('#authHeading').inner_text()))
+        results.append((label,'signup_action_present','创建游戏账号' in page.locator('#authHeading').inner_text()))
         page.evaluate("document.getElementById('guestBtn').click()")
         page.wait_for_timeout(550)
         snapshot=page.evaluate('window.PetalRealmsInfo.snapshot()')

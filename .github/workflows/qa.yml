@@ -33,6 +33,13 @@ jobs:
         run: node tests/v591_batch_craft.cjs
       - name: V5.9.2 exact collision geometry regression
         run: node tests/v592_collision_precision.cjs
+      - name: V5.10 account availability, backups and petal workbench
+        run: |
+          node tests/v510_access.cjs
+          node tests/v510_backups.cjs
+          node tests/v510_petals.cjs
+      - name: V5.9.3 petal protection and collision broadphase
+        run: node tests/v593_protection_broadphase.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -45,14 +52,16 @@ jobs:
           python-version: '3.11'
       - name: Install Playwright and Chromium for interaction regression
         run: |
-          python -m pip install playwright
+          python -m pip install playwright==1.58.0
           python -m playwright install --with-deps chromium
       - name: Desktop/mobile V5.9 UI and runtime browser checks
-        run: python tests/browser_v59.py
+        run: |
+          python tests/browser_v59.py
+          python tests/browser_v510.py
       - name: Upload desktop/mobile inventory screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v59-inventory-crafting-screenshots
-          path: artifacts/qa/v59_*.png
+          path: artifacts/qa/*.png
           if-no-files-found: ignore

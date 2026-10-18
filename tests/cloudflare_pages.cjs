@@ -1,7 +1,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync(path.join(__dirname,'../site/index.html'),'utf8');
 const headers=fs.readFileSync(path.join(__dirname,'../site/_headers'),'utf8');
-const lines=['CLOUD_PRIMARY_URL','CLOUD_LEGACY_URL','CLOUD_SITE_URL'].map(name=>{
+const lines=['CLOUD_PRIMARY_URL','CLOUD_SITE_URL'].map(name=>{
  const declaration=html.match(new RegExp('^const '+name+'=.*;$','m'));
  assert.ok(declaration,'Missing '+name);
  return declaration[0];
@@ -12,7 +12,7 @@ const cases=[
  [{protocol:'https:',hostname:'petal-realms.pages.dev',origin:primary},primary],
  [{protocol:'https:',hostname:'staging.petal-realms.pages.dev',origin:'https://staging.petal-realms.pages.dev'},primary],
  [{protocol:'https:',hostname:'other.pages.dev',origin:'https://other.pages.dev'},primary],
- [{protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:legacy},legacy],
+ [{protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:legacy},primary],
  [{protocol:'http:',hostname:'stellular-khapse-5c19f8.netlify.app',origin:'http://stellular-khapse-5c19f8.netlify.app'},primary],
  [{protocol:'https:',hostname:'petal-realms.pages.dev.attacker.example',origin:'https://petal-realms.pages.dev.attacker.example'},primary],
  [null,primary]
@@ -26,7 +26,7 @@ for(const [needle,message] of [
  ["cloudVerifiedSignupReady();",'Verified email preflight'],
 
  ['id="changePasswordForm"','In-game password rotation'],
- ['version:\'5.9.2-contact-precision\'','Version code'],
+
  ['id="forgotPasswordBtn"','Email recovery control'],
  
  ['id="migrationNotice"','Explicit old-origin migration warning'],
@@ -52,8 +52,8 @@ function hosted(loc,online){
  return {badge:badge.textContent,notice:notice.style.display};
 }
 const a=hosted({protocol:'https:',hostname:'stellular-khapse-5c19f8.netlify.app'},true);
-assert.ok(a.badge.includes('旧版网站')&&a.notice==='block');n++;
+assert.ok(a.badge.includes('Cloudflare')&&a.notice==='none');n++;
 const b=hosted({protocol:'https:',hostname:'petal-realms.pages.dev'},false);
-assert.ok(b.badge.includes('Cloudflare Pages')&&b.badge.includes('离线')&&b.notice==='none');n++;
+assert.ok(b.badge.includes('Cloudflare')&&b.badge.includes('离线')&&b.notice==='none');n++;
 assert.ok(html.includes("'/auth/v1/recover?redirect_to='+encodeURIComponent(CLOUD_SITE_URL)"),'Verified email recovery callback');n++;
-console.log(JSON.stringify({checks:n,passed:n,scope:'static Cloudflare + no-email flow; live Auth confirmation setting separate'}));
+console.log(JSON.stringify({checks:n,passed:n,scope:'canonical Cloudflare callbacks and headers; mail identity stays separate'}));

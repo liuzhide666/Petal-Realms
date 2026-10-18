@@ -26,7 +26,7 @@ ok(html.includes('mobSupportRadius(a,dx,dy)+mobSupportRadius(b,-dx,-dy)'),'mob s
 const uiStart=html.indexOf('// Shared controls for inventory and forging'),uiEnd=html.indexOf('function renderModal(){',uiStart);
 ok(uiStart>0&&uiEnd>uiStart,'inventory helpers scoped outside rendering');
 const rarity=Array.from({length:10},(_,i)=>({en:'tier'+i,name:'等级'+i}));
-const c=vm.createContext({rarity,console});vm.runInContext(html.slice(uiStart,uiEnd),c);
+const c=vm.createContext({rarity,console,isPetalProtected:()=>false});vm.runInContext(html.slice(uiStart,uiEnd),c);
 ok(vm.runInContext("inventoryControls('bag')",c).includes('bagSort'),'inventory sorting UI');
 ok(vm.runInContext("inventoryControls('craft')",c).includes('craftReadyOnly'),'ready-only crafting filter');
 const cards=[{dataset:{name:'基础 basic',rank:'0',count:'5'},style:{},hidden:false},{dataset:{name:'玫瑰 rose',rank:'4',count:'3'},style:{},hidden:false},{dataset:{name:'玻璃 glass',rank:'7',count:'8'},style:{},hidden:false}];
@@ -55,7 +55,7 @@ function authHarness(settings,session=null){
   cloudForgetStoredSession:()=>{},$:name=>elements[name]||{value:''},cloudEnter:async a=>entered.push(a),
   CLOUD_SITE_URL:'https://petal-realms.pages.dev',
   cloudRequest:async(p,opt)=>{calls.push({p,opt});if(p==='/auth/v1/settings')return settings;if(p.startsWith('/auth/v1/signup'))return session??{user:{id:'mock'}};if(p.startsWith('/auth/v1/token?'))return {access_token:'a',refresh_token:'r',user:{id:'mock'}};throw Error(p)}};
- vm.createContext(env);vm.runInContext(html.slice(authStart,authEnd),env);
+ env.mailRequest=(_action,p,opt)=>env.cloudRequest(p,opt);vm.createContext(env);vm.runInContext(html.slice(authStart,authEnd),env);
  return {calls,entered,err,run:e=>vm.runInContext(e,env),env};
 }
 (async()=>{
