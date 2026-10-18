@@ -1,43 +1,27 @@
-# 旧版 Netlify 迁移与回滚指南（Cloudflare Pages 为正式主站）
+# Netlify 退役清单
 
-**当前正式网站是 https://petal-realms.pages.dev 。本文件仅保留 Netlify 的旧站运维和迁移信息，新版本发布以 [Cloudflare 主站指南](CLOUDFLARE_PAGES.md) 为准。未经旧站存档迁移验收，请勿删除或强制重定向 Netlify。**
+Cloudflare 是唯一正式发布目标：https://petal-realms.pages.dev/ 。不要重新启用 Netlify 发布或把新版本手工推回旧站。
 
-## 固定目标
+## 当前事实
 
-- 网站：https://stellular-khapse-5c19f8.netlify.app
-- Netlify 项目 ID：`2b2abcc1-06c1-4098-b0aa-373d2de3caf3`
-- GitHub：https://github.com/liuzhide666/Petal-Realms
-- Supabase：https://supabase.com/dashboard/project/bfipozjqhzsbdvmisoct
-- 正式构建分支：`main`；发布目录：`site`；构建命令：留空。
+旧项目 stellular-khapse-5c19f8，Site ID 2b2abcc1-06c1-4098-b0aa-373d2de3caf3，仍有 V5.8 ready 部署，SHA 62bc03ce7f836b0e7da2a86d612d5ed99025bb97。
 
-## 首次连接 GitHub 自动部署
+本次删除仓库手动 Netlify 部署脚本，移除现行双平台发布说明。`netlify.toml` 暂时仅保留 `ignore = "exit 0"` 防止旧连接意外继续构建；它不是旧站删除回执。
 
-打开既有 Netlify 项目 `https://app.netlify.com/projects/stellular-khapse-5c19f8`。在 **Project configuration → Developer settings → Continuous deployment → Repository → Link repository** 中连接仓库 `liuzhide666/Petal-Realms`，分支选 `main`，发布目录选 `site`。
+## 顺序
 
-**不要**创建新 Netlify 站点，也不要选择仓库根目录作为发布目录。现有站点原来通过 Drop 手动发布；连接 Git 时可能立刻触发生产构建。在完成真实云端账号验证前，应先检查部署预览、旧玩家存档备份与回退计划。
+1. 保存旧站部署和配置的回退依据。
+2. 旧站域名与 Cloudflare 域名的 localStorage 不互通。先为尚未上传的旧角色提供导出／迁移；不能假设两条 Supabase 云存档涵盖所有浏览器中的本地进度。
+3. 旧邮箱角色在 Cloudflare 的旧邮箱入口登录，并迁移到新的空游戏账号。未确认身份不能因邮件限流而认领旧角色。
+4. 完成数据迁移验收后，解除**该项目**的 Netlify 仓库连接、构建和部署钩子；不要撤销影响其他项目的整个组织集成。
+5. 退役／删除该旧站，检查相关域名和回调；移除仓库的 Netlify 构建停止配置。
+6. Supabase 回调白名单与全局认证策略可能影响同项目其他应用，需按应用检查，不能直接清空项目配置。
 
-## 预览和手动发布
+当前 Netlify 连接器没有删除站点或解除仓库关联的操作。远程退役尚未执行；不能用删除本地文件冒充平台操作成功。当前界面入口是 https://app.netlify.com/projects/stellular-khapse-5c19f8 。
 
-`scripts/deploy-existing-site.sh` 始终指定同一个站点 ID：
+历史 Netlify ZIP 与 QA 仅作为发布来源保留，不作为有效部署配置。
 
-```bash
-sh scripts/deploy-existing-site.sh           # 草稿/预览，不替换生产
-sh scripts/deploy-existing-site.sh --prod    # 显式替换生产，谨慎使用
-```
 
-需在**你自己已登录 Netlify CLI** 的开发环境执行；仓库不储存登录 Token。Git 自动部署启用后，直接手动推送生产可能被下一次 Git 推送覆盖。
+### 2026-10-18 实际退役状态
 
-## Supabase 云存档
-
-- 已执行迁移存于 `database/migrations/`。**不要再次应用到同一个项目**。
-- 在 Authentication → URL Configuration 核实网站 Site URL 与允许的 Redirect URLs；不要修改其他应用的表。
-- 真实登录、邮件验证、首次上传、刷新恢复、跨设备读取、RLS 负向测试、旧 `localStorage` 迁移还需要单独验收。
-- 云端存档是客户端权威的测试功能；没有服务端反作弊保障。
-
-## 发版门禁
-
-1. 核实 `site/index.html` 与预期发行版本一致。
-2. Node.js 静态检查和单元测试通过，Chromium 测试通过。
-3. 在 Netlify Deploy Preview 或草稿地址测试游戏、登录及存档。
-4. 备份现有玩家本地存档，确认数据结构迁移。
-5. 再将新版发布到原站点并查看部署状态；不得以“上传到 GitHub”代替生产验收。
+Netlify 所有部署现已启用受邀团队登录限制，旧生产地址公开访问显示 `This site is private`，不再向访客提供旧游戏。Cloudflare 为公开运行基准。历史部署保留，永久删除和仓库解绑尚未完成，构建停止保护仍需保留。Google 登录回调报 `Invalid state key`，没有据此声称后台退役已全部完成。

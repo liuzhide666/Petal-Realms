@@ -1,0 +1,13 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),vm=require('node:vm');
+const html=fs.readFileSync(path.join(__dirname,'../site/index.html'),'utf8');
+assert.ok(html.includes('if(cfMode)return cfAuthenticate(e);'),'default server auth must reach Cloudflare API');
+assert.ok(html.includes('if(cfAccount)cfQueue('),'game save must queue Cloudflare progress');
+assert.ok(html.includes('cfPanelControls();'),'account settings must be reachable');
+assert.ok(html.includes('id="cfModeBtn"')&&html.includes('id="localModeBtn"'),'all account modes must have explicit controls');
+assert.ok(html.includes('if(cfAccount){void cfLogout();return}'),'logout must revoke server session');
+const start=html.indexOf('const pets='),end=html.indexOf('const mobs=');
+const names=vm.runInNewContext(html.slice(start,end)+'Object.keys(pets)');
+const backend=fs.readFileSync(path.join(__dirname,'../functions/api/[[path]].js'),'utf8');
+const serverNames=vm.runInNewContext(backend.match(/const PETALS = new Set\([^;]+;/)[0]+'Array.from(PETALS)');
+assert.deepEqual([...names].sort(),[...serverNames].sort(),'server accepts all and only existing flower IDs');
+console.log('V5.11 Cloudflare UI and 27 petal schema compatibility PASS');

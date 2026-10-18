@@ -1,0 +1,16 @@
+{
+  "name": "petal-realms",
+  "private": true,
+  "version": "5.12.0",
+  "type": "module",
+  "scripts": {
+    "test:api": "node --test tests/cloudflare_api.test.mjs",
+    "test:static": "node scripts/test-static.cjs",
+    "test": "npm run test:static && npm run test:api",
+    "dev": "wrangler pages dev site",
+    "build:worker": "wrangler pages functions build --outdir artifacts/worker --compatibility-date 2026-10-18 --compatibility-flags nodejs_compat"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}
