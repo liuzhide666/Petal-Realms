@@ -43,7 +43,7 @@ for(const m of trials){
  }
 }
 ok(comparisons>250,'compared against high-resolution ellipse boundary');
-ok(html.includes("ctx.rotate(m.facing??0);")&&html.includes("drawCreatureBody(m,d.color"),'render orientation and collision body match');
+ok(html.includes("ctx.rotate(m.facing??0);")&&html.includes("drawCreatureBody(m,materialFill("),'render orientation and collision body match');
 ok(html.includes("ctx.arc(0,0,petalContactRadius(d),0,TAU);ctx.stroke()"),'petal hitbox debug shows actual collision circle');
 ok(html.includes("if(mobCircleOverlap(a,p.x,p.y,p.r+.5))"),'player body uses exact ellipse vs circle');
 ok(html.includes("!mobCircleOverlap(m,e.x,e.y,petalContactRadius(def))"),'orbit petals use exact ellipse vs circle');
