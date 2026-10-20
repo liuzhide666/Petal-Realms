@@ -75,7 +75,11 @@ try:
         page.wait_for_function('document.querySelector(".slot-state").textContent.includes("s")')
         check('swapping_loadout_shows_reload_countdowns',page.evaluate('window.PetalRealmsInfo.snapshot().petalState.every(p=>p.cd>0)'))
         page.screenshot(path=str(OUT/'v511_combat_reload.png'))
-        page.wait_for_function('window.PetalRealmsInfo.snapshot().petalState.every(p=>p.cd<=0)')
+        try:
+            page.wait_for_function('window.PetalRealmsInfo.snapshot().petalState.every(p=>p.cd<=0)',timeout=45000)
+        except Exception:
+            print('RELOAD_DIAGNOSTIC',page.evaluate('window.PetalRealmsInfo.snapshot()'),flush=True)
+            raise
         page.wait_for_function('!document.querySelector(".slot.reloading")')
         check('petals_return_after_reload',not page.locator('.slot.reloading').count())
         page.evaluate('document.getElementById("pauseBtn").click()')

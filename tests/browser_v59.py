@@ -1,3 +1,10 @@
+
+from pathlib import Path
+_ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
+def inline_assets(source):
+    for asset in ['rules','art']:
+        source=source.replace('<script src="'+asset+'.js?v=5.14.0"></script>','<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>')
+    return source
 import os
 from pathlib import Path
 import json
@@ -12,7 +19,7 @@ with sync_playwright() as pw:
         page=ctx.new_page()
         errors=[]
         page.on('pageerror',lambda error:errors.append(str(error)))
-        page.set_content(html.read_text(),wait_until='domcontentloaded')
+        page.set_content(inline_assets(html.read_text()),wait_until='domcontentloaded')
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         results.append((label,'local_account_hint','当前浏览器' in page.locator('#authModeHint').inner_text()))

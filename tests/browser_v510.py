@@ -1,3 +1,10 @@
+
+from pathlib import Path
+_ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
+def inline_assets(source):
+    for asset in ['rules','art']:
+        source=source.replace('<script src="'+asset+'.js?v=5.14.0"></script>','<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>')
+    return source
 import os
 """Isolated HTTPS-origin account/backup/workbench acceptance; never creates live users."""
 from pathlib import Path
@@ -5,6 +12,7 @@ import json
 from playwright.sync_api import sync_playwright
 
 HTML = (Path(__file__).resolve().parent.parent / 'site/index.html').read_text()
+HTML=inline_assets(HTML)
 OUT = Path('artifacts/qa')
 OUT.mkdir(parents=True, exist_ok=True)
 checks = []
