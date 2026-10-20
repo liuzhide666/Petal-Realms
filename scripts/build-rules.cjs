@@ -1,7 +1,9 @@
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const p='site/rules.js',config=JSON.parse(fs.readFileSync('docs/standard/ruleset.json','utf8'));
 assert.equal(config.version,JSON.parse(fs.readFileSync('package.json')).version);
-for(const group of ['critical','frost','events','utility'])assert.ok(config[group]);
+for(const group of ['critical','frost','events','utility','special'])assert.ok(config[group]);
+assert.ok(Object.values(config.special).every(x=>Number.isFinite(x)&&x>=0));
+for(const k of ['windup','chargeWindup','chargeDuration','projectileLife','novaRadius'])assert.ok(config.special[k]>0);
 assert.ok(config.critical.perCopy>=0&&config.critical.perCopy<=1&&config.critical.cap<=1&&config.critical.cap>=0&&config.critical.multiplier>=1);
 assert.ok(config.frost.perCopy>=0&&config.frost.cap>=0&&config.frost.cap<1&&config.frost.duration>0&&config.frost.guardianFactor>=0&&config.frost.guardianFactor<=1);
 for(const group of ['events','utility'])assert.ok(Object.values(config[group]).every(x=>Number.isFinite(x)&&x>=0)&&Object.values(config[group]).some(x=>x>0));
