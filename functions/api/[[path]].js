@@ -7,7 +7,7 @@ const SCRYPT = Object.freeze({N:16384,r:8,p:5,maxmem:33554432});
 const MAX_BODY = 1048576;
 const LEGACY_URL = 'https://bfipozjqhzsbdvmisoct.supabase.co';
 const LEGACY_PUBLIC_KEY = 'sb_publishable_wfyMqIqPAZPjH-Q7sHl5ug_8m92bpX0';
-const PETALS = new Set(['basic','rose','leaf','stinger','cactus','bubble','sand','claw','iris','lightning','gear','fang','magma','shell','antenna','poison','starpetal','nectar','missile','grape','puff','bloom','glass','root','soil','wing','magnet']);
+const PETALS = new Set(['basic','rose','leaf','stinger','cactus','bubble','sand','claw','iris','lightning','gear','fang','magma','shell','antenna','poison','starpetal','nectar','missile','grape','puff','bloom','glass','root','soil','wing','magnet','prism','frost']);
 const ZONES = new Set(['garden','desert','ant','ocean','sewer','jungle','hel','factory']);
 const hash = value => createHash('sha256').update(value).digest('hex');
 const now = () => Math.floor(Date.now()/1000);
@@ -104,7 +104,7 @@ function validateSave(payload) {
   if(!Array.isArray(payload.slots)||payload.slots.length>10||!payload.slots.every(item)) fail(400,'装备数据无效。');
   if(payload.backupSlots!==undefined&&(!Array.isArray(payload.backupSlots)||payload.backupSlots.length>10||!payload.backupSlots.every(item))) fail(400,'备用装备数据无效。');
   const bag=payload.bag;
-  if(!bag||typeof bag!=='object'||Array.isArray(bag)||Object.keys(bag).length>270) fail(400,'背包数据无效。');
+  if(!bag||typeof bag!=='object'||Array.isArray(bag)||Object.keys(bag).length>PETALS.size*10) fail(400,'背包数据无效。');
   for(const [k,n]of Object.entries(bag)){const m=/^([a-zA-Z]+)@(0|[1-9])$/.exec(k);if(!m||!PETALS.has(m[1])||!Number.isInteger(n)||n<0||n>99999)fail(400,'背包物品无效。')}
   if(payload.goal!=null&&(!PETALS.has(payload.goal.t)||!Number.isInteger(payload.goal.r)||payload.goal.r<0||payload.goal.r>9))fail(400,'收集目标无效。');
   const text=JSON.stringify(payload);
@@ -150,7 +150,7 @@ export async function onRequest({request,env}) {
     if(!['GET','POST','PUT'].includes(method)) return reply({error:'请求方法不支持。'},405,{Allow:'GET, POST, PUT'});
     if(method!=='GET'&&request.headers.get('Origin')!==url.origin) fail(403,'请求来源不匹配。请从游戏主站重新操作。');
     if(method==='GET'&&path==='session') {const a=await accountFor(db,request);return reply({account:a?publicAccount(a):null});}
-    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.13',provider:'cloudflare',passwordHash:'scrypt'});}
+    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.14',provider:'cloudflare',passwordHash:'scrypt'});}
     const account=await accountFor(db,request);
     if(account&&['save','auth/password','auth/logout','migrate'].includes(path)&&request.headers.get('X-Petal-Account')!==account.id)
       fail(409,'此浏览器已切换到其他账号。已停止操作，请在当前标签页重新登录。');

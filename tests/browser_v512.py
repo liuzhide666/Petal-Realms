@@ -1,4 +1,11 @@
 """Controls, collection and responsive UI on an isolated synthetic account."""
+
+from pathlib import Path
+_ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
+def inline_assets(source):
+    for asset in ['rules','art']:
+        source=source.replace('<script src="'+asset+'.js?v=5.14.0"></script>','<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>')
+    return source
 import json
 import os
 from pathlib import Path
@@ -8,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'artifacts/qa'
 OUT.mkdir(parents=True, exist_ok=True)
 HTML = (ROOT / 'site/index.html').read_text()
+HTML=inline_assets(HTML)
 checks = []
 
 with sync_playwright() as pw:

@@ -128,10 +128,10 @@ test('legacy migration proves identity, refuses overwrite and is idempotent',asy
     assert.equal(f.db.prepare('SELECT count(*) n FROM legacy_links').get().n,1);
   }finally{globalThis.fetch=original;}
 });
-test('all 27 petals survive validation and concurrent writes have one winner',async()=>{
+test('all 29 petal families survive validation and concurrent writes have one winner',async()=>{
   const f=fixture(), a=await register(f);
   const payload=save();
-  payload.bag={'iris@0':1,'puff@3':2,'bloom@9':4,'glass@4':1,'root@3':2,'soil@3':4,'wing@0':1,'magnet@0':2};
+  payload.bag={'iris@0':1,'puff@3':2,'bloom@9':4,'glass@4':1,'root@3':2,'soil@3':4,'wing@0':1,'magnet@0':2,'prism@8':3,'frost@9':2};
   await f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:null,payload}});
   const results=await Promise.all([1,2].map(()=>f.call('save',{method:'PUT',cookie:a.cookie,body:{expectedRevision:1,payload}})));
   assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);

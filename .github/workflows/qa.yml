@@ -13,6 +13,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Versioned probability rules
+        run: |
+          node scripts/build-rules.cjs --check
+          node tests/v514_probability.cjs
       - name: Syntax and public-key safety
         run: node tests/js_syntax.cjs
       - name: Cloud save mock regression
@@ -76,6 +80,7 @@ jobs:
           python tests/browser_v511.py
           python tests/browser_v512.py
           python tests/browser_v513_visual.py
+          python tests/browser_v514.py
       - name: Upload desktop/mobile inventory screenshots
         if: always()
         uses: actions/upload-artifact@v4

@@ -10,4 +10,4 @@ const names=vm.runInNewContext(html.slice(start,end)+'Object.keys(pets)');
 const backend=fs.readFileSync(path.join(__dirname,'../functions/api/[[path]].js'),'utf8');
 const serverNames=vm.runInNewContext(backend.match(/const PETALS = new Set\([^;]+;/)[0]+'Array.from(PETALS)');
 assert.deepEqual([...names].sort(),[...serverNames].sort(),'server accepts all and only existing flower IDs');
-console.log('V5.11 Cloudflare UI and 27 petal schema compatibility PASS');
+console.log('V5.11 Cloudflare UI and 29 petal schema compatibility PASS');
