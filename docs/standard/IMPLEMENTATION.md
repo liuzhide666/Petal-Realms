@@ -15,3 +15,7 @@ Implemented in this release:
 Deferred contracts remain marked P: complete ordered replay, automatic policy optimization, general element matrices, pity, trading and server-authoritative multiplayer/economy. This release is a concrete standards-based implementation step; it does not declare all future proposals complete.
 
 Verification: `npm test`, `node scripts/build-rules.cjs --check`, Worker compilation, browser suites and the handbook's independent reference calculations. The exact source/deployment pins and fresh evidence belong in the release QA report.
+
+## V5.15 amendment
+
+Edition 3.1 adds M125–M130. See [V5.15_TACTICAL_ATLAS.md](V5.15_TACTICAL_ATLAS.md) for the formulas, state conditioning, shared combat/preview coefficients, visual hierarchy and bounded verification. Ruleset5.15.0 adds post-armor moments, exact target-drop union, craft output histogram and composable camera/orbit smoothing. The catalog now contains130 contracts. No schema or account migration is required.

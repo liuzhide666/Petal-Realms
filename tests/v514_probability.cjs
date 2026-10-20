@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('site/rules.js','utf8'),ctx);const R=ctx.PetalRules;
 let checks=0;const ok=v=>{assert.ok(v);checks++};
-ok(R.version==='5.14.0');ok(Object.isFrozen(R.config)&&Object.isFrozen(R.config.critical));
+ok(R.version===JSON.parse(fs.readFileSync('package.json')).version);ok(Object.isFrozen(R.config)&&Object.isFrozen(R.config.critical));
 assert.throws(()=>R.normalize([0,0]));assert.throws(()=>R.normalize([NaN,1]));checks+=2;
 ok(Math.abs(R.normalize([1e308,1e308])[0]-.5)<1e-14);
 const a=R.streams(42),b=R.streams(42);for(let i=0;i<100;i++)a.visual();ok(a.loot()===b.loot());ok(a.craft()===b.craft());ok(a.world()===b.world());

@@ -1,5 +1,5 @@
 {
-  "version": "5.14.0",
+  "version": "5.15.0",
   "critical": {
     "perCopy": 0.15,
     "cap": 0.6,
@@ -23,5 +23,19 @@
     "survival": 0.3,
     "damage": 0.2,
     "mobility": 0.1
+  },
+  "special": {
+    "windup": 1.1,
+    "chargeWindup": 0.95,
+    "chargeDuration": 0.52,
+    "chargeMultiplier": 3,
+    "enrageSpeed": 1.33,
+    "sniperSpeed": 340,
+    "venomSpeed": 270,
+    "levelSpeed": 1.7,
+    "levelSpeedCap": 120,
+    "projectileLife": 2.3,
+    "spread": 0.18,
+    "novaRadius": 210
   }
 }
