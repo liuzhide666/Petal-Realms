@@ -17,6 +17,7 @@ jobs:
         run: |
           node scripts/build-rules.cjs --check
           node tests/v514_probability.cjs
+          node tests/standard_catalog.cjs
       - name: Syntax and public-key safety
         run: node tests/js_syntax.cjs
       - name: Cloud save mock regression
