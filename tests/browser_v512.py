@@ -144,6 +144,7 @@ with sync_playwright() as pw:
         page.locator('#pauseBtn').click()
         page.locator('#manualSave').click()
         page.reload()
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         page.locator('#authName').fill('controlqa');page.locator('#authPass').fill('control-password-2026');page.locator('#authSubmit').click()
