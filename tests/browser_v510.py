@@ -57,6 +57,7 @@ with sync_playwright() as pw:
         page.locator('#manualSave').click()
         check('backup_controls_for_local_character', page.locator('#exportLocalSave').count() == 1)
         page.reload()
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         page.locator('#authName').fill('petaltest')

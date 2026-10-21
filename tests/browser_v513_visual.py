@@ -30,6 +30,8 @@ with sync_playwright() as p:
  page=b.new_page(viewport={'width':1000,'height':870},device_scale_factor=1)
  errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.set_content(html,wait_until='domcontentloaded')
+ page.locator('#welcomeContinue').click()
+ page.wait_for_function('!document.getElementById("authSubmit").disabled')
  page.locator('#gate').evaluate('(e)=>e.remove()')
  for n in range(2):
   result=page.evaluate('(n)=>window.__visualQA(n)',n)
