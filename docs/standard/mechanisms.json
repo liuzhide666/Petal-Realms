@@ -2155,7 +2155,7 @@
       "title": "Gate-entry announcement lifecycle",
       "equation": "gate_visible_entry -> welcome_open -> dismiss -> optional_session_restore",
       "meaning": "Every initial load and transition back to the gate opens the developer/update announcement. Manual reopen is available. First session restoration waits for dismissal; a hidden gate closes a pending welcome. Repeated calls while open share the same close promise.",
-      "composition": "Gate visibility owns welcome presentation. Changing authentication tabs does not create a new gate entry.",
+      "composition": "Gate visibility owns welcome presentation. Changing authentication tabs does not create a new gate entry. Authentication and mode controls are reserved until initial restoration settles, preventing a post-dismissal mode race.",
       "boundary": "The developer text describes the project without inventing personal biography. No forever-hide preference suppresses subsequent gate entries.",
       "verification": "Check first load, manual reopen, Escape, logout, focus and restored-session ordering.",
       "anchor": "PetalUI.install; PetalUI.welcome; logout [S16]",

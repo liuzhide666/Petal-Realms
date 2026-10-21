@@ -25,3 +25,14 @@ for(let a=0;a<=3;a++)for(let b=0;b<=3;b++)for(const policy of Object.keys(W.weig
 }
 assert.throws(()=>W.plan({a:99999,b:2},['a','a'],defs,'sustain'),'reject returned stack overflow');
 console.log('48 exhaustive allocation cases and overflow boundary PASS');
+(async()=>{
+ const html=fs.readFileSync('site/index.html','utf8');const src=html.slice(html.indexOf('async function askGame('),html.indexOf("let workshopPolicy=",html.indexOf('async function askGame(')));
+ const ctx={game:{user:'A',active:true,dead:false,p:{}},cfAccount:{id:'A'},modal:'workshop',cfConflict:false,PetalUI:{ask:async()=>true}};vm.createContext(ctx);vm.runInContext(src,ctx);
+ assert.equal(await ctx.askGame('apply'),true);
+ let pending=ctx.askGame('apply');ctx.game.user='B';assert.equal(await pending,false);
+ ctx.game.user='A';pending=ctx.askGame('apply');ctx.game.p={};assert.equal(await pending,false);
+ pending=ctx.askGame('apply');ctx.cfConflict=true;assert.equal(await pending,false);
+ ctx.game.active=false;ctx.game.dead=true;ctx.modal=null;assert.equal(await ctx.askGame('resolve known conflict at gate'),true);
+ ctx.PetalUI.ask=async()=>false;assert.equal(await ctx.askGame('cancel'),false);
+ console.log('6 asynchronous action-identity cases PASS');
+})().catch(e=>{console.error(e);process.exitCode=1});
