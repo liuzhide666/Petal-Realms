@@ -34,6 +34,7 @@ styles = {
     'body': ParagraphStyle('Body', fontName='Body', fontSize=10, leading=16, textColor=colors.HexColor('#233d35'), spaceAfter=12),
     'title': ParagraphStyle('Title', fontName='Bold', fontSize=24, leading=30, textColor=colors.HexColor('#193e30'), spaceAfter=22),
     'heading': ParagraphStyle('Heading', fontName='Bold', fontSize=13, leading=19, textColor=colors.HexColor('#4a6548'), spaceBefore=12, spaceAfter=10),
+    'path': ParagraphStyle('Path', fontName='Bold', fontSize=9, leading=14, textColor=colors.HexColor('#4a6548'), spaceBefore=9, spaceAfter=5),
     'small': ParagraphStyle('Small', fontName='Body', fontSize=8, leading=12, textColor=colors.HexColor('#426150'), spaceAfter=9, splitLongWords=True),
 }
 def para(text, kind='body'):
@@ -65,7 +66,7 @@ for group in groups:
 story += [para('Source identity and change boundary', 'title'), para('Runtime source commit: ' + commit, 'small')]
 scope = ['site/index.html', 'site/rules.js', 'site/release.json', 'functions/api/[[path]].js', 'docs/standard/ruleset.json', 'docs/standard/mechanisms.json', 'docs/standard/V5.17_INTERFACE_CONTINUITY.md', 'tests/browser_v517.mjs']
 for name in scope:
-    story += [para(name, 'heading'), para('SHA-256 ' + hashlib.sha256((root/name).read_bytes()).hexdigest(), 'small')]
+    story += [para(name, 'path'), para('SHA-256 ' + hashlib.sha256((root/name).read_bytes()).hexdigest(), 'small')]
 story += [PageBreak(), para('Conformance and limits', 'title'), para('The current browser regression contains 128 assertions across five viewport sizes. The preceding V5.16 suite contains 245 assertions. Source, test result and deployment verification are separate evidence dimensions; this document does not turn an unexecuted check into a pass.'), para('Equipment safety', 'heading'), para('For distinct item keys, reject a swap if the replaced item cannot return to its existing bag stack. The rejection occurs before consuming the requested item. Same-key swaps at the 99999 cap have zero net stock change. Neither operation bypasses existing reload, HP or save behavior.'), para('Compatibility', 'heading'), para('The native account database and save schema 5 remain compatible. Only the API health version label changes. The probability profile coefficients are unchanged; its version label follows the release. No production player account is created by the isolated browser suite.'), para('Reproduction', 'heading'), para('Run scripts/build-interface-supplement.py with the frozen Edition 3.2 baseline PDF, an output path and the exact V5.17 source commit. The source script checks the baseline page count and verifies that every original page retains its text in the consolidated output. ReportLab invariant mode removes timestamp variability from newly generated pages.'), para('Baseline PDF SHA-256: ' + hashlib.sha256(Path(base).read_bytes()).hexdigest(), 'small'), para('Hardware boundary', 'heading'), para('Chromium mobile emulation and injected browser touch events do not certify physical iPhone, iPad or Safari behavior. Successful public byte and health checks establish publication of matching files, not a complete live-account playthrough.')]
 buffer = io.BytesIO()
 SimpleDocTemplate(buffer, pagesize=(595.28,841.89), rightMargin=48,leftMargin=48,topMargin=66,bottomMargin=54).build(story,onFirstPage=page,onLaterPages=page)
@@ -83,5 +84,5 @@ for i in [0,*range(334,340)]:
     for block in check[i].get_text('dict')['blocks']:
         for line in block.get('lines',[]):
             for span in line['spans']:
-                x0,y0,x1,y1=span['bbox'];assert x0>=0 and y0>=0 and x1<=596 and y1<=842
+                x0,y0,x1,y1=span['bbox'];assert x0>=0 and y0>=0 and x1<=548 and y1<=842
 print('340 pages; original 333 page texts preserved; supplement bounds verified')
