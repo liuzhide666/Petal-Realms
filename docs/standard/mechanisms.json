@@ -1,7 +1,7 @@
 {
   "standard": "PR-STD-003",
   "edition": "3.2",
-  "ruleset": "5.16.0",
+  "ruleset": "5.17.0",
   "scope": "V5.16 complete runtime, probability atlas, constrained build planning and interface state contracts; proposals retain P status",
   "records": [
     {
