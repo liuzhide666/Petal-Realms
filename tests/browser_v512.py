@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 _ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
 def inline_assets(source):
-    for asset in ['rules','art']:
+    for asset in ['workshop','interface','rules','art']:
         source=re.sub(r'<script src="'+re.escape(asset)+r'\.js\?v=[^"]+"></script>',lambda _: '<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>',source)
     return source
 import json
@@ -34,6 +34,7 @@ with sync_playwright() as pw:
                 variant=variant.replace(f'env(safe-area-inset-{side})',f'{pixels}px')
         page.route('https://petal-qa.invalid/**',lambda r:r.fulfill(status=200,content_type='text/html',body=variant))
         page.goto('https://petal-qa.invalid/')
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         def check(name, condition):
             checks.append({'viewport':label,'test':name,'passed':bool(condition)})
@@ -143,6 +144,7 @@ with sync_playwright() as pw:
         page.locator('#pauseBtn').click()
         page.locator('#manualSave').click()
         page.reload()
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         page.locator('#authName').fill('controlqa');page.locator('#authPass').fill('control-password-2026');page.locator('#authSubmit').click()

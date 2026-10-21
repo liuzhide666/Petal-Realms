@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 _ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
 def inline_assets(source):
-    for asset in ['rules','art']:
+    for asset in ['workshop','interface','rules','art']:
         source=re.sub(r'<script src="'+re.escape(asset)+r'\.js\?v=[^"]+"></script>',lambda _: '<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>',source)
     return source
 import os
@@ -37,6 +37,7 @@ with sync_playwright() as pw:
 
         page.route('https://*.supabase.co/**', auth_route)
         page.goto('https://petal-qa.invalid/')
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         def check(name, value):
@@ -56,6 +57,7 @@ with sync_playwright() as pw:
         page.locator('#manualSave').click()
         check('backup_controls_for_local_character', page.locator('#exportLocalSave').count() == 1)
         page.reload()
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         page.locator('#authName').fill('petaltest')
@@ -84,15 +86,17 @@ with sync_playwright() as pw:
         data = json.loads(exported)
         check('export_has_progress_without_password', data['payload']['p']['level'] == 1 and 'petal-pass-2026' not in exported)
         data['payload']['p']['level'] = 9
-        page.once('dialog', lambda d: d.accept())
         page.locator('#importLocalSave').set_input_files({'name': 'backup.json', 'mimeType': 'application/json', 'buffer': json.dumps(data).encode()})
+        page.locator('#confirmAccept').click()
         page.wait_for_function('window.PetalRealmsInfo.snapshot().level === 9')
         check('backup_import_applied', True)
         page.evaluate("document.getElementById('pauseBtn').click()")
-        page.once('dialog', lambda d: d.accept())
         page.locator('#restoreLocalSave').click()
+        page.locator('#confirmAccept').click()
+        page.wait_for_function('window.PetalRealmsInfo.snapshot().level === 1')
         check('import_can_be_rolled_back', page.evaluate('window.PetalRealmsInfo.snapshot().level') == 1)
         page.evaluate("document.getElementById('logoutBtn').click()")
+        page.locator('#welcomeContinue').click()
         page.locator('#legacyAccounts').evaluate('(e)=>e.open=true');page.locator('#cloudModeBtn').click()
         page.locator('#tabRegister').click()
         page.locator('#authName').fill('qa@example.invalid')
