@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 _ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
 def inline_assets(source):
-    for asset in ['rules','art']:
+    for asset in ['workshop','interface','rules','art']:
         source=re.sub(r'<script src="'+re.escape(asset)+r'\.js\?v=[^"]+"></script>',lambda _: '<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>',source)
     return source
 import os
@@ -21,6 +21,7 @@ with sync_playwright() as pw:
         errors=[]
         page.on('pageerror',lambda error:errors.append(str(error)))
         page.set_content(inline_assets(html.read_text()),wait_until='domcontentloaded')
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         results.append((label,'local_account_hint','当前浏览器' in page.locator('#authModeHint').inner_text()))

@@ -14,8 +14,8 @@ test('corrupt outbox recovery is bound to the newly authenticated account',async
  await assert.rejects(ctx.cfEnter({id:'B',username:'new'}),/corrupt/);assert.equal(target,'B');
 });
 test('recovery code file uses its response account, never the old form or role',()=>{
- const nodes=new Map();const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'oldlocal',remove(){}});return nodes.get(id)};let downloaded;
- const ctx={$,cfAccount:{username:'oldlocal'},game:{paused:true},modal:null,document:{createElement:()=>({style:{}}),body:{append(){}}},cfDownload:d=>{downloaded=d}};
+ const nodes=new Map();const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'oldlocal',remove(){},focus(){}});return nodes.get(id)};let downloaded;
+ const ctx={$,cfAccount:{username:'oldlocal'},game:{paused:true},modal:null,document:{createElement:()=>({style:{},setAttribute(){},showModal(){},close(){},addEventListener(){}}),body:{append(){}}},cfDownload:d=>{downloaded=d}};
  vm.runInNewContext(extract('function cfShowRecovery(','function cfDownload('),ctx);
  ctx.cfShowRecovery('isolated-code',{id:'new-id',username:'correct-user'});$('cfDownloadRecovery').onclick();
  assert.equal(downloaded.username,'correct-user');

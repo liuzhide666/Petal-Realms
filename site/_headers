@@ -15,3 +15,12 @@
 
 /art.js
   Cache-Control: no-cache, must-revalidate
+
+/workshop.js
+  Cache-Control: no-cache, must-revalidate
+
+/interface.js
+  Cache-Control: no-cache, must-revalidate
+
+/release.json
+  Cache-Control: no-cache, must-revalidate

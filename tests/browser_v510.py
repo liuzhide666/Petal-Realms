@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 _ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
 def inline_assets(source):
-    for asset in ['rules','art']:
+    for asset in ['workshop','interface','rules','art']:
         source=re.sub(r'<script src="'+re.escape(asset)+r'\.js\?v=[^"]+"></script>',lambda _: '<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>',source)
     return source
 import os
@@ -37,6 +37,7 @@ with sync_playwright() as pw:
 
         page.route('https://*.supabase.co/**', auth_route)
         page.goto('https://petal-qa.invalid/')
+        page.locator('#welcomeContinue').click()
         page.wait_for_function('!document.getElementById("authSubmit").disabled')
         page.locator('#localModeBtn').click()
         def check(name, value):
