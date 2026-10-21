@@ -87,6 +87,7 @@ jobs:
           python tests/browser_v515.py
           npm install --no-save --package-lock=false playwright@1.58.0
           node tests/browser_v516.mjs
+          node tests/browser_v517.mjs
       - name: Upload desktop/mobile inventory screenshots
         if: always()
         uses: actions/upload-artifact@v4

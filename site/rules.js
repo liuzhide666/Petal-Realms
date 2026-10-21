@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const freeze=o=>{Object.values(o).forEach(v=>v&&typeof v==='object'&&freeze(v));return Object.freeze(o)};
-  const config=freeze({"version":"5.16.0","critical":{"perCopy":0.15,"cap":0.6,"multiplier":1.6},"frost":{"perCopy":0.12,"cap":0.35,"duration":1.2,"guardianFactor":0.5},"events":{"swarm":28,"treasure":18,"bloodmoon":21,"renewal":18,"meteor":15},"utility":{"progress":0.4,"survival":0.3,"damage":0.2,"mobility":0.1},"special":{"windup":1.1,"chargeWindup":0.95,"chargeDuration":0.52,"chargeMultiplier":3,"enrageSpeed":1.33,"sniperSpeed":340,"venomSpeed":270,"levelSpeed":1.7,"levelSpeedCap":120,"projectileLife":2.3,"spread":0.18,"novaRadius":210}});
+  const config=freeze({"version":"5.17.0","critical":{"perCopy":0.15,"cap":0.6,"multiplier":1.6},"frost":{"perCopy":0.12,"cap":0.35,"duration":1.2,"guardianFactor":0.5},"events":{"swarm":28,"treasure":18,"bloodmoon":21,"renewal":18,"meteor":15},"utility":{"progress":0.4,"survival":0.3,"damage":0.2,"mobility":0.1},"special":{"windup":1.1,"chargeWindup":0.95,"chargeDuration":0.52,"chargeMultiplier":3,"enrageSpeed":1.33,"sniperSpeed":340,"venomSpeed":270,"levelSpeed":1.7,"levelSpeedCap":120,"projectileLife":2.3,"spread":0.18,"novaRadius":210}});
   function finite(x){if(!Number.isFinite(x))throw new RangeError('Finite number required');return x}
   function probability(p){finite(p);if(p<0||p>1)throw new RangeError('Probability outside [0,1]');return p}
   function integer(n,max=99999){if(!Number.isSafeInteger(n)||n<0||n>max)throw new RangeError('Invalid bounded integer');return n}

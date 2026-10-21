@@ -1,6 +1,12 @@
 # Petal Realms · 花瓣之境
 
-当前源码版本：**V5.16 · 林间工坊与统一界面**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.16_QA.md)。
+当前源码版本：**V5.17 · 随手配装与连续操作**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.17_QA.md)。
+
+## V5.17 随手配装
+
+背包新增常驻装备操作栏，始终显示所选花瓣、当前/备用构筑和目标槽位。手机可在卡片主体滑动浏览，使用右下角拖拽柄直接装备；电脑保留鼠标拖放和键盘选择。卡片、槽位、合成材料和偏好按钮重新绘制后保持键盘焦点。
+
+各面板分别记住本次冒险的滚动位置。退出或重新进入游戏时清空界面菜单、筛选和选择状态。拖拽在取消、失焦或面板切换时清理，旧手势不能影响新页面。概率系数、背包守恒、原有重装代价、账号和存档模式保留。参见 [英文界面规范补充](docs/standard/V5.17_INTERFACE_CONTINUITY.md)。
 
 ## V5.16 林间工坊
 
