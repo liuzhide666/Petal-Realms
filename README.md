@@ -1,6 +1,12 @@
 # Petal Realms · 花瓣之境
 
-当前源码版本：**V5.17 · 随手配装与连续操作**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.17_QA.md)。
+当前源码版本：**V5.18 · 原野环绕与清晰描边**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.18_QA.md)。
+
+## V5.18 原野环绕
+
+新增原创描边美术风格、八区地表配色、共享的 29 类矢量花瓣和角色表情。背包、合成、构筑、装备栏与图鉴使用对应绘图，精简 HUD 为战场留出空间；电脑可直接查看备用构筑。设置中可切换林间材质风格、完整 HUD、减少动画、网格和轨道辅助线。
+
+本次已访问 Florr 官方入口，但游客战斗连接未能建立，因此不宣称已完整试玩或复刻其服务器机制。保留现有概率系数、碰撞、账号和存档规则；参见 [英文规范 S2](docs/standard/V5.18_ORBITAL_FIELD.md)。
 
 ## V5.17 随手配装
 
