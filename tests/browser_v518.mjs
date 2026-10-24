@@ -11,6 +11,24 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
  const frozen=await page.evaluate(()=>__fieldQA.snapshot());await page.evaluate(()=>{__fieldQA.render();__fieldQA.render()});check(label+' rendering preserves gameplay',await page.evaluate(x=>__fieldQA.snapshot()===x,frozen));check(label+' all creatures preserve colliders',await page.evaluate(()=>__fieldQA.gallery())===129);await page.evaluate(()=>__fieldQA.render());
  check(label+' no horizontal overflow',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));check(label+' health visible',await page.locator('#hpText').isVisible());check(label+' compact tools collapsed',await page.locator('#craftBtn').isHidden());check(label+' compact skills collapsed',await page.locator('#skillDock').isHidden());
  await page.screenshot({path:out+'/v518_'+label+'_play.png'});
+ // Exercise disclosure through real controls instead of forced or DOM clicks.
+ for(const hud of ['compact','full']){
+  await page.locator('#pauseBtn').click();await page.locator('#settingsFromPause').click();
+  await page.locator('#hudSelect').selectOption(hud);await page.locator('#panelClose').click();
+  check(label+' '+hud+' panel close collapses tools',await page.locator('#toolsMenuBtn').getAttribute('aria-expanded')==='false');
+  check(label+' '+hud+' orbit disclosure',await page.locator('#orbitBtn').isVisible()===(hud==='full'));
+  if(hud==='compact')await page.locator('#toolsMenuBtn').click();
+  check(label+' '+hud+' orbit reachable',await page.locator('#orbitBtn').isVisible());
+  if(!mobile)check(label+' '+hud+' desktop deck reachable',await page.locator('#deckBtn').isVisible());
+  await page.locator('#orbitBtn').click();check(label+' '+hud+' orbit click reverses',await page.evaluate(()=>PetalRealmsInfo.snapshot().orbitDirection)===-1);
+  await page.keyboard.press('h');check(label+' '+hud+' orbit keyboard restores',await page.evaluate(()=>PetalRealmsInfo.snapshot().orbitDirection)===1);
+  if(hud==='compact'){
+   await page.locator('#toolsMenuBtn').click();check(label+' tools can collapse',await page.locator('#orbitBtn').isHidden()&&await page.locator('#deckBtn').isHidden());
+   await page.locator('#toolsMenuBtn').click();await page.locator('#bagBtn').click();await page.locator('#panelClose').click();
+   check(label+' panel close hides disclosed orbit',await page.locator('#orbitBtn').isHidden()&&await page.locator('#toolsMenuBtn').getAttribute('aria-expanded')==='false');
+  }
+ }
+
  await page.evaluate(()=>__fieldQA.open('settings'));for(const id of ['visualStyleSelect','hudSelect','motionSelect','gridToggle','orbitGuideToggle'])check(label+' '+id,await page.locator('#'+id).isVisible());
  await page.locator('#visualStyleSelect').selectOption('botanical');check(label+' botanical switch',await page.evaluate(()=>document.body.dataset.visual==='botanical'));await page.locator('#hudSelect').selectOption('full');check(label+' full hud switch',await page.evaluate(()=>document.body.dataset.hud==='full'));await page.locator('#motionSelect').selectOption('reduced');check(label+' motion preference',await page.evaluate(()=>__fieldQA.settings().motion==='reduced'&&document.body.dataset.motion==='reduced'));
  await page.locator('#gridToggle').click();await page.locator('#orbitGuideToggle').click();check(label+' guides toggle',await page.evaluate(()=>__fieldQA.settings().showGrid&&__fieldQA.settings().orbitGuide));await page.locator('#visualStyleSelect').selectOption('field');await page.locator('#hudSelect').selectOption('compact');await page.screenshot({path:out+'/v518_'+label+'_settings.png'});

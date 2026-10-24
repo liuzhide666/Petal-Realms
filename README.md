@@ -1,6 +1,12 @@
 # Petal Realms · 花瓣之境
 
-当前源码版本：**V5.18 · 原野环绕与清晰描边**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。源码版本与生产部署状态分别记录；见 [QA](docs/qa/V5.18_QA.md)。
+当前源码候选版本：**V5.19 · 战斗明晰**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。本地候选与生产部署分别记录，见 [QA](docs/qa/V5.19_QA.md)。
+
+## V5.19 战斗明晰
+
+修复死亡后同帧继续治疗、拾取和反伤结算；死亡与复活清空输入并恢复安全点镜头。远程花瓣使用怪物实际躯干轮廓判定，无敌期间被挡下的投射物不会附加中毒。伤害浮字显示扣甲与过量伤害截断后的有效伤害；原有吸血和连锁伤害基数保持明确。
+
+同步失败采用有效的有限退避，过期登录和无效存档不再在失败结算中循环重试。29类掉落花瓣使用共享图形，守卫血条、事件提示和手机工具栏调整为独立区域。等级上限与存档约束一致。完整规则与证据边界见 [英文规范 S3](docs/standard/V5.19_COMBAT_CONSISTENCY.md)。
 
 ## V5.18 原野环绕
 

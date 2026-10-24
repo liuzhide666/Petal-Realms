@@ -110,6 +110,8 @@ with sync_playwright() as pw:
         else:
             check('desktop_skills_clear_inventory',disjoint('#skillDock','#bottom'))
             check('ten_slots_fit_one_row',page.evaluate('new Set([...document.querySelectorAll("#slots .slot")].map(e=>e.offsetTop)).size===1'))
+            page.locator('#toolsMenuBtn').click()
+            check('orbit_menu_reopened_after_panel_close',page.locator('#toolsMenuBtn').get_attribute('aria-expanded')=='true')
             page.locator('#orbitBtn').click()
             direction=page.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')
             page.keyboard.down(' ')

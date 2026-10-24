@@ -150,7 +150,7 @@ export async function onRequest({request,env}) {
     if(!['GET','POST','PUT'].includes(method)) return reply({error:'请求方法不支持。'},405,{Allow:'GET, POST, PUT'});
     if(method!=='GET'&&request.headers.get('Origin')!==url.origin) fail(403,'请求来源不匹配。请从游戏主站重新操作。');
     if(method==='GET'&&path==='session') {const a=await accountFor(db,request);return reply({account:a?publicAccount(a):null});}
-    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.18',provider:'cloudflare',passwordHash:'scrypt'});}
+    if(method==='GET'&&path==='health') {await db.prepare('SELECT id FROM players LIMIT 1').first();await verifyPasswordRuntime();return reply({ok:true,version:'5.19',provider:'cloudflare',passwordHash:'scrypt'});}
     const account=await accountFor(db,request);
     if(account&&['save','auth/password','auth/logout','migrate'].includes(path)&&request.headers.get('X-Petal-Account')!==account.id)
       fail(409,'此浏览器已切换到其他账号。已停止操作，请在当前标签页重新登录。');
