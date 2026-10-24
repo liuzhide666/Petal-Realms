@@ -14,7 +14,7 @@ const server=http.createServer((req,res)=>{
  if(u.pathname.startsWith('/api/')){res.setHeader('Content-Type','application/json');res.end('{"account":null}');return}
  const f=u.pathname==='/'?null:path.join(root,path.basename(u.pathname));
  if(f&&!fs.existsSync(f)){res.writeHead(404);res.end();return}
- res.setHeader('Content-Type',u.pathname.endsWith('.js')?'text/javascript':u.pathname.endsWith('.json')?'application/json':'text/html;charset=utf-8');
+ res.setHeader('Content-Type',u.pathname.endsWith('.js')?'text/javascript':u.pathname.endsWith('.css')?'text/css':u.pathname.endsWith('.json')?'application/json':'text/html;charset=utf-8');
  res.end(f?fs.readFileSync(f):html);
 });
 await new Promise(r=>server.listen(0,'127.0.0.1',r));

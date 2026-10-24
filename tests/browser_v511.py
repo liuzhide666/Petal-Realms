@@ -131,7 +131,7 @@ try:
         page.locator('#gate').wait_for(state='visible')
         page.locator('#welcomeContinue').click()
         page.locator('#authName').fill(user);page.locator('#authPass').fill(password);page.locator('#authSubmit').click()
-        page.wait_for_function('document.getElementById("authError").textContent.includes("另一设备")')
+        page.wait_for_function('document.getElementById("authError").textContent.includes("版本不一致")')
         check('conflict_survives_logout_and_login',page.locator('#gate').is_visible())
         page.locator('#cfPendingControls').evaluate('(e)=>e.open=true')
         with page.expect_download():

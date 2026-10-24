@@ -58,6 +58,14 @@ jobs:
         run: node tests/v512_controls_collection.cjs
       - name: Bounded save retries and preserved outbox
         run: node tests/v519_sync_retry.cjs
+      - name: Recovery, settled crafting, deterministic effects and training contracts
+        run: |
+          node tests/v520_recovery.cjs
+          node tests/v520_crafting.cjs
+          node tests/v520_capacity.cjs
+          node tests/v520_skills.cjs
+          node tests/v520_effects.cjs
+          node tests/v520_trials.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -94,6 +102,8 @@ jobs:
           node tests/browser_v518.mjs
           node tests/browser_input_continuity.mjs
           node tests/browser_v519.mjs
+          node tests/browser_v520.mjs
+          node tests/browser_v520_trials.mjs
       - name: Upload browser screenshots and assertion results
         if: always()
         uses: actions/upload-artifact@v4
