@@ -64,6 +64,9 @@ try:
         check('signup_really_saves_to_d1',True)
         check('secure_httponly_session',all(c['httpOnly'] and c['secure'] and c['sameSite']=='Strict' for c in desktop.cookies() if c['name']=='__Host-petal_session'))
         check('no_auth_token_in_localstorage',not page.evaluate('Object.values(localStorage).some(v=>v.includes("__Host-petal_session"))'))
+        # Compact HUD discloses orbit controls through More.
+        page.locator('#toolsMenuBtn').click()
+        check('desktop_tools_menu_expanded',page.locator('#toolsMenuBtn').get_attribute('aria-expanded')=='true')
         page.locator('#orbitBtn').click()
         check('orbit_button_reverses_live_petals',page.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')==-1)
         page.keyboard.press('h')
@@ -107,6 +110,9 @@ try:
         check('independent_device_reads_same_cloud_character',True)
         second.screenshot(path=str(OUT/'v511_mobile_cloud_account.png'))
         second.locator('#panelClose').click()
+        # Closing the panel collapses More; reopen it before orbit interaction.
+        second.locator('#toolsMenuBtn').click()
+        check('mobile_tools_menu_expanded',second.locator('#toolsMenuBtn').get_attribute('aria-expanded')=='true')
         second.locator('#orbitBtn').click()
         check('mobile_orbit_control_is_reachable',second.evaluate('window.PetalRealmsInfo.snapshot().orbitDirection')==-1)
         check('mobile_slots_do_not_overlap_combat_buttons',second.evaluate('''()=>{

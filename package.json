@@ -1,7 +1,7 @@
 {
   "name": "petal-realms",
   "private": true,
-  "version": "5.17.0",
+  "version": "5.19.0",
   "type": "module",
   "scripts": {
     "test:api": "node --test tests/cloudflare_api.test.mjs",

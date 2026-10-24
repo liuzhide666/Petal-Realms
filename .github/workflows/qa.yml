@@ -19,6 +19,7 @@ jobs:
           node tests/v514_probability.cjs
           node tests/v515_rules.cjs
           node tests/v516_workshop.cjs
+          node tests/v518_field.cjs
           node tests/standard_catalog.cjs
       - name: Syntax and public-key safety
         run: node tests/js_syntax.cjs
@@ -55,6 +56,8 @@ jobs:
           node --test tests/cloudflare_api.test.mjs
       - name: Input, collection and neutral creature behavior
         run: node tests/v512_controls_collection.cjs
+      - name: Bounded save retries and preserved outbox
+        run: node tests/v519_sync_retry.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -76,7 +79,7 @@ jobs:
         run: |
           python -m pip install playwright==1.58.0
           python -m playwright install --with-deps chromium
-      - name: Desktop/mobile V5.9 UI and runtime browser checks
+      - name: Desktop/mobile interaction and runtime browser checks
         run: |
           python tests/browser_v59.py
           python tests/browser_v510.py
@@ -88,10 +91,17 @@ jobs:
           npm install --no-save --package-lock=false playwright@1.58.0
           node tests/browser_v516.mjs
           node tests/browser_v517.mjs
-      - name: Upload desktop/mobile inventory screenshots
+          node tests/browser_v518.mjs
+          node tests/browser_input_continuity.mjs
+          node tests/browser_v519.mjs
+      - name: Upload browser screenshots and assertion results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v59-inventory-crafting-screenshots
-          path: artifacts/qa/*.png
+          path: |
+            artifacts/qa/*.png
+            artifacts/qa/*_results.json
+            artifacts/qa/*_browser.json
+            artifacts/qa/input_continuity.json
           if-no-files-found: ignore
