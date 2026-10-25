@@ -17,7 +17,7 @@ V5.12 将用户已注册并保存进度的原预览库指定为生产库，保�
 
 两库均已通过 Cloudflare API 创建，并应用 `database/cloudflare/0001_accounts.sql`。初始结构为 additive/IF NOT EXISTS；不要对后续变更盲目重放或重建数据库。
 
-Pages 构建环境使用 Node.js 24，发布目录 site，构建命令建议 `npm test`。该命令检查静态与 API 回归；浏览器测试由 GitHub Actions 执行。每次合并必须先查该提交 CI 成功；主分支保护是否强制执行须单独核对管理配置，本文不代表已经设置。
+Pages 构建通过仓库 `.node-version` 固定为 Node.js24.22.1（相应npm11），发布目录site，构建命令为`npm test`。2026-10-25真实日志曾检出默认Node22/npm10，无法安装npm11生成的定向安全修补锁文件；本机复现后补上版本文件，不能把README的版本要求当作远程配置已生效。实际生效仍须核对当前部署日志。该命令检查静态与 API 回归；浏览器测试由 GitHub Actions 执行。每次合并必须先查该提交 CI 成功；主分支保护是否强制执行须单独核对管理配置，本文不代表已经设置。
 
 仅同步 public 配置，禁止将 Cloudflare API Token、Supabase secret/service_role、密码、会话、恢复码或玩家进度提交到仓库。
 
