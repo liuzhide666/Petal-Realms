@@ -9,7 +9,7 @@ test('a stale snapshot never borrows another outbox revision',()=>{
  ctx.cfQueue({p:{level:3}});assert.equal(raw,original);assert.equal(ctx.cfConflict,true);
 });
 test('corrupt outbox recovery is bound to the newly authenticated account',async()=>{
- let target='A';const ctx={cfAPI:async()=>({accountId:'B',revision:2,payload:null}),cfTakeLock:async()=>{},cfReleaseLock:()=>{},cfReadOutbox:()=>{throw Error('corrupt')},localStorage:{setItem:(k,v)=>{if(k==='petal_realms_cf_last_uid')target=v}}};
+ let target='A';const ctx={cfAPI:async()=>({accountId:'B',revision:2,payload:null}),cfTakeLock:async()=>{},cfReleaseLock:()=>{},cfOutboxKey:id=>'outbox_'+id,cfReadOutbox:()=>{throw Error('corrupt')},localStorage:{getItem:()=>null,setItem:(k,v)=>{if(k==='petal_realms_cf_last_uid')target=v}}};
  vm.runInNewContext(extract('async function cfEnter(','async function cfAuthenticate('),ctx);
  await assert.rejects(ctx.cfEnter({id:'B',username:'new'}),/corrupt/);assert.equal(target,'B');
 });

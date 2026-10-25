@@ -1,12 +1,6 @@
 """Synthetic render gallery, RNG isolation and geometry invariants; no live accounts."""
 
-from pathlib import Path
-import re
-_ASSET_ROOT=Path(__file__).resolve().parent.parent/'site'
-def inline_assets(source):
-    for asset in ['workshop','interface','rules','art']:
-        source=re.sub(r'<script src="'+re.escape(asset)+r'\.js\?v=[^"]+"></script>',lambda _: '<script>'+(_ASSET_ROOT/(asset+'.js')).read_text()+'</script>',source)
-    return source
+from browser_assets import inline_assets
 import json,os,subprocess
 from pathlib import Path
 from playwright.sync_api import sync_playwright

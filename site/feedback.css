@@ -1,0 +1,28 @@
+/* Botanical feedback: semantic information remains visible without animation. */
+.save-comparison{margin:12px 0;padding:13px;border:1px solid #d7c894;border-radius:13px;background:#1c392f;color:#e5efdd;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.save-comparison p{margin:7px 0}.save-comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.save-comparison article{min-width:0;padding:10px;border:1px solid #a7c9ac5c;border-radius:9px;background:#294b39}
+.save-comparison strong{color:#f0e5b2}.save-comparison small{color:#c1d8c2}
+#cfPendingControls[open]>.route-list{display:grid;grid-template-columns:1fr;margin-bottom:12px}
+#cfPendingControls[open]>.route-list button{min-height:44px;text-align:left;line-height:1.5}
+#cfPendingControls[open]>summary{font-weight:800;color:#ead9a1}
+@media(max-width:590px){.save-comparison-grid{grid-template-columns:1fr}}
+.craft-receipt{position:relative;margin:0 0 18px;padding:16px;border:1px solid var(--craft-color,#b7d99f);border-radius:16px;background:radial-gradient(ellipse at 50% 35%,#4c684139,#17362c 70%);text-align:center;overflow:hidden}
+.craft-receipt p{margin:8px 0;font-size:12px;line-height:1.7}.craft-receipt h3{margin:6px 0;color:#f0e6ba;font-size:20px}.craft-receipt small{display:block;color:#b8d0b9;font-size:11px;line-height:1.7}.craft-receipt button{margin-top:10px;min-height:42px}
+.craft-eyebrow{letter-spacing:.12em;color:#bdd0ac;font-size:10px!important}.craft-stage{position:relative;width:170px;height:158px;margin:0 auto;isolation:isolate}
+.craft-stage::before{content:'';position:absolute;inset:13px 19px;border:1px solid var(--craft-color);border-radius:50%;opacity:.3}
+.craft-material,.craft-product{position:absolute;left:50%;top:50%;display:grid;place-items:center;border:1px solid var(--craft-color);background:#294938;border-radius:13px;width:36px;height:36px;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)));opacity:.2}
+.craft-material canvas{width:27px;height:27px}.craft-product{--dx:0px;--dy:0px;width:62px;height:62px;opacity:1;background:#53694b;box-shadow:0 0 0 6px #c3da9d12}.craft-product canvas{width:49px;height:49px}
+.craft-receipt[data-outcome="failure"] .craft-product{opacity:.4;filter:saturate(.35)}
+.craft-running .craft-material{animation:petal-gather 950ms cubic-bezier(.2,.65,.25,1) both}.craft-running .craft-product{animation:petal-emerge 950ms ease-out both}
+.craft-running[data-outcome="failure"] .craft-material{animation-name:petal-scatter}
+.craft-running[data-outcome="mixed"] .craft-material:nth-child(even){animation-name:petal-scatter}
+.craft-receipt[data-motion="reduced"] .craft-material{animation:none;opacity:.15}.craft-receipt[data-motion="reduced"] .craft-product{animation:none}
+@keyframes petal-gather{0%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--turn))}65%{opacity:.9;transform:translate(-50%,-50%) rotate(calc(var(--turn) + 140deg)) scale(.45)}100%{opacity:0;transform:translate(-50%,-50%) scale(.1)}}
+@keyframes petal-scatter{0%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)))}45%{opacity:.8;transform:translate(-50%,-50%) scale(.5)}100%{opacity:.12;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--turn)) scale(.7)}}
+@keyframes petal-emerge{0%,48%{opacity:0;transform:translate(-50%,-50%) scale(.45)}80%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@media(prefers-reduced-motion:reduce){.craft-running .craft-material,.craft-running .craft-product{animation:none}}
+
+.skill-btn[data-state="active"]{opacity:1;filter:none;border-color:#e8d59e;background:linear-gradient(0deg,#526d42 var(--skill-ready),#254537 var(--skill-ready))}.skill-btn[data-state="active"] small{color:#e8f1ce}
+.player-title b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tiny-level{flex:none;white-space:nowrap}
+@media(max-height:500px) and (orientation:landscape){.craft-stage{display:none}.craft-receipt{padding:9px}.craft-receipt h3{margin:3px 0;font-size:17px}.craft-receipt p{margin:3px 0}.craft-receipt small{font-size:10px}}
