@@ -16,6 +16,7 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
  const original=await page.evaluate(()=>__trialQA.snapshot()),saved=await page.evaluate(()=>__trialQA.saved());
  await page.locator('#trainingFromPause').click();await page.locator('[data-trial="surround"]').click();await page.locator('#confirmAccept').click();await page.waitForFunction(()=>__trialQA.trial()?.type==='surround');
  check(label+' isolated trial is active',(await page.evaluate(()=>__trialQA.trial()))?.type==='surround');
+ check(label+' training context replaces exploration location',/四面楚歌/.test(await page.locator('#zoneLabel').innerText()));check(label+' training hides unrelated main quest',await page.locator('#questStrip').evaluate(el=>el.classList.contains('hidden')));check(label+' training identifies current enemy level',/LV 1/.test(await page.locator('#zoneTier').innerText()));
  check(label+' no instant spawn',await page.evaluate(()=>__trialQA.alive().length)===0);await page.evaluate(()=>__trialQA.advance(1));check(label+' warning lasts at least 1.5 seconds',await page.evaluate(()=>__trialQA.alive().length)===0);
  await page.evaluate(()=>__trialQA.advance(.6));check(label+' warned wave is spawned',await page.evaluate(()=>__trialQA.alive().length)>=4);
  await page.evaluate(()=>{__trialQA.draw();__trialQA.save()});check(label+' offscreen route direction remains readable',/向右突破/.test(await page.locator('#eventRibbon').innerText()));check(label+' trial cannot write main save',await page.evaluate(()=>__trialQA.saved())===saved);await page.screenshot({path:out+'/v520_'+label+'_surround.png'});
@@ -26,7 +27,7 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
   if(wave<3){check(label+' wave '+wave+' advances',(await page.evaluate(()=>__trialQA.trial())).wave===wave+1);await page.evaluate(()=>__trialQA.center());await page.evaluate(()=>__trialQA.advance(1.6))}
  }
  check(label+' third completed objective wins',(await page.evaluate(()=>__trialQA.trial())).result==='won');await page.locator('#exitTraining').click();
- check(label+' main character world and RNG restored',await page.evaluate(()=>__trialQA.snapshot())===original);check(label+' main persisted bytes unchanged',await page.evaluate(()=>__trialQA.saved())===saved);
+ check(label+' main character world and RNG restored',await page.evaluate(()=>__trialQA.snapshot())===original);check(label+' main persisted bytes unchanged',await page.evaluate(()=>__trialQA.saved())===saved);check(label+' main location restored',/花园/.test(await page.locator('#zoneLabel').innerText()));check(label+' main quest restored',!await page.locator('#questStrip').evaluate(el=>el.classList.contains('hidden')));
  await page.evaluate(()=>__trialQA.pause());await page.locator('#trainingFromPause').click();await page.locator('[data-trial="laststand"]').click();await page.locator('#confirmAccept').click();await page.waitForFunction(()=>__trialQA.trial()?.type==='laststand');
  check(label+' backwater starts at 35 percent HP',await page.evaluate(()=>PetalRealmsInfo.snapshot().hp)===35);
  const skill=await page.evaluate(()=>__trialQA.skills());check(label+' shared skill budget cannot be exceeded',skill.budget===0&&skill.denied&&skill.cooldown===0);

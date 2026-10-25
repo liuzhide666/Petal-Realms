@@ -1,14 +1,14 @@
 # Petal Realms · 花瓣之境
 
-当前源码候选版本：**V5.20 · 绽放与战术**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。本地候选与生产部署分别记录，见 [QA](docs/qa/V5.20_QA.md)。
+当前源码版本：**V5.20 · 绽放与战术**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。本地候选与生产部署分别记录，见 [QA](docs/qa/V5.20_QA.md)。
 
-## V5.20 绽放与战术（候选）
+## V5.20 绽放与战术
 
 存档冲突自动展开双方摘要，先备份再明确选择，失败恢复原待同步记录。合成加入可跳过的原创演出与实际消耗回执；快速重复操作只结算一次，满产物库存不会扣料，概率分析计入空位。技能使用真实持续计时与独立图形，满血治疗不消耗冷却。
 
 暂停菜单新增独立战术训练：四面楚歌要求突破轮换通道并清敌；背水一战以35%生命起步、三波共享3次主动技能。训练不写主线、不发永久奖励，退出后恢复原现场与随机状态；刷新会结束训练并读取主线存档。训练数值仍待长期试玩。
 
-新增规则：[英文规范 S4](docs/standard/V5.20_BLOOM_TACTICS.md)。当前验证与发布边界见 [V5.20 QA](docs/qa/V5.20_QA.md)。本分支没有正式部署授权，不把候选功能称为线上已有功能。
+新增规则：[英文规范 S4](docs/standard/V5.20_BLOOM_TACTICS.md)。当前验证与发布边界见 [V5.20 QA](docs/qa/V5.20_QA.md)。2026-10-25已获更新上线授权；实际发布状态以当前Cloudflare部署提交和健康接口为准，不能仅由此文档推断。
 
 ## V5.19 战斗明晰
 
