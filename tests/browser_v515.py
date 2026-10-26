@@ -28,6 +28,7 @@ with sync_playwright() as p:
   check(label+' nova actual radius',page.evaluate('window.__atlasQA.telegraph()'))
   check(label+' no horizontal overflow',page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
   page.locator('.panel').evaluate('async e=>{await Promise.all(e.getAnimations().map(a=>a.finished))}');page.screenshot(path=str(OUT/f'v515_{label}_atlas.png'));page.locator('#panelClose').click();page.evaluate('window.__atlasQA.open("craft")');page.locator('[data-craft="basic@0"]').click()
+  page.locator('.craft-probability-details summary').click()
   check(label+' six output probabilities',page.locator('#craftOutputDistribution [data-output]').count()==6)
   check(label+' no random draws for analysis',page.evaluate('window.__atlasQA.isolation()'))
   page.locator('#craftOutputDistribution').scroll_into_view_if_needed();page.screenshot(path=str(OUT/f'v515_{label}_craft.png'));page.locator('#panelClose').click()

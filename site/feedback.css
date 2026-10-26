@@ -26,3 +26,27 @@
 .skill-btn[data-state="active"]{opacity:1;filter:none;border-color:#e8d59e;background:linear-gradient(0deg,#526d42 var(--skill-ready),#254537 var(--skill-ready))}.skill-btn[data-state="active"] small{color:#e8f1ce}
 .player-title b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tiny-level{flex:none;white-space:nowrap}
 @media(max-height:500px) and (orientation:landscape){.craft-stage{display:none}.craft-receipt{padding:9px}.craft-receipt h3{margin:3px 0;font-size:17px}.craft-receipt p{margin:3px 0}.craft-receipt small{font-size:10px}}
+/* Keep the selected card and its actions on adjacent sides, even on phones. */
+#panelLayer[data-panel="craft"] .panel{width:min(1040px,100%)}
+.craft-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+.craft-library,.craft-workbench{min-width:0}.craft-layout h3{font-size:14px;margin:0 0 10px}.craft-sort-note{font-size:11px;color:var(--ink-soft);line-height:1.6;margin:0 0 10px}
+.craft-catalog{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));max-height:52dvh;overflow:auto;overscroll-behavior:contain;align-content:start;padding:2px 5px 5px 2px}
+.craft-library .inventory-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}.craft-library .inventory-toolbar label:first-child{grid-column:1/-1}.craft-library .inventory-toolbar label{min-width:0}.craft-library .inventory-toolbar input:not([type="checkbox"]),.craft-library .inventory-toolbar select{width:100%;box-sizing:border-box;min-width:0}.craft-library .inventory-toggle{grid-column:1/-1}.craft-library .inventory-filter-count{grid-column:1/-1}
+.craft-workbench .craft-summary{margin:0 0 12px;padding:14px;gap:10px}.craft-workbench .craft-summary>div{min-width:0}.craft-recipe{display:flex;gap:9px;align-items:center;margin:12px 0}.craft-recipe canvas{width:42px;height:42px}.craft-recipe b{font-size:12px;color:var(--gold)}
+.craft-actions{display:grid;grid-template-columns:1fr;gap:8px;width:100%}.craft-actions button{width:100%;min-height:44px;padding:10px 8px}.craft-actions #allCraft{background:#ead5a2}.craft-all-note{font-size:11px;line-height:1.7;color:var(--ink-soft)}
+.craft-workbench #toggleCraftLock{width:100%;min-height:40px;border:1px solid var(--line);border-radius:10px;background:#17392d;color:var(--ink)}
+.craft-workbench .craft-receipt{margin:0 0 12px;padding:12px}.craft-workbench .craft-stage{transform:scale(.8);height:130px;margin-top:-8px;margin-bottom:-8px}.craft-probability-details .probability-grid{grid-template-columns:1fr}.craft-probability-details .distribution-bin small{font-size:9px}
+@media(max-width:590px){
+ #panelLayer[data-panel="craft"]{padding:8px}#panelLayer[data-panel="craft"] .panel-body{padding:12px 10px}
+ .craft-layout{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:8px}.craft-intro{font-size:11px;margin-bottom:10px}
+ .craft-library .inventory-toolbar{grid-template-columns:1fr}.craft-library .inventory-toolbar label{grid-column:1}.craft-library .inventory-toolbar input:not([type="checkbox"]),.craft-library .inventory-toolbar select{padding:8px 4px;font-size:16px}
+ .craft-library .inventory-toggle{font-size:10px;line-height:1.6}.craft-sort-note{font-size:10px}.craft-catalog{grid-template-columns:1fr;gap:7px;max-height:54dvh}
+ .craft-catalog .item-card{padding:9px;min-height:106px}.craft-catalog .item-card strong{font-size:12px}.craft-catalog .count{font-size:11px;right:6px}
+ .craft-workbench .craft-summary{padding:10px;gap:8px}.craft-summary strong{font-size:12px;overflow-wrap:anywhere}.craft-recipe{gap:4px;flex-wrap:wrap}.craft-recipe canvas{width:31px;height:31px}.craft-recipe b{font-size:10px}
+ .craft-workbench .craft-receipt{padding:8px}.craft-workbench .craft-stage{width:150px;height:112px;transform:scale(.65);transform-origin:center center;margin:0 calc((100% - 150px)/2)}.craft-workbench .craft-receipt h3{font-size:16px}.craft-receipt p{font-size:11px}.craft-eyebrow{letter-spacing:.02em}.craft-actions button{font-size:12px}
+}
+@media(max-width:590px){
+ .craft-library .craft-sort-note{display:none}.craft-library .inventory-toolbar{gap:4px;margin-bottom:8px}
+ .craft-library .inventory-toolbar>label:not(.inventory-toggle){font-size:0;gap:0}.craft-library .inventory-toolbar input:not([type="checkbox"]),.craft-library .inventory-toolbar select{min-height:38px;padding:7px 5px;font-size:16px}
+ .craft-library .inventory-filter-count{font-size:10px;margin:0}.craft-catalog .item-card{min-height:100px;padding:8px}.craft-catalog .itemicon{width:40px;height:40px;line-height:40px}.craft-catalog .itemicon canvas{width:32px;height:32px}.craft-catalog .item-card strong{margin:3px 0}.craft-catalog .item-card small{font-size:10px;line-height:1.4}
+}

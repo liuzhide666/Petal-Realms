@@ -34,6 +34,7 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
  }
  check(label+' version mismatch does not claim another device as fact',!(await page.locator('#authError').innerText()).includes('另一设备已经'));
  await page.screenshot({path:out+'/v520_'+label+'_recovery.png'});await page.unroute('**/api/save');
+ await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-26T00:01:00Z'));
  await page.evaluate(()=>__feedbackQA.start());await page.evaluate(()=>{const button=document.getElementById('doCraft');button.click();button.click()});
  let s=await page.evaluate(()=>__feedbackQA.state());check(label+' rapid craft accepted once',s.bag['basic@7']===15&&s.bag['basic@8']===1);
  check(label+' result persisted before animation',s.saved?.bag['basic@7']===15&&s.saved?.bag['basic@8']===1);

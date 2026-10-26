@@ -1,0 +1,10 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+function setup(entries={}){const c={};vm.runInNewContext(fs.readFileSync('site/save-store.js','utf8'),c);const data=new Map(Object.entries(entries));return{store:c.PetalSaveStore,data,storage:{getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)}}}
+const validate=p=>{if(!p||!Number.isInteger(p.level))throw Error('invalid')};
+test('missing save alone permits a new character',()=>{const t=setup();assert.equal(t.store.read(t.storage,'A',validate).payload,null)});
+test('corrupt or structurally invalid primary never silently starts over',()=>{for(const raw of ['{','null','{}']){const t=setup({A:raw});assert.throws(()=>t.store.read(t.storage,'A',validate));assert.equal(t.data.get('A'),raw)}});
+test('recover last valid copy without discarding damaged bytes',()=>{const t=setup({A:'broken','A.previous':'{"level":8}'});const r=t.store.read(t.storage,'A',validate);assert.equal(r.payload.level,8);assert.equal(r.recovered,true);t.store.write(t.storage,'A',r.payload,validate);assert.equal(t.data.get('A.damaged'),'broken');assert.equal(t.data.get('A.previous'),'{"level":8}');assert.equal(JSON.parse(t.data.get('A')).level,8)});
+test('changed save rotates a valid previous generation, identical autosaves do not',()=>{const t=setup({A:'{"level":8}'});t.store.write(t.storage,'A',{level:9},validate);t.store.write(t.storage,'A',{level:9},validate);assert.equal(t.data.get('A.previous'),'{"level":8}')});
+test('storage failure leaves the current save intact',()=>{const t=setup({A:'{"level":8}'});t.storage.setItem=()=>{throw Error('QuotaExceededError')};assert.throws(()=>t.store.write(t.storage,'A',{level:9},validate));assert.equal(t.data.get('A'),'{"level":8}')});
+test('primary removal still recovers the previous generation',()=>{const t=setup({'A.previous':'{"level":8}'});assert.equal(t.store.read(t.storage,'A',validate).payload.level,8)});
+test('accounts cannot read each others backup',()=>{const t=setup({'B.previous':'{"level":8}'});assert.equal(t.store.read(t.storage,'A',validate).payload,null)});

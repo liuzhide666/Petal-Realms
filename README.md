@@ -1,6 +1,14 @@
 # Petal Realms · 花瓣之境
 
-当前源码版本：**V5.20 · 绽放与战术**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。本地候选与生产部署分别记录，见 [QA](docs/qa/V5.20_QA.md)。
+当前候选源码版本：**V5.21 · 存档守护与合成工作台**。正式入口：[petal-realms.pages.dev](https://petal-realms.pages.dev/)。源码：[liuzhide666/Petal-Realms](https://github.com/liuzhide666/Petal-Realms)。本地候选与生产部署分别记录，见 [V5.21 QA](docs/qa/V5.21_QA.md)。
+
+## V5.21 存档守护与合成工作台（候选）
+
+左侧按品质、名称浏览材料，右侧就近查看配方与执行单合、最多五次批量合、当前材料组全合。全合不升级新产物，不处理其他组；原有概率、失败损耗、材料保护和装备隔离保持。结算先写本机存档，再播放可跳过的短演出；写入失败撤销本次库存变化，云端排队失败不撤销已保存结果。
+
+本机存档保留上一份有效副本。损坏时优先恢复副本；没有有效副本时停止载入，并在本机身份校验后提供备份恢复入口。原损坏记录保留一份，导出直接读取当前进度，保存失败不再误报成功。云端版本冲突仍需明确选择，不自动合并库存。
+
+规则与边界见 [V5.21 规范](docs/standard/V5.21_SAVE_CRAFT_WORKBENCH.md)。候选修改不等于已经发布，部署状态见 [QA](docs/qa/V5.21_QA.md)。
 
 ## V5.20 绽放与战术
 

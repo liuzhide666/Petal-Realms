@@ -66,6 +66,8 @@ jobs:
           node tests/v520_skills.cjs
           node tests/v520_effects.cjs
           node tests/v520_trials.cjs
+          node tests/save_store.cjs
+          node tests/save_integration.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -104,6 +106,7 @@ jobs:
           node tests/browser_v519.mjs
           node tests/browser_v520.mjs
           node tests/browser_v520_trials.mjs
+          node tests/browser_save_craft.mjs
       - name: Upload browser screenshots and assertion results
         if: always()
         uses: actions/upload-artifact@v4
