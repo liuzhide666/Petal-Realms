@@ -22,9 +22,9 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.PE
 try{
  const api=await browser.newContext();
  const health=await api.request.get(new URL('/api/health',origin).href);
- const h=await health.json();check('health version matches source',health.ok()&&h.ok&&h.version===expected.split('.').slice(0,2).join('.'));
+ const h=await health.json();check('health version matches source',health.ok()&&h.ok&&h.version===expected);
  const session=await api.request.get(new URL('/api/session',origin).href);check('anonymous session stays anonymous',session.ok()&&(await session.json()).account===null);
- const files=['index.html','release.json','rules.js','art.js','interface.js','workshop.js','effects.js','feedback.js','feedback.css','trials.js'];
+ const files=['index.html','release.json','rules.js','art.js','interface.js','workshop.js','effects.js','feedback.js','feedback.css','trials.js','save-store.js','Petal_Realms_Handbook.pdf','Petal_Realms_Player_Guide.pdf'];
  const responses=await Promise.all(files.map(file=>api.request.get(new URL(file==='index.html'?'/':'/'+file,origin).href)));
  for(const [i,file] of files.entries()){
   const response=responses[i];
@@ -53,7 +53,7 @@ try{
   const after=await page.evaluate(()=>PetalRealmsInfo.snapshot());
   check(label+' main level/loadout restored',after.level===before.level&&after.slots===before.slots&&after.deck===before.deck&&after.zone===before.zone);
   check(label+' training status removed',!(await page.locator('#saveText').innerText()).includes('训练'));
-  check(label+' only isolated local role saved',await page.evaluate(name=>Object.keys(localStorage).filter(k=>k.startsWith('petal_realms_save_')).every(k=>k==='petal_realms_save_'+name),localName));
+  check(label+' only isolated local role saved',await page.evaluate(name=>Object.keys(localStorage).filter(k=>k.startsWith('petal_realms_save_')).every(k=>['','.previous','.damaged'].some(s=>k==='petal_realms_save_'+name+s)),localName));
   check(label+' no cloud outbox created',await page.evaluate(()=>Object.keys(localStorage).every(k=>!k.startsWith('petal_realms_cf_outbox_'))));
   check(label+' no server writes attempted',writes.length===0);check(label+' no runtime errors',errors.length===0);
   await context.close();

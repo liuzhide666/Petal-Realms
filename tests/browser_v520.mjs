@@ -23,17 +23,19 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
  const page=await browser.newPage({viewport:{width,height},hasTouch:mobile,isMobile:mobile}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://127.0.0.1:'+server.address().port);await page.locator('#welcomeContinue').click();await page.waitForFunction(()=>!document.querySelector('#authSubmit').disabled);
  // The auth boundary is stubbed; actual account/CAS behavior is covered by the local workerd suite.
- await page.route('**/api/save',async route=>{const payload=await page.evaluate(()=>{const b={version:5,zone:'garden',p:{level:12,xp:0,kills:0,hp:100},bag:{'leaf@1':30},slots:Array.from({length:6},()=>({t:'basic',r:0}))};return b});await route.fulfill({json:{accountId:'fixture',revision:2,payload,updatedAt:'2026-10-24T01:00:00Z'}})});
+ await page.route('**/api/save',async route=>{const payload=await page.evaluate(()=>{const b={version:5,zone:'garden',p:{level:12,xp:0,kills:0,hp:100},bag:{'leaf@1':30},slots:Array.from({length:6},()=>({t:'basic',r:0}))};return b});await route.fulfill({json:{accountId:'fixture',revision:2,payload,updatedAt:1792803600}})});
  await page.evaluate(()=>__feedbackQA.conflict());
  check(label+' conflict fixture reached version comparison',/版本|另一设备/.test(await page.locator('#authError').innerText()));
  check(label+' recovery is expanded automatically',await page.locator('#cfPendingControls').evaluate(e=>e.open));
  check(label+' both progress summaries are visible',await page.locator('#cfConflictSummary').count()&&await page.locator('#cfConflictSummary').isVisible());
  if(await page.locator('#cfConflictSummary').count()){
   const text=await page.locator('#cfConflictSummary').innerText();check(label+' local and cloud level/count shown',text.includes('LV 8')&&text.includes('LV 12')&&text.includes('20')&&text.includes('30'));
+  check(label+' server seconds and local ISO dates both render',!(await page.locator('#cfConflictSummary').innerText()).includes('时间未知'));
   check(label+' summary fits viewport',await page.locator('#cfConflictSummary').evaluate(e=>e.scrollWidth<=e.clientWidth+1));
  }
  check(label+' version mismatch does not claim another device as fact',!(await page.locator('#authError').innerText()).includes('另一设备已经'));
  await page.screenshot({path:out+'/v520_'+label+'_recovery.png'});await page.unroute('**/api/save');
+ await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-26T00:01:00Z'));
  await page.evaluate(()=>__feedbackQA.start());await page.evaluate(()=>{const button=document.getElementById('doCraft');button.click();button.click()});
  let s=await page.evaluate(()=>__feedbackQA.state());check(label+' rapid craft accepted once',s.bag['basic@7']===15&&s.bag['basic@8']===1);
  check(label+' result persisted before animation',s.saved?.bag['basic@7']===15&&s.saved?.bag['basic@8']===1);

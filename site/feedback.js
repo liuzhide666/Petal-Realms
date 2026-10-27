@@ -3,7 +3,7 @@
 function renderCraft(host,receipt,{color,motion='auto'}={}){
  if(!host||!receipt)return;
  const root=document.createElement('section');root.id='craftReceipt';root.className='craft-receipt';root.tabIndex=-1;root.dataset.motion=motion;root.dataset.outcome=receipt.success?(receipt.failed?'mixed':'success'):'failure';root.dataset.phase='settled';root.style.setProperty('--craft-color',color);
- const label=document.createElement('p');label.className='craft-eyebrow';label.textContent=receipt.rank===7?'BOTANICAL FORGE · 花瓣锻造':'BOTANICAL SYNTHESIS · 花瓣合成';
+ const label=document.createElement('p');label.className='craft-eyebrow';label.textContent=(receipt.mode==='all'?'此组全合':receipt.mode==='batch'?'批量合成':'单次合成')+' · '+(receipt.rank===7?'花瓣锻造':'花瓣合成');
  const stage=document.createElement('div');stage.className='craft-stage';stage.setAttribute('aria-hidden','true');
  for(let i=0;i<5;i++){const part=document.createElement('span');part.className='craft-material';const angle=i*Math.PI*2/5-Math.PI/2;part.style.setProperty('--dx',Math.cos(angle)*62+'px');part.style.setProperty('--dy',Math.sin(angle)*62+'px');part.style.setProperty('--turn',i*72+'deg');const icon=document.createElement('canvas');icon.dataset.petalIcon=receipt.key;part.append(icon);stage.append(part)}
  const center=document.createElement('span');center.className='craft-product';const icon=document.createElement('canvas');icon.dataset.petalIcon=receipt.type+'@'+(receipt.rank+(receipt.success?1:0));center.append(icon);stage.append(center);

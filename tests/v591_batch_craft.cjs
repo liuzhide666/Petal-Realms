@@ -39,7 +39,7 @@ t=make(15,0,[.99,.75,.99,.0,.99,.5,.99,.99,.99,.75]);
 v=t.run(5);
 ok(v.attempts>0&&v.attempts<=5&&t.bags['basic@0']>=0,'failure-only never creates negative counts');
 ok(v.success+v.failed===v.attempts,'result ledger reconciles');
-ok(html.includes('id="batchCraft"')&&/requested>1&&!await askGame\(/.test(html),'confirmation dialog required for bulk');
+ok(html.includes('id="batchCraft"')&&/requested==='all'\|\|requested>1\)&&!await askGame\(/.test(html),'confirmation dialog required for bulk');
 ok(html.includes('performCraft(craftSelect,1)'),'single crafting uses guarded transaction path');
 ok(html.includes('performCraft(craftSelect,5)')&&html.includes('craftBatch(key,requested)'),'bulk crafting uses same transaction logic');
 ok(html.indexOf('const localSaved=game.guest?null:saveGame()')<html.indexOf('craftAnimation=globalThis.PetalFeedback.animateCraft'),'save precedes presentation');

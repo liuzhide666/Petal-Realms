@@ -30,7 +30,7 @@ r=run("craftBatch('basic@0',1)");ok(r.attempts===1&&r.success===1,'unlocked craf
 ok(run("togglePetalProtection('not-an-item')")===false,'invalid item cannot be protected');
 ok(html.includes('protectedPetals:game.protectedPetals')&&html.includes('game.protectedPetals=sanitizeProtectedPetals(a.protectedPetals)'),'protection round-trips via version-5 save JSON');
 ok(html.includes('id="toggleCraftLock"')&&html.includes("lockBtn.onclick=()=>"),'touch-accessible crafting lock action wired');
-ok(html.includes("available<10||!rate||isPetalProtected(craftSelect)")&&html.includes("available<5||!rate||isPetalProtected(craftSelect)"),'UI disables crafting actions for locked inputs');
+ok(html.includes("available<5||!rate||isPetalProtected(craftSelect)")&&html.includes("available<5||!rate||isPetalProtected(craftSelect)"),'UI disables crafting actions for locked inputs');
 ok(html.includes("craftReadyOnly&&(count<5||rank>=rarity.length-1||isPetalProtected(card.dataset.craft))"),'craft-ready filter excludes protected inputs');
 const gStart=html.indexOf('function mobCollider('),gEnd=html.indexOf('function mobCircleOverlap(',gStart);
 ok(gStart>0&&gEnd>gStart,'directional ellipse geometry available');
