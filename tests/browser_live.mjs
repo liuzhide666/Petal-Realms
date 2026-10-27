@@ -22,9 +22,9 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.PE
 try{
  const api=await browser.newContext();
  const health=await api.request.get(new URL('/api/health',origin).href);
- const h=await health.json();check('health version matches source',health.ok()&&h.ok&&h.version===expected.split('.').slice(0,2).join('.'));
+ const h=await health.json();check('health version matches source',health.ok()&&h.ok&&h.version===expected);
  const session=await api.request.get(new URL('/api/session',origin).href);check('anonymous session stays anonymous',session.ok()&&(await session.json()).account===null);
- const files=['index.html','release.json','rules.js','art.js','interface.js','workshop.js','effects.js','feedback.js','feedback.css','trials.js'];
+ const files=['index.html','release.json','rules.js','art.js','interface.js','workshop.js','effects.js','feedback.js','feedback.css','trials.js','save-store.js','Petal_Realms_Handbook.pdf','Petal_Realms_Player_Guide.pdf'];
  const responses=await Promise.all(files.map(file=>api.request.get(new URL(file==='index.html'?'/':'/'+file,origin).href)));
  for(const [i,file] of files.entries()){
   const response=responses[i];

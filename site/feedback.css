@@ -50,3 +50,5 @@
  .craft-library .inventory-toolbar>label:not(.inventory-toggle){font-size:0;gap:0}.craft-library .inventory-toolbar input:not([type="checkbox"]),.craft-library .inventory-toolbar select{min-height:38px;padding:7px 5px;font-size:16px}
  .craft-library .inventory-filter-count{font-size:10px;margin:0}.craft-catalog .item-card{min-height:100px;padding:8px}.craft-catalog .itemicon{width:40px;height:40px;line-height:40px}.craft-catalog .itemicon canvas{width:32px;height:32px}.craft-catalog .item-card strong{margin:3px 0}.craft-catalog .item-card small{font-size:10px;line-height:1.4}
 }
+
+.manual-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#17392f;color:var(--ink);font-size:12px;text-decoration:none}.manual-links a:hover,.manual-links a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}

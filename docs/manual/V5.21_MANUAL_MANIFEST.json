@@ -1,0 +1,45 @@
+{
+  "version": "5.21.0",
+  "date": "2026-10-27",
+  "historicalPages": 354,
+  "guidePages": 6,
+  "engineeringPages": 4,
+  "completePages": 365,
+  "retainedHistoricalTextAndDrawingStreams": true,
+  "baselineSha256": "d46fafd9d5067d1999bf4cd077797d06ff7c530c2da3169b6321ece1e085a8b4",
+  "runtimeBundleSha256": "8312ef62908bd0edc01f62541c739e7aedfe3faf80a2812923087f5bb22e09a8",
+  "runtimeFiles": {
+    "docs/standard/mechanisms.json": "5d708fd203e629d0d331f8ab9b8e672ffcef7bb6601240898cbc742e1a9dcac1",
+    "docs/standard/ruleset.json": "546d8d1968a9a9ce8b10a52c77cec8279d5562d93bd3defdf928eaec9bc27a9b",
+    "functions/api/[[path]].js": "8001fa8ab551867cbcc0b05fe99300a5013d6c545aabd15f7327dd8b15889128",
+    "package-lock.json": "52de1f89b8aceb4e613644e9e175e787e9272677572884650bcf8dfef49f227a",
+    "package.json": "3a6a7563255b427a677ca97491473a12ed1a9ad24c5a7992103a9a9092618841",
+    "site/art.js": "284f0008c2b7612c2db2018169f47dd7306e25c6754db793ddf3fe13ac1dff85",
+    "site/effects.js": "671ce93f57e13277936481a6e341d6a6c85930415dccf0b3ff0ab2701504ec18",
+    "site/feedback.css": "f2a0f5f55d3ebb91580ab14e795b493248bbe4f1259699c05b2603de4543d24c",
+    "site/feedback.js": "477d35d8ba2a05aaf1a88b86a01846e48b7b13c4548cf52a117395d1b9aef3f7",
+    "site/index.html": "6f4b31b97948e7534749c2cf436d603d70e5845379600a485ff34e194d9b96c6",
+    "site/interface.js": "72f47d051d2645be738e7f65fb122a8028be6429b1ccb984c6008938cba140b8",
+    "site/release.json": "7f6e3b1df6fdb952678bcaaa1db04a879643c88de915821f4f82e5f493f8298d",
+    "site/rules.js": "b64c92ccf6ee56afed1d1fb8bc2385a588e409ab5b9a1afb9566cf7189a9f53c",
+    "site/save-store.js": "aef1b1f055c5588410932f7f2e470fcf59c8975cfbb0ff9b13c4d9a9e67e25f4",
+    "site/trials.js": "23f97914af9e2f583978f31e092aafbe6120f2a2f894b7295852d3a447e06e20",
+    "site/workshop.js": "ecb9bf79ef5590e02a52c3a2d8adaac33e164a2245dbf9b4277d17e8e9f89004",
+    "wrangler.jsonc": "8c1ecd2fb0e760a66abdb01c8e72145ab259c0146f6e5e8842a64fc411ea7d5f"
+  },
+  "fonts": {
+    "NotoSansCJKsc-Regular.otf": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b",
+    "NotoSerifCJKsc-Regular.otf": "2a2eae2628df83556c54018c41e20fa532c1b862c5256ae8b3f23feb918d12ca"
+  },
+  "latinFontSha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+  "pdfs": {
+    "Petal_Realms_Handbook.pdf": {
+      "bytes": 1468106,
+      "sha256": "89ef358ba6c35cc146908940a8eba52d9187915fa97b28f69a491a07bb5df4c0"
+    },
+    "Petal_Realms_Player_Guide.pdf": {
+      "bytes": 241989,
+      "sha256": "04ec21bca20d9975965be234b664981cae1646a98f7cffe653ba71c770d5160f"
+    }
+  }
+}

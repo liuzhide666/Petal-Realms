@@ -1,0 +1,1571 @@
+{
+  "version": "5.21.0",
+  "scope": "Every tracked or authored non-ignored file except this self-referential receipt; historical files retain their version scope. Structural checks are not line-by-line semantic certification. Third-party node_modules excluded; npm lock/audit used separately.",
+  "files": 142,
+  "success": true,
+  "records": [
+    {
+      "path": ".github/workflows/qa.yml",
+      "role": "current",
+      "bytes": 4604,
+      "sha256": "4eeb2e4d7f0239e9838d2d8a4d1e7eca6cc1ad8f63cccc348cc742b7e94e1eb7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": ".gitignore",
+      "role": "current",
+      "bytes": 117,
+      "sha256": "da9e15df5a3fbbf2dcf464d634da1e1c8abcc9f52f548172c84621a715e85c32",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": ".node-version",
+      "role": "current",
+      "bytes": 8,
+      "sha256": "d9f318747a126ce2247661af67852b185def7789492eabfad7bba322be087c33",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "README.md",
+      "role": "current",
+      "bytes": 13398,
+      "sha256": "7b2378fb349b38af62f771bf19c54bb5dce312df5e7d02fe31fdb7e440264683",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "database/cloudflare/0001_accounts.sql",
+      "role": "current",
+      "bytes": 1321,
+      "sha256": "a4d9784904dc69c79c87bbd67b8844c2a94ba6866ddcbaa7a482da449f49fce4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "database/migrations/20261017053742_create_petal_realms_saves_v1.sql",
+      "role": "historical",
+      "bytes": 1409,
+      "sha256": "6cf6efe95a45b5e71ae818fd40bd2ef8c8ff676f58a80db4f4d65a09d02f7f37",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/CF_IMPLEMENTATION_LEDGER.md",
+      "role": "current",
+      "bytes": 10437,
+      "sha256": "b7a19023484d1ff32e0bbb67deeb233de045416d7ca20c7859ad3b89de4e381c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/CLOUDFLARE_PAGES.md",
+      "role": "current",
+      "bytes": 5228,
+      "sha256": "68c29a8cf92275733d579a5eb10956f1cea3b6dabc558976535909ae2947d713",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "role": "current",
+      "bytes": 2107,
+      "sha256": "f1097373e8bd5b934c882f2430d0cb1e6488d990a52014724531b6954b1db59a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/EMAIL_DELIVERY_SETUP.md",
+      "role": "current",
+      "bytes": 4226,
+      "sha256": "ff5f9e93fea167ab4eb3af58eb799bfb3a6e0694fd0cd455c8e898d6906072f0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/MULTIPLAYER_ARCHITECTURE.md",
+      "role": "current",
+      "bytes": 1799,
+      "sha256": "8ff936c28ed5b051eed4a762d274d6d80049a8d224f64a6c736dc40e9a3f72b2",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/STRUCTURE.md",
+      "role": "current",
+      "bytes": 1647,
+      "sha256": "dda72055170f3a18758c421dfd6d10789616a8cf4feafddd2ae85025b2b79292",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/design/V5.20_COMPREHENSIVE_UPGRADE.md",
+      "role": "current",
+      "bytes": 9829,
+      "sha256": "71b1856722aa4bb360d2f7f4426b6a7b7f7669351e4e83e809c538bdbae33afa",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/history/Petal_Realms_Manual_V5.19_Pages.pdf",
+      "role": "historical",
+      "bytes": 976350,
+      "sha256": "d46fafd9d5067d1999bf4cd077797d06ff7c530c2da3169b6321ece1e085a8b4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "pdf-page-text"
+      ]
+    },
+    {
+      "path": "docs/history/V5.3_README_original.md",
+      "role": "historical",
+      "bytes": 3784,
+      "sha256": "bbdc8073a117ca10458d178f0d6eb4c78c8e779f67a9e4b714bd46ab3af94205",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/manual/README.md",
+      "role": "current",
+      "bytes": 1785,
+      "sha256": "1700aa22f19b63c98b2c4639ed07d319580cb1c62ff24d3632d8701c1b507fd5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/manual/V5.21_MANUAL_MANIFEST.json",
+      "role": "current",
+      "bytes": 2610,
+      "sha256": "d486d1ade7e196d64cc7684e3a1d5714fe8d450861c8c2a11653b8cea60eb404",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "docs/qa/TOUCH_INPUT_CONTINUITY.md",
+      "role": "current",
+      "bytes": 3016,
+      "sha256": "26da95bc7f1411c8e337b3a1bc26f656fdd1a731bbf3b2c04f7e7dfb254075af",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.10_QA.md",
+      "role": "current",
+      "bytes": 3197,
+      "sha256": "90df57ed17088ae91a6fc47519e1bd8b2b8eee816ec61f5cfe730378cd3bbe4c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.11_QA.md",
+      "role": "current",
+      "bytes": 5181,
+      "sha256": "acf9a61264844f731524b7efbc9b8399bfa352f29980a6e2fd7972dbccd379e6",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.12_QA.md",
+      "role": "current",
+      "bytes": 4588,
+      "sha256": "19686bae04bb64a559ff47667bd3d8ce89190187872ecee8fbe48c546e651511",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.13_QA.md",
+      "role": "current",
+      "bytes": 3044,
+      "sha256": "70ec16f365192945993a1eca2197fadd887ea74941be1dea2474081db3e55a99",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.14_QA.md",
+      "role": "current",
+      "bytes": 1932,
+      "sha256": "fcda4c27f6112623a08d416777ecac91f23d48f2790d3df1ab9228cb1f7261e5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.15_QA.md",
+      "role": "current",
+      "bytes": 3360,
+      "sha256": "2a039e8ecc48e6f494457478f99d4bccbe2d04a86b90ac96480f7b4ddd6d8185",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.16_QA.md",
+      "role": "current",
+      "bytes": 2270,
+      "sha256": "3ee53bdf430dae9cb61ca029d4de60f7ed07bab5d301678202488c5b334434d5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.17_QA.md",
+      "role": "current",
+      "bytes": 1504,
+      "sha256": "b1aa7b39146e242566aaa5471b76f1e02b22e50cf5879e6284a8a249ab5fd8b8",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.18_QA.md",
+      "role": "current",
+      "bytes": 1854,
+      "sha256": "9a8ae6878196412cb2d437bbfc90afa6b1f4ac42fd9b1ee8a3df778a2583d716",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.19_QA.md",
+      "role": "current",
+      "bytes": 5036,
+      "sha256": "4d46525afc6c400cb61890270308626d7f8e92a5ce74772f8e2ccce5351c458b",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.20_QA.md",
+      "role": "current",
+      "bytes": 7068,
+      "sha256": "fd851398783b99e70f8160b583685e3e178cb39f4e06176d81d4cbc28ec7d984",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.21_QA.md",
+      "role": "current",
+      "bytes": 4568,
+      "sha256": "6fbd30feb26b85635bba2f87fa827d3fb3c016d7618047f130cac4f66580be7c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.21_RELEASE_AUDIT.md",
+      "role": "current",
+      "bytes": 5733,
+      "sha256": "5edc29a30b0c64cef154cc9f44c17c457957656810bca229e2b2f68b51c8223e",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.3_QA.md",
+      "role": "current",
+      "bytes": 2065,
+      "sha256": "8b5a28184030e84908a10dbecdb588adc2490706a88f9d2d5b8b8edd907dc331",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.4_QA.md",
+      "role": "current",
+      "bytes": 2049,
+      "sha256": "0c5a424483c056ba1df4c6b45555b45589518da305dc547d998ea66365848832",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.5.1_auth_error_fix.md",
+      "role": "current",
+      "bytes": 1306,
+      "sha256": "863a5725bdd66fff929bae1921e3e5fb5a2f916e8134db8e1046edcca4054907",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.5_QA.md",
+      "role": "current",
+      "bytes": 1497,
+      "sha256": "e36e84d4aad2146c3ec719eb30b5758afe583d668e10d3870f949390d62996fd",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.6_QA.md",
+      "role": "current",
+      "bytes": 1503,
+      "sha256": "de221f841a62b83175001ec37139e3a773b827574a34519d529651912d2be200",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.7.1_CLOUDFLARE_PRIMARY.md",
+      "role": "current",
+      "bytes": 2327,
+      "sha256": "2cf26d8689c98b5ee60f8af2c38814b143bc7e087271e228b9a16ba569017a26",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.7_QA.md",
+      "role": "current",
+      "bytes": 2394,
+      "sha256": "b596a04189122ddf319ecb43b12934bed5187ae47c3a03940b228400665384ff",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.9.1_CRAFTING_QA.md",
+      "role": "current",
+      "bytes": 1658,
+      "sha256": "489fb28cb5c53b02853040cc1b6daa2ab78a03c845dc7a9851149504639fc93d",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.9.2_COLLISION_QA.md",
+      "role": "current",
+      "bytes": 2409,
+      "sha256": "a2b937efd1bc1edae8517b8a5afc1a93a92e2cb32e0d48e3acbba7b11b4e98ae",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.9.3_QA.md",
+      "role": "current",
+      "bytes": 2837,
+      "sha256": "2618303c5479e64b379c4c2d6dcf70ed2b998ee9606ef0eea62a4d620928332c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/V5.9_QA.md",
+      "role": "current",
+      "bytes": 3431,
+      "sha256": "da08cb0b5455911570e4564026ccf27d324ae01d36c414eb1245b6220b1b7678",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/qa/browser_qa_v5.3.json",
+      "role": "current",
+      "bytes": 970,
+      "sha256": "0cc7e9630106cb843061fb490a6d1dec3d8aa102caeabac71c2f0715b35ed2cd",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "docs/qa/screenshots/v5.3_desktop.png",
+      "role": "current",
+      "bytes": 415128,
+      "sha256": "1f244b8e434be66b618c4b90223ffe87943dd7e20ad0275f80a580aedc50900a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "png-decode"
+      ]
+    },
+    {
+      "path": "docs/qa/screenshots/v5.3_mobile.png",
+      "role": "current",
+      "bytes": 189046,
+      "sha256": "89f15918361560ee70097728623477d796dedc6fa137e36529ccf48630e7d378",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "png-decode"
+      ]
+    },
+    {
+      "path": "docs/research/2026-10-24-reference-ledger.md",
+      "role": "current",
+      "bytes": 6983,
+      "sha256": "bf8e3bec21b6615af45b7f9b0faa1ec8567b386f79110ee1909c718eb868bbf9",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/IMPLEMENTATION.md",
+      "role": "current",
+      "bytes": 2864,
+      "sha256": "0d2f5626c74095ef84348af6f6e0f1e5ab4ea2630f9645045c9086b72f8bae30",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.15_TACTICAL_ATLAS.md",
+      "role": "current",
+      "bytes": 5678,
+      "sha256": "92171a0902e088aa06c849a60d38a2654992c834dc6c12e1461923b64fcfc4a7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.16_BOTANICAL_WORKSHOP.md",
+      "role": "current",
+      "bytes": 8718,
+      "sha256": "e1316dd8fc373c8377e441e26b36c39e99825bf76184782471336741e8ebeec4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.17_INTERFACE_CONTINUITY.md",
+      "role": "current",
+      "bytes": 5262,
+      "sha256": "47c9c88e67566ed95aff1bc02980e0c4d01bba7984d1c9c59e114da91bb947b6",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.18_ORBITAL_FIELD.md",
+      "role": "current",
+      "bytes": 5771,
+      "sha256": "e4a8c67f8446a477947105dc2ccf8a7b255c3fc8c48dee75266c777efd15dc42",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.19_COMBAT_CONSISTENCY.md",
+      "role": "current",
+      "bytes": 9005,
+      "sha256": "a106f4f1abff4b0a52ec888901d13bfee5ec31d80f07373b3648577f7eb94945",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.20_BLOOM_TACTICS.md",
+      "role": "current",
+      "bytes": 8939,
+      "sha256": "1b28f259abd1db9d2f49f414908ce1ed162424011355b85c79ea81f78aad3a93",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/V5.21_SAVE_CRAFT_WORKBENCH.md",
+      "role": "current",
+      "bytes": 4640,
+      "sha256": "2368d19c0993ad183408d44e40380e10ef9a93281b04b72a4b901eea3159bc8a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/standard/mechanisms.json",
+      "role": "current",
+      "bytes": 193966,
+      "sha256": "5d708fd203e629d0d331f8ab9b8e672ffcef7bb6601240898cbc742e1a9dcac1",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "docs/standard/ruleset.json",
+      "role": "current",
+      "bytes": 733,
+      "sha256": "546d8d1968a9a9ce8b10a52c77cec8279d5562d93bd3defdf928eaec9bc27a9b",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-18-cloudflare-transition.md",
+      "role": "current",
+      "bytes": 3628,
+      "sha256": "0c35a4e7f7cc6880c191de0f4e57e48954d1da407ec776a7f55ef3c80238ed4e",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-24-v520-feedback.md",
+      "role": "current",
+      "bytes": 6756,
+      "sha256": "89dfede2cf0dbbac4844fd56a3ad6679b99c965c77cc03f760f0cfff9ad9549b",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "functions/api/[[path]].js",
+      "role": "current",
+      "bytes": 17391,
+      "sha256": "8001fa8ab551867cbcc0b05fe99300a5013d6c545aabd15f7327dd8b15889128",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "netlify.toml",
+      "role": "current",
+      "bytes": 246,
+      "sha256": "b5d1bd23d9172f63c4a61b0f0bf6191ca30542b71532f4842e5f6080f23abc6e",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "package-lock.json",
+      "role": "current",
+      "bytes": 49449,
+      "sha256": "52de1f89b8aceb4e613644e9e175e787e9272677572884650bcf8dfef49f227a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "package.json",
+      "role": "current",
+      "bytes": 589,
+      "sha256": "3a6a7563255b427a677ca97491473a12ed1a9ad24c5a7992103a9a9092618841",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "releases/v5.2/Petal_Realms_V5_2.html",
+      "role": "historical",
+      "bytes": 128358,
+      "sha256": "07ce3689454016688682b3a008a043b03ef292d73c74d3a9debba17466eb0972",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "html-script-syntax"
+      ]
+    },
+    {
+      "path": "releases/v5.3/Petal_Realms_V5_3_Source.zip",
+      "role": "historical",
+      "bytes": 706626,
+      "sha256": "de37c0982067ed09741a2f9b6f642299d25ce1ab7c3b6ddd6950193bee13b003",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "zip-crc",
+        "zip-safe-paths"
+      ]
+    },
+    {
+      "path": "scripts/analyze-balance.cjs",
+      "role": "current",
+      "bytes": 6358,
+      "sha256": "47a8fcf85fa4c041b1f28d8056a07cd6a77399020d7c2f37283a8bd35fbdc938",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "scripts/audit-release-files.py",
+      "role": "current",
+      "bytes": 3054,
+      "sha256": "78203ef4358c67bac971b9ab1afe235d7c353563ea5b99441d5e5ef26a85a26a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "scripts/benchmark-runtime.mjs",
+      "role": "current",
+      "bytes": 4843,
+      "sha256": "1fb1b85e2ae9164821161eb5cfbe301775d560a04650c45b43a314f73c398cd6",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "scripts/build-combat-supplement.py",
+      "role": "current",
+      "bytes": 7892,
+      "sha256": "b0783fc8dcf3d421a9250157fe8fc403f54192dfec3e447bdad1eba10f19d419",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "scripts/build-interface-supplement.py",
+      "role": "current",
+      "bytes": 11880,
+      "sha256": "7cff543505c6e4d5f477fed5c8bd222eab36a8fe80f4183d870d702fc68603a7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "scripts/build-release-handbook.py",
+      "role": "current",
+      "bytes": 30027,
+      "sha256": "126590592e9f3af7292a58562758c9585a026688cc35eab7a14df5928d7cec27",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "scripts/build-rules.cjs",
+      "role": "current",
+      "bytes": 1795,
+      "sha256": "ac454ddcffcf019edfbccd791d60b0e9e8caa78bb266bc764c3e5398f718e194",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "scripts/test-static.cjs",
+      "role": "current",
+      "bytes": 287,
+      "sha256": "4f9c27cd0d146f6d3f0f235e481b29b7c105b12eebd8418bcea00dceedb32631",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/Petal_Realms_Handbook.pdf",
+      "role": "current",
+      "bytes": 1468106,
+      "sha256": "89ef358ba6c35cc146908940a8eba52d9187915fa97b28f69a491a07bb5df4c0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "pdf-page-text"
+      ]
+    },
+    {
+      "path": "site/Petal_Realms_Player_Guide.pdf",
+      "role": "current",
+      "bytes": 241989,
+      "sha256": "04ec21bca20d9975965be234b664981cae1646a98f7cffe653ba71c770d5160f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "pdf-page-text"
+      ]
+    },
+    {
+      "path": "site/_headers",
+      "role": "current",
+      "bytes": 568,
+      "sha256": "a8f55e9a182245637225b859b192c8e051d701dd9a2f959fdda4aa3e06ea67b4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "site/art.js",
+      "role": "current",
+      "bytes": 19831,
+      "sha256": "284f0008c2b7612c2db2018169f47dd7306e25c6754db793ddf3fe13ac1dff85",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/effects.js",
+      "role": "current",
+      "bytes": 3466,
+      "sha256": "671ce93f57e13277936481a6e341d6a6c85930415dccf0b3ff0ab2701504ec18",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/feedback.css",
+      "role": "current",
+      "bytes": 8627,
+      "sha256": "f2a0f5f55d3ebb91580ab14e795b493248bbe4f1259699c05b2603de4543d24c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    },
+    {
+      "path": "site/feedback.js",
+      "role": "current",
+      "bytes": 3746,
+      "sha256": "477d35d8ba2a05aaf1a88b86a01846e48b7b13c4548cf52a117395d1b9aef3f7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/index.html",
+      "role": "current",
+      "bytes": 329513,
+      "sha256": "6f4b31b97948e7534749c2cf436d603d70e5845379600a485ff34e194d9b96c6",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "html-script-syntax"
+      ]
+    },
+    {
+      "path": "site/interface.js",
+      "role": "current",
+      "bytes": 3998,
+      "sha256": "72f47d051d2645be738e7f65fb122a8028be6429b1ccb984c6008938cba140b8",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/release.json",
+      "role": "current",
+      "bytes": 1054,
+      "sha256": "7f6e3b1df6fdb952678bcaaa1db04a879643c88de915821f4f82e5f493f8298d",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "json-parse"
+      ]
+    },
+    {
+      "path": "site/rules.js",
+      "role": "current",
+      "bytes": 8560,
+      "sha256": "b64c92ccf6ee56afed1d1fb8bc2385a588e409ab5b9a1afb9566cf7189a9f53c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/save-store.js",
+      "role": "current",
+      "bytes": 1217,
+      "sha256": "aef1b1f055c5588410932f7f2e470fcf59c8975cfbb0ff9b13c4d9a9e67e25f4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/trials.js",
+      "role": "current",
+      "bytes": 2368,
+      "sha256": "23f97914af9e2f583978f31e092aafbe6120f2a2f894b7295852d3a447e06e20",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "site/workshop.js",
+      "role": "current",
+      "bytes": 2468,
+      "sha256": "ecb9bf79ef5590e02a52c3a2d8adaac33e164a2245dbf9b4277d17e8e9f89004",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/auth_error_guidance.cjs",
+      "role": "current",
+      "bytes": 2246,
+      "sha256": "193ddf7c8c5814fd97226160b3eaada104e016b15ed2343d871bf96596baad25",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_assets.py",
+      "role": "current",
+      "bytes": 582,
+      "sha256": "199a4acefc18977234a8daa90b390c7f8e4f0d805c9ed528b0aa1bca2616b4fc",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_cloud_auth.py",
+      "role": "current",
+      "bytes": 4938,
+      "sha256": "c328454e59e528d770be398aaaa68c97116db0e0ddbd323735759b632d46d144",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_input_continuity.mjs",
+      "role": "current",
+      "bytes": 6468,
+      "sha256": "680318a21ee400bf82f113a2a3c71e0c01a4c7344749fc691257fc4a8f92552f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_live.mjs",
+      "role": "current",
+      "bytes": 6024,
+      "sha256": "8ba526a1bbd2faf54a8404590e1ca66efd2db1382e399e8438819a7c035b2201",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_save_craft.mjs",
+      "role": "current",
+      "bytes": 10190,
+      "sha256": "8081a6860f372ab739c51d6f8d0429a79e9e96a3a69ea06a7348247f7e5c9b59",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_smoke.py",
+      "role": "current",
+      "bytes": 1901,
+      "sha256": "7e7326b0aab72d44f270f4d16a6801c3520f35c5eed15d52d747709fa45d25ff",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v510.py",
+      "role": "current",
+      "bytes": 7470,
+      "sha256": "a03c12a7fc2314217a86318e841d0b9de6dc972a1da0aac42e6c3ca6157eaae0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v511.py",
+      "role": "current",
+      "bytes": 13931,
+      "sha256": "ba698c34daf797573e3a78682b30613a0276cbb003cf78d7f5da9f757e9cced5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v512.py",
+      "role": "current",
+      "bytes": 11042,
+      "sha256": "9576e4d307d4a075d77ecbed940816cbbc863d296188d221c8bd830ba62aea75",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v513_visual.py",
+      "role": "current",
+      "bytes": 3792,
+      "sha256": "3272272fe710c8e0a080903627b6c2414d496d53678d5776fc3271e48bf2742f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v514.py",
+      "role": "current",
+      "bytes": 6000,
+      "sha256": "c761328cb0186e80efe72eb90afadeb1cd2192ab3f039be92d2f14b0bb72d8d0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v515.py",
+      "role": "current",
+      "bytes": 5585,
+      "sha256": "ca3c5e9eefd5bbd368d2e47c77dca29cb215bdb509385e2f19b30df45fe15c7a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/browser_v516.mjs",
+      "role": "current",
+      "bytes": 7994,
+      "sha256": "887fe54646eff9ff396b1932500bee30a8c4f58d32ace4b8098fad0c170307ac",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v517.mjs",
+      "role": "current",
+      "bytes": 9314,
+      "sha256": "556270dcbd7577a6b84d27324bb64f33dfde6ecb9ac2baa935cbf3be7eb93482",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v518.mjs",
+      "role": "current",
+      "bytes": 9201,
+      "sha256": "3e3176a5c2e46b8b10595c06ac700f2e0a1a1212be8c9a4c7db3f47ff0960384",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v519.mjs",
+      "role": "current",
+      "bytes": 10232,
+      "sha256": "6b7b99687d00d91a41fefa54a5361fb7507d3c866264a075c3d7f7e25b42f00f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v520.mjs",
+      "role": "current",
+      "bytes": 9917,
+      "sha256": "5601d15e931833e440e492600df064e6cf43e2b56eb295593cb16905f9c6a6a4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v520_trials.mjs",
+      "role": "current",
+      "bytes": 10233,
+      "sha256": "287762eca7da6b49b1534842ea742781b58996883842a8cc02e4009d29f220c4",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/browser_v59.py",
+      "role": "current",
+      "bytes": 4268,
+      "sha256": "53959beabb5c0cf55cd259a18cfb35ff3acd6c7f35c9cf3398684a915c67055f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "python-ast"
+      ]
+    },
+    {
+      "path": "tests/cloud_unit.cjs",
+      "role": "current",
+      "bytes": 5552,
+      "sha256": "f2e98ea068eb0fc88c1638d81e154327142e7419dcad616e0fbfba14e3a54d39",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/cloudflare_api.test.mjs",
+      "role": "current",
+      "bytes": 15017,
+      "sha256": "6f5a1eed842950fdd19983c38601010359f0216e70573f465ddd140f4ade7cdd",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/cloudflare_pages.cjs",
+      "role": "current",
+      "bytes": 3845,
+      "sha256": "6f3d024c2b6234e626a88da611fdf09c7f29ade5dca1231836342d91f266dfe5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/js_syntax.cjs",
+      "role": "current",
+      "bytes": 1208,
+      "sha256": "e72c53f1928231e5a878cce6df189fe8837fba5235295cf08e32b26cfad17dea",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/manual_integrity.cjs",
+      "role": "current",
+      "bytes": 1261,
+      "sha256": "80c42c5f4803b02cf05b7a7507c5df5a875d9c007a76a58e600f18c60d8102b8",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/preview_cloud_acceptance.mjs",
+      "role": "current",
+      "bytes": 6396,
+      "sha256": "a9dbc06583c6dc7806d09a3105d1ef4a3356fcd8493cd2672f75ae706fdd6775",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/realtime_v57.cjs",
+      "role": "current",
+      "bytes": 2667,
+      "sha256": "a48d6f5f8e191867aca38c44d890137100b9818dd23e6a11e519d12f8633fc68",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/save_integration.cjs",
+      "role": "current",
+      "bytes": 1624,
+      "sha256": "c403de5b8fe68ea0ec38224de7a45e8457308a2edc7aaef738fbfbddbc103e9a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/save_store.cjs",
+      "role": "current",
+      "bytes": 2133,
+      "sha256": "b52726cd4cdbc71b874e975d3fa404859c00f4c075eeb4b1bbaae8bb412244a5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/standard_catalog.cjs",
+      "role": "current",
+      "bytes": 834,
+      "sha256": "74e3a366d9170ca926f4a2641492a4440f999d05a6caab5135524c69d976fa1a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/tactical_v57.cjs",
+      "role": "current",
+      "bytes": 2801,
+      "sha256": "4cc96f686841f8a4c6d42c9da1dfcc658495fb83b88e9a60135ef1a98d32629b",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/talents_v56.cjs",
+      "role": "current",
+      "bytes": 2896,
+      "sha256": "3014b9388a31c6b4066ada5a19a96db4e91184ec34008392f3f31ea348ab4fd7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v510_access.cjs",
+      "role": "current",
+      "bytes": 3013,
+      "sha256": "e0df0b5cbdf7bc37828eaf4e6535f831acee4e7bc4c5a429da7e1b02d3f86adf",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v510_backups.cjs",
+      "role": "current",
+      "bytes": 1391,
+      "sha256": "16b25dc3ca9dfc197edcad9fdd2665eefc4a33d80f8ae36877f08c6cd6a309f1",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v510_petals.cjs",
+      "role": "current",
+      "bytes": 1429,
+      "sha256": "dbfbf4e95216cce719db2720734859c672646f9427e11849d375d298d4e6d495",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v511_combat.cjs",
+      "role": "current",
+      "bytes": 1708,
+      "sha256": "4baaa83ac186d1531219b20004cea63c8f6fa76197d11c0c522475cd2699aa5c",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v511_review.cjs",
+      "role": "current",
+      "bytes": 2202,
+      "sha256": "65eed309f7343366ac9cc109e4d3cbd96565dadb89e772b116c043a859e5feb0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v511_wiring.cjs",
+      "role": "current",
+      "bytes": 1251,
+      "sha256": "cf379b7b3e198173e41b2c433816f085819b78ac9f56039c32f636a94bd06044",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v512_controls_collection.cjs",
+      "role": "current",
+      "bytes": 3142,
+      "sha256": "8ea04e5a23f54e7791a4bf4b9798ac91bfbc3ad6a24fb05d4ac16edfa0b492a7",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v514_probability.cjs",
+      "role": "current",
+      "bytes": 2706,
+      "sha256": "14d4165477931803b801f4af80605f37cabe858d4abdd06e0d7afc8c5276f414",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v515_rules.cjs",
+      "role": "current",
+      "bytes": 3889,
+      "sha256": "59837a73f7a63f71c92cde0ca7cd76228782b3fdb99685b058ab03efed15666a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v516_workshop.cjs",
+      "role": "current",
+      "bytes": 3666,
+      "sha256": "44a8e0d211eae56dc15cca72125e0fdd14ca45456e7da3e7ce395c63f1f679b3",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v518_field.cjs",
+      "role": "current",
+      "bytes": 2250,
+      "sha256": "5325374522e0d91cfc7c34f3d1399d1b5a5f2df7d3a69b42b0a38d3497d93072",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v519_sync_retry.cjs",
+      "role": "current",
+      "bytes": 2358,
+      "sha256": "774442635818aab7179b4f854aa94da5c79ac58c1379d3f096f3382074640ccb",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_capacity.cjs",
+      "role": "current",
+      "bytes": 776,
+      "sha256": "b86c605bfda613ef243da027b87257da5d37120281d0252cf9e95fd382bdb7c0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_crafting.cjs",
+      "role": "current",
+      "bytes": 4382,
+      "sha256": "f9996a53c55ca43addc06b09e012a632f95d9a213ebdc07052e47078a682d1df",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_effects.cjs",
+      "role": "current",
+      "bytes": 1737,
+      "sha256": "118c33868330969a8fe6099139eff93eeab2395286ad4645467e67220df1dedc",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_recovery.cjs",
+      "role": "current",
+      "bytes": 3946,
+      "sha256": "e3d8490c7ac15b7912e0ab91e87cb0063fedd64cd4da6dd75d4e41e789d9b627",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_skills.cjs",
+      "role": "current",
+      "bytes": 1459,
+      "sha256": "78ded6396b72182abb682038e4f04b0c9d9e041d0978d8cbf42ae05daf9c42f5",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v520_trials.cjs",
+      "role": "current",
+      "bytes": 1842,
+      "sha256": "05e6240653031a9ab340c0a435c2f77486ca5b9177310751771150dbd94e235a",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v521_release_guards.cjs",
+      "role": "current",
+      "bytes": 2859,
+      "sha256": "ef1913ec1aaebb0c7d9b2b0a203d024fbc5b17b296dc0799057b244e8c757c73",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v591_batch_craft.cjs",
+      "role": "current",
+      "bytes": 3107,
+      "sha256": "914832c059615d06733966a60912096a24d73f50e65c08d9f6fce228e6474bd0",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v592_collision_precision.cjs",
+      "role": "current",
+      "bytes": 3572,
+      "sha256": "047856aa5ee35333686abfd5651e907ed8931cfbda631dfca2c5fe1bd58524c8",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v593_protection_broadphase.cjs",
+      "role": "current",
+      "bytes": 4780,
+      "sha256": "740313ee71782c3bf1b9b164de1efdc06439e6d94a21ac8948b04223379ca305",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "tests/v59_gameplay_auth.cjs",
+      "role": "current",
+      "bytes": 6842,
+      "sha256": "5990f63d7eb491464df42f9a905be2001af45286079d9b0cefaaf9c0bfe06f3e",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "node-syntax"
+      ]
+    },
+    {
+      "path": "wrangler.jsonc",
+      "role": "current",
+      "bytes": 680,
+      "sha256": "8c1ecd2fb0e760a66abdb01c8e72145ab259c0146f6e5e8842a64fc411ea7d5f",
+      "checks": [
+        "read-complete",
+        "sha256",
+        "utf8"
+      ]
+    }
+  ]
+}

@@ -175,7 +175,7 @@ test('register/login/password/recovery work with the deployed Workers PBKDF2 cap
   };syncBuiltinESMExports();
   try{
     const f=fixture(),a=await register(f);
-    const health=await f.call('health');assert.equal(health.status,200);assert.equal((await health.json()).passwordHash,'scrypt');
+    const health=await f.call('health');assert.equal(health.status,200);const identity=await health.json();assert.equal(identity.passwordHash,'scrypt');assert.equal(identity.version,JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8')).version);
     const record=JSON.parse(f.db.prepare('SELECT password_record FROM players').get().password_record);
     assert.deepEqual({algorithm:record.algorithm,N:record.N,r:record.r,p:record.p},{algorithm:'scrypt',N:16384,r:8,p:5});
     assert.equal((await f.call('auth/login',{method:'POST',body:{username:a.account.username,password}})).status,200);

@@ -68,6 +68,8 @@ jobs:
           node tests/v520_trials.cjs
           node tests/save_store.cjs
           node tests/save_integration.cjs
+          node tests/v521_release_guards.cjs
+          node tests/manual_integrity.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12

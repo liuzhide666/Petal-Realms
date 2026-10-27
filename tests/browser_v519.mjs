@@ -10,7 +10,7 @@ const probe=`window.__combatQA={
  poisonDeath(){game.p.hp=.001;game.p.venomUntil=20;game.drops=[{x:1000,y:1000,t:'basic',r:0,life:20,ang:0}];},
  meteorDeath(){game.p.hp=1;game.worldEvent={type:'meteor',until:20,nextPulse:100,meteors:[{x:1000,y:1000,r:95,at:0}]};},
  bodyDeath(){game.p.hp=1;game.equipped=[];game.mapData[game.zone].living=[this.mob({x:1000,hp:1,max:1,dmg:100})];},
- novaDeath(){game.p.hp=1;game.equipped=[];game.mapData[game.zone].living=[this.mob({x:1200,t:'guardianHel',dmg:100,specialType:'nova',windup:.001})];},
+ novaDeath(){game.p.hp=1;game.equipped=[];game.mapData[game.zone].living=[this.mob({x:1200,t:'guardianHel',dmg:100,specialType:'nova',windup:.001,stunUntil:0})];},
  bulletDeath(){game.p.hp=1;this.projectile(0,true);this.bullet();game.bullets[0].dmg=100;game.mapData[game.zone].living[0].hp=1;},
  projectile(facing=0,hit=false){game.equipped=[];const m=this.mob({facing});game.mapData[game.zone].living=[m];game.friendlyShots=[{x:m.x+(facing?0:hit?20:43),y:m.y+(facing?(hit?20:43):0),vx:0,vy:0,range:100,traveled:0,radius:2,dmg:10,bounces:0,hitIds:[]}];},
  venom(kind){game.equipped=[];if(kind==='dash')game.p.dashIFrames=1;if(kind==='grace')game.p.lastHit=game.time;this.bullet();},
@@ -19,6 +19,8 @@ const probe=`window.__combatQA={
  trade(){game.equipped=[{t:'basic',r:0,hp:pets.basic.hp,cd:0,reloadTotal:0,lastDamage:0,healWait:1.8,shotWait:100,lastHits:new Map(),x:1092,y:1000}];game.mapData[game.zone].living=[this.mob({x:1092,r:18,dmg:1,rank:4})];this.tick();const label=game.floats.find(f=>f.text.startsWith('−'))?.text;return {loss:1000-game.mapData[game.zone].living[0].hp,label}},
  loot(){game.drops=Object.keys(pets).map((t,i)=>({x:game.p.x+(i%6-2.5)*63,y:game.p.y+(Math.floor(i/6)-2)*64,t,r:i%rarity.length,life:30,ang:0}));render();},
  boss(){game.mapData[game.zone].living=[this.mob({t:'guardianGarden',level:30,hp:900,max:1000})];game.worldEvent={type:'treasure',until:30,nextPulse:100,meteors:[]};syncHud(true);render();},
+ stunCharge(){game.equipped=[];const m=this.mob({t:'beetle',x:1140,r:20,speed:120,calmed:0,stunUntil:0,chargeFor:.3,chargeVX:-1,chargeVY:0,specialType:'charger'});game.mapData[game.zone].living=[m];activeSkill('storm');this.tick();return{x:m.x,charge:m.chargeFor,stunned:m.stunUntil>game.time}},
+ interruptNova(){game.equipped=[];const before=game.p.hp,m=this.mob({t:'guardianHel',x:1140,r:20,dmg:100,stunUntil:0,specialType:'nova',windup:.001});game.mapData[game.zone].living=[m];activeSkill('storm');this.tick();return{alive:!game.dead,hpUnchanged:game.p.hp===before,windup:m.windup}},
  die,render};`;
 const html=fs.readFileSync(root+'/index.html','utf8').replaceAll('requestAnimationFrame(loop);','').replace('})();</script>',probe+'\n})();</script>');
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://localhost');if(u.pathname.startsWith('/api/')){res.setHeader('Content-Type','application/json');res.end('{"account":null}');return}const f=u.pathname==='/'?null:path.join(root,path.basename(u.pathname));if(f&&!fs.existsSync(f)){res.writeHead(404);res.end();return}res.setHeader('Content-Type',u.pathname.endsWith('.js')?'text/javascript':u.pathname.endsWith('.css')?'text/css':u.pathname.endsWith('.json')?'application/json':'text/html;charset=utf-8');res.end(f?fs.readFileSync(f):html)});
@@ -34,6 +36,8 @@ try{for(const[label,width,height,mobile]of [['desktop',1280,800,false],['phone',
   if(cause==='poisonDeath')check(label+' dead player cannot collect loot',s.drops===1&&s.bag===before.bag);
   if(cause==='meteorDeath')check(label+' event death stops player phase',s.angle===before.angle);
  }
+ await start();const stunned=await page.evaluate(()=>__combatQA.stunCharge());check(label+' storm interrupts active charging',stunned.x===1140&&stunned.charge===0&&stunned.stunned);
+ await start();const interrupted=await page.evaluate(()=>__combatQA.interruptNova());check(label+' storm cancels imminent nova',interrupted.alive&&interrupted.hpUnchanged&&interrupted.windup===0);
  await start();await page.locator('#game').focus();await page.keyboard.down('d');await page.keyboard.down('Space');await page.evaluate(()=>__combatQA.die());
  check(label+' death clears all held commands',(await state()).mode==='normal'&&(await state()).move.dx===0);
  await page.locator('#respawnBtn').click();check(label+' respawn is neutral',(await state()).mode==='normal'&&(await state()).move.dx===0);
