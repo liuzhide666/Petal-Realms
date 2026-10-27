@@ -53,7 +53,7 @@ try{
   const after=await page.evaluate(()=>PetalRealmsInfo.snapshot());
   check(label+' main level/loadout restored',after.level===before.level&&after.slots===before.slots&&after.deck===before.deck&&after.zone===before.zone);
   check(label+' training status removed',!(await page.locator('#saveText').innerText()).includes('训练'));
-  check(label+' only isolated local role saved',await page.evaluate(name=>Object.keys(localStorage).filter(k=>k.startsWith('petal_realms_save_')).every(k=>k==='petal_realms_save_'+name),localName));
+  check(label+' only isolated local role saved',await page.evaluate(name=>Object.keys(localStorage).filter(k=>k.startsWith('petal_realms_save_')).every(k=>['','.previous','.damaged'].some(s=>k==='petal_realms_save_'+name+s)),localName));
   check(label+' no cloud outbox created',await page.evaluate(()=>Object.keys(localStorage).every(k=>!k.startsWith('petal_realms_cf_outbox_'))));
   check(label+' no server writes attempted',writes.length===0);check(label+' no runtime errors',errors.length===0);
   await context.close();

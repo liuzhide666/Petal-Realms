@@ -13,10 +13,11 @@ const proxyAddress=process.env.PETAL_BROWSER_PROXY||process.env.HTTPS_PROXY,prox
 if(proxy&&process.env.CODEX_PROXY_CERT){const ca=new X509Certificate(fs.readFileSync(process.env.CODEX_PROXY_CERT));args.push('--ignore-certificate-errors-spki-list='+createHash('sha256').update(ca.publicKey.export({type:'spki',format:'der'})).digest('base64'))}
 const browser=await chromium.launch({headless:true,executablePath:process.env.PETAL_CHROMIUM,args,...(proxy?{proxy:{server:proxy.origin,...(proxy.username?{username:decodeURIComponent(proxy.username),password:decodeURIComponent(proxy.password)}:{})}}:{})});
 const checks=[],errors=[];let completed=false;
-function check(name,ok){checks.push({name,passed:!!ok});assert.ok(ok,name)}
+function check(name,ok){checks.push({name,passed:!!ok});console.log(JSON.stringify({check:name,passed:!!ok}));assert.ok(ok,name)}
 const output='artifacts/qa/preview_cloud_acceptance.json';fs.mkdirSync('artifacts/qa',{recursive:true});
 try{
  const a=await browser.newContext({viewport:{width:1280,height:800}}),b=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ a.setDefaultTimeout(20000);b.setDefaultTimeout(20000);
  const call=(c,path,method='GET',data,id)=>c.request.fetch(new URL('/api/'+path,origin).href,{method,...(data?{data}:{}),headers:{Origin:origin.origin,...(id?{'X-Petal-Account':id}:{})}});
  const health=await call(a,'health');check('real Worker and database health',health.ok()&&(await health.json()).version===JSON.parse(fs.readFileSync('package.json','utf8')).version);
  const username='release-'+randomBytes(10).toString('hex')+'@example.invalid',password=randomBytes(24).toString('hex');
@@ -39,7 +40,7 @@ try{
  await pa.reload();await pa.locator('#welcomeContinue').click();await pa.waitForFunction(()=>PetalRealmsInfo.snapshot()!==null);await pa.locator('#pauseBtn').click();await pa.waitForFunction(()=>document.querySelector('#saveText').textContent==='云端已同步');
  check('reload retained settled inventory',JSON.stringify((await (await call(a,'save','GET',null,account.id)).json()).payload.bag)===JSON.stringify(crafted));
  const pb=await enter(b);check('phone context sees saved level',(await pb.evaluate(()=>PetalRealmsInfo.snapshot())).level===8);
- await pb.locator('#resumeBtn').click();await pb.locator('#craftBtn').click();check('phone cloud stock matches desktop',await pb.locator('[data-craft="basic@0"]').innerText().then(t=>t.includes(String(crafted['basic@0']))));
+ await pb.locator('#resumeBtn').click();await pb.locator('#toolsMenuBtn').click();await pb.locator('#craftBtn').click();check('phone cloud stock matches desktop',await pb.locator('[data-craft="basic@0"]').innerText().then(t=>t.includes(String(crafted['basic@0']))));
  // The phone's resume save advances the revision. The older desktop must retain an outbox.
  await pa.locator('#manualSave').click();await pa.waitForFunction(()=>document.querySelector('#saveText').textContent.includes('冲突'));
  check('older desktop retains pending snapshot',await pa.evaluate(id=>!!localStorage.getItem('petal_realms_cf_outbox_'+id),account.id));

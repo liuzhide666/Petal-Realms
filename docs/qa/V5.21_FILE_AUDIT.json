@@ -998,8 +998,8 @@
     {
       "path": "tests/browser_live.mjs",
       "role": "current",
-      "bytes": 6024,
-      "sha256": "8ba526a1bbd2faf54a8404590e1ca66efd2db1382e399e8438819a7c035b2201",
+      "bytes": 6063,
+      "sha256": "3cd70bd07899add5bd4a21d2e7051f7cf2d63a0394e87812c3159d6afbceb69a",
       "checks": [
         "read-complete",
         "sha256",
@@ -1229,8 +1229,8 @@
     {
       "path": "tests/preview_cloud_acceptance.mjs",
       "role": "current",
-      "bytes": 6396,
-      "sha256": "a9dbc06583c6dc7806d09a3105d1ef4a3356fcd8493cd2672f75ae706fdd6775",
+      "bytes": 6548,
+      "sha256": "ff5923187e89edd1ab60c2f0d99f839cae704a678b12e827d9d23141263dee0c",
       "checks": [
         "read-complete",
         "sha256",
