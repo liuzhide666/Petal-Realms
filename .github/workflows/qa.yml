@@ -72,6 +72,7 @@ jobs:
           node tests/manual_integrity.cjs
           node tests/probability_independent.cjs
           node tests/probability_catalog.cjs
+          node tests/probability_catalog_negative.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12

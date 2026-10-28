@@ -1,5 +1,5 @@
 """Read every tracked/authored file; record structural checks, not a semantic proof."""
-import ast,hashlib,json,subprocess,zipfile
+import argparse,ast,hashlib,json,subprocess,zipfile
 from pathlib import Path
 from html.parser import HTMLParser
 import fitz
@@ -14,6 +14,7 @@ class Scripts(HTMLParser):
  def handle_endtag(self,tag):
   if tag=='script' and self.current is not None:self.parts.append(''.join(self.current));self.current=None
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--output',default='docs/qa/V5.21_FILE_AUDIT.json');args=parser.parse_args()
  paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z'],cwd=ROOT).decode().split('\0')
  records=[]
  for name in sorted(set(filter(None,paths))):
@@ -43,5 +44,6 @@ def main():
    b.decode('utf8');checks+=['utf8']
   records.append({'path':name,'role':role,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'checks':checks})
  result={'version':'5.21.0','scope':'Every tracked or authored non-ignored file except this self-referential receipt; historical files retain their version scope. Structural checks are not line-by-line semantic certification. Third-party node_modules excluded; npm lock/audit used separately.','files':len(records),'success':True,'records':records}
- (ROOT/'docs/qa/V5.21_FILE_AUDIT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'files':len(records),'success':True}))
+ output=ROOT/args.output;output.parent.mkdir(parents=True,exist_ok=True)
+ output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'files':len(records),'success':True}))
 if __name__=='__main__':main()
