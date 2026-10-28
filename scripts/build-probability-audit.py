@@ -11,7 +11,7 @@ def main():
  spec=importlib.util.spec_from_file_location('handbook',ROOT/'scripts/build-release-handbook.py');h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
  input_hash=sha(Path(a.manual).read_bytes());canonical_pdf=subprocess.check_output(['git','show',BASE+':site/Petal_Realms_Handbook.pdf'],cwd=ROOT)
  assert input_hash in (sha(canonical_pdf),'b51846f5cb69f0cc6e94916f1f8e7e6105331e0aac76288fa91878e74bfb62ac'),'Input handbook identity differs from pinned V5.21/Library version 8'
- for source in ['site/index.html','docs/standard/ruleset.json','docs/standard/mechanisms.json','scripts/build-release-handbook.py']:
+ for source in ['site/index.html','site/rules.js','docs/standard/ruleset.json','docs/standard/mechanisms.json','scripts/build-release-handbook.py']:
   assert (ROOT/source).read_bytes()==subprocess.check_output(['git','show',BASE+':'+source],cwd=ROOT),'Source differs from baseline: '+source
  files=subprocess.check_output(['git','ls-tree','-rz','--name-only',BASE],cwd=ROOT).decode().strip('\0').split('\0');rows=[];functions=[]
  for p in files:
