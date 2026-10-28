@@ -14,3 +14,9 @@ node tests/manual_integrity.cjs
 生成清单记录运行时全部来源哈希、字体和两个 PDF 的摘要。完整手册逐页比对历史正文的提取文本与解码绘制流；新增页检查字体映射、文字边界和 TeX 溢出。表格续页重复表头，第二张花瓣目录从新页开始。相同已验证工具链连续两次构建得到完全相同字节；不承诺不同 TeX / 字体 / PyMuPDF 版本之间的字节一致。
 
 `--output-dir artifacts/manual/rebuild` 可输出第二份用于复核。新增页仍须渲染后人工检查，结构检查不能替代排版验收。CI 检查成品与代码的哈希一致性，不安装整个文档工具链。
+
+## 2026-10-28 数学审计版
+
+`PROBABILITY_FOUNDATIONS.md` 记录概率契约与推导；`PROBABILITY_AUDIT_CATALOG.json` 固定143个基线文件、337个具名函数锚点、全部核心数据定义及机制契约。词法锚点不是完整调用图。生成器 `scripts/build-probability-audit.py --manual <固定基线或已核实Library版本8手册> --output <新路径>` 保留365页，再追加3页，并把目录嵌入PDF附件。生成前拒绝来源漂移及未知手册摘要；输入与输出不能同一路径。
+
+Library审计手册为368页，网站已发布的365页PDF不因本PR自动替换。具体执行与未验证边界见 `docs/qa/PROBABILITY_REVIEW_2026-10-28.md`。本轮不改变概率、掉落、属性或存档结构。
