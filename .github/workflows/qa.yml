@@ -70,6 +70,7 @@ jobs:
           node tests/save_integration.cjs
           node tests/v521_release_guards.cjs
           node tests/manual_integrity.cjs
+          node tests/probability_independent.cjs
   browser-v59:
     runs-on: ubuntu-latest
     timeout-minutes: 12
